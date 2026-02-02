@@ -3,126 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mecánico Pro V2.1</title>
+    <title>Mecánico Pro Ultra</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #e67e22; }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: #ecf0f1; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: center; 
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --text: #f1f5f9;
+            --warning: #fbbf24;
         }
-        .card { 
-            background: white; 
-            width: 100%; 
-            max-width: 400px; 
-            padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            text-align: center;
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-        h2 { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
-        
-        /* MEJORA DEL SELECTOR */
-        select { 
-            width: 100%; 
-            padding: 15px; /* Más espacio para el dedo */
-            margin: 10px 0; 
-            border-radius: 8px; 
-            border: 2px solid #bdc3c7; 
-            font-size: 1.1rem; 
-            background-color: #fff;
-            color: var(--primary);
-            cursor: pointer;
+
+        .card {
+            background: var(--card);
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h2 { 
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
             display: block;
-            appearance: listbox; /* Fuerza la visualización de la flecha en Android */
-            -webkit-appearance: listbox;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: #94a3b8;
         }
 
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 10px 0; 
-            border-radius: 8px; 
-            border: 1px solid #bdc3c7; 
-            font-size: 1.2rem; 
-            box-sizing: border-box; 
+        select, input {
+            width: 100%;
+            padding: 15px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
-        .result-box { 
-            margin-top: 20px; 
-            padding: 15px; 
-            background: #fdf2e9; 
-            border-left: 5px solid var(--accent); 
-            border-radius: 5px; 
+        select:focus, input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
-        #resultado { font-size: 1.3rem; font-weight: bold; color: var(--primary); }
-        .llave-info { display: block; margin-top: 10px; color: #d35400; font-weight: bold; font-size: 1.1rem; }
+
+        .result-container {
+            background: rgba(56, 189, 248, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px dashed #334155;
+        }
+
+        .main-res {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+
+        .detail-res {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--warning);
+            color: #000;
+            font-weight: bold;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>🛠 Mecánico Pro</h2>
+    <h2>Mecánico Pro ⚡</h2>
     
-    <label style="display:block; text-align:left; font-weight:bold; color:#7f8c8d;">Convertir:</label>
-    <select id="tipoConversion" onchange="limpiar()">
-        <option value="mm_to_in">Milímetros a Pulgadas 📏</option>
-        <option value="in_to_mm">Pulgadas a Milímetros ⚙️</option>
-    </select>
+    <div class="input-group">
+        <label>Modo de Conversión</label>
+        <select id="mode" onchange="convert()">
+            <option value="mm_to_in">Milímetros a Pulgadas</option>
+            <option value="in_to_mm">Pulgadas a Milímetros</option>
+        </select>
+    </div>
 
-    <input type="number" id="valorEntrada" placeholder="Introduce valor..." inputmode="decimal" oninput="calcular()">
+    <div class="input-group">
+        <label>Valor a calcular</label>
+        <input type="number" id="input" placeholder="0.00" inputmode="decimal" oninput="convert()">
+    </div>
 
-    <div class="result-box">
-        <div id="resultado">Esperando datos...</div>
+    <div class="result-container" id="resBox">
+        <div class="detail-res">Esperando entrada...</div>
+        <div class="main-res" id="mainVal">--</div>
+        <div id="subVal"></div>
     </div>
 </div>
 
 <script>
-function calcular() {
-    const tipo = document.getElementById('tipoConversion').value;
-    const valor = parseFloat(document.getElementById('valorEntrada').value);
-    const resDiv = document.getElementById('resultado');
+    function convert() {
+        const val = parseFloat(document.getElementById('input').value);
+        const mode = document.getElementById('mode').value;
+        const main = document.getElementById('mainVal');
+        const sub = document.getElementById('subVal');
+        
+        if (!val || val <= 0) {
+            main.innerText = "--";
+            sub.innerHTML = "";
+            return;
+        }
 
-    if (isNaN(valor) || valor <= 0) {
-        resDiv.innerHTML = "Esperando datos...";
-        return;
+        if (mode === 'mm_to_in') {
+            const inches = val / 25.4;
+            const frac = toFraction(inches);
+            main.innerText = frac;
+            sub.innerHTML = `<div class="detail-res">Exacto: ${inches.toFixed(4)}"</div>
+                             <div class="badge">Llave sugerida</div>`;
+        } else {
+            const mm = val * 25.4;
+            main.innerText = mm.toFixed(2) + " mm";
+            sub.innerHTML = `<div class="detail-res">Llave comercial: ${Math.round(mm)} mm</div>`;
+        }
     }
 
-    if (tipo === "mm_to_in") {
-        let pulgadasDec = valor / 25.4;
-        let fraccion = decAFraccion(pulgadasDec);
-        resDiv.innerHTML = `Decimal: ${pulgadasDec.toFixed(4)}"<br>
-        <span class="llave-info">Llave: ${fraccion}</span>`;
-    } else {
-        let mm = valor * 25.4;
-        resDiv.innerHTML = `Resultado: ${mm.toFixed(2)} mm<br>
-        <span class="llave-info">Llave: ${Math.round(mm)} mm</span>`;
+    function toFraction(dec) {
+        const denominators = [2, 4, 8, 16, 32, 64];
+        let bestNum = 0;
+        let bestDen = 1;
+        let minDiff = Infinity;
+
+        for (let d of denominators) {
+            let n = Math.round(dec * d);
+            let diff = Math.abs(dec - n / d);
+            if (diff < minDiff) {
+                minDiff = diff;
+                bestNum = n;
+                bestDen = d;
+            }
+        }
+
+        if (bestNum === 0) return '---';
+
+        // Simplificar
+        const gcd = (a, b) => b ? gcd(b, a % b) : a;
+        const common = gcd(bestNum, bestDen);
+        bestNum /= common;
+        bestDen /= common;
+
+        return bestDen === 1 ? bestNum + '"' : `${bestNum}/${bestDen}"`;
     }
-}
-
-function decAFraccion(decimal) {
-    const dieciseisavos = Math.round(decimal * 16);
-    if (dieciseisavos === 0) return 'Muy pequeña';
-    
-    let num = dieciseisavos;
-    let den = 16;
-
-    const mcd = (a, b) => b ? mcd(b, a % b) : a;
-    const divisor = mcd(num, den);
-    num /= divisor;
-    den /= divisor;
-
-    return den === 1 ? num + '"' : num + "/" + den + '"';
-}
-
-function limpiar() {
-    document.getElementById('valorEntrada').value = '';
-    document.getElementById('resultado').innerHTML = 'Esperando datos...';
-    document.getElementById('valorEntrada').focus();
-}
 </script>
-
 </body>
 </html>
