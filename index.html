@@ -16,7 +16,7 @@
         
         /* BOTÓN DIAGONAL FLOTANTE */
         .slash-btn {
-            display: none; /* Se activa por JS */
+            display: none; 
             position: absolute;
             right: 10px;
             bottom: 8px;
@@ -30,8 +30,9 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+            z-index: 10;
         }
-        .slash-btn:active { transform: scale(0.9); }
+        .slash-btn:active { transform: scale(0.9); background: #7dd3fc; }
 
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -80,19 +81,15 @@
         const btn = document.getElementById('slashBtn');
         const input = document.getElementById('input');
         
-        // Limpiar para evitar errores al cambiar de modo
         input.value = '';
         document.getElementById('resBox').innerHTML = '...';
 
-        // Mostrar botón solo en modo Pulgadas a MM
         btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
         input.focus();
     }
 
     function addSlash() {
         const input = document.getElementById('input');
-        // Si hay un número y no termina en espacio, asumimos que puede ser un número mixto
-        // Pero para la diagonal simple solo la añadimos al final
         input.value += "/";
         input.focus();
         convert();
@@ -112,17 +109,19 @@
             resBox.innerHTML = `<div class="main-res">${res}</div><div class="badge">Sugerencia taller</div>`;
         } else {
             let mm = (val * 25.4).toFixed(2);
-            resBox.innerHTML = `<div class="main-res">${mm}mm</div><div class="badge">Equivale a: ${Math.round(mm)}mm</div>`;
+            resBox.innerHTML = `<div class="main-res">${mm}mm</div><div class="badge">Exacto: ${mm} mm</div>`;
         }
     }
 
     function evalFraccion(t) {
         t = t.replace(',', '.');
-        // Manejo de números mixtos tipo "1 1/2"
         if (t.includes(' ')) {
-            let p = t.split(' ');
-            try { return parseFloat(p[0]) + (p[1].includes('/') ? eval(p[1]) : 0); } 
-            catch(e) { return parseFloat(p[0]); }
+            let p = t.split(/\s+/);
+            try { 
+                let entero = parseFloat(p[0]) || 0;
+                let fracc = p[1] && p[1].includes('/') ? eval(p[1]) : 0;
+                return entero + fracc;
+            } catch(e) { return parseFloat(p[0]); }
         }
         try { return t.includes('/') ? eval(t) : parseFloat(t); } 
         catch(e) { return parseFloat(t); }
