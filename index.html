@@ -3,106 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mecánico Pro Ultra</title>
+    <title>Mecánico Pro - Conversor de Pulgadas y Milímetros</title>
+    <meta name="description" content="Conversor profesional para mecánicos. Convierte mm a pulgadas con fracciones comerciales y historial de búsqueda.">
+    
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #38bdf8;
-            --text: #f1f5f9;
-            --warning: #fbbf24;
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
         }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .card {
-            background: var(--card);
-            width: 100%;
-            max-width: 420px;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        h2 { 
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            color: #94a3b8;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 15px;
-            background: #0f172a;
-            border: 2px solid #334155;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
+        .card { 
+            background: var(--card); 
+            width: 100%; 
+            max-width: 420px; 
+            padding: 30px; 
+            border-radius: 28px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            text-align: center; 
             box-sizing: border-box;
         }
+        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
+        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--accent); }
+        .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
+        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
+        .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
+        .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
+        .exact-val { font-size: 0.85rem; color: #64748b; margin-top: 10px; }
+        
+        /* HISTORIAL */
+        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; width: 100%; }
+        .history-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .history-item { background: #16213e; padding: 12px 15px; border-radius: 12px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
+        .history-item:hover { border-color: var(--accent); }
 
-        select:focus, input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-        }
-
-        .result-container {
-            background: rgba(56, 189, 248, 0.05);
-            border-radius: 16px;
-            padding: 20px;
+        /* ESPACIO PUBLICIDAD */
+        .ad-slot {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 420px;
+            min-height: 100px;
+            background: rgba(255,255,255,0.03);
             border: 1px dashed #334155;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            font-size: 0.7rem;
         }
 
-        .main-res {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 10px 0;
-        }
-
-        .detail-res {
-            font-size: 0.95rem;
-            color: #94a3b8;
-            line-height: 1.4;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: var(--warning);
-            color: #000;
-            font-weight: bold;
-            font-size: 0.75rem;
+        .btn-clear {
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-decoration: underline;
+            cursor: pointer;
             margin-top: 10px;
         }
     </style>
@@ -121,69 +90,137 @@
     </div>
 
     <div class="input-group">
-        <label>Valor a calcular</label>
-        <input type="number" id="input" placeholder="0.00" inputmode="decimal" oninput="convert()">
+        <label>Medida de Pieza</label>
+        <input type="text" id="input" placeholder="Ej: 13 o 1 1/2" oninput="convert()" autocomplete="off">
     </div>
 
     <div class="result-container" id="resBox">
-        <div class="detail-res">Esperando entrada...</div>
-        <div class="main-res" id="mainVal">--</div>
-        <div id="subVal"></div>
+        <div style="color: #475569;">Introduce una medida...</div>
+    </div>
+
+    <button class="btn-clear" onclick="limpiar()">Borrar todo</button>
+
+    <div class="history-section" id="historySection" style="display:none;">
+        <span class="history-title">Historial Reciente</span>
+        <div id="historyList"></div>
+    </div>
+</div>
+
+<div class="ad-slot">
+    <span style="margin-bottom: 5px;">ANUNCIO</span>
+    <div style="width: 320px; height: 50px; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; font-style: italic;">
+        Ads Google Slot
     </div>
 </div>
 
 <script>
+    const tablaComercial = {
+        "1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"",
+        "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"",
+        "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"",
+        "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"",
+        "25": "1\"", "25.4": "1\""
+    };
+
+    let historial = [];
+
     function convert() {
-        const val = parseFloat(document.getElementById('input').value);
+        const rawVal = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
-        const main = document.getElementById('mainVal');
-        const sub = document.getElementById('subVal');
+        const resBox = document.getElementById('resBox');
         
-        if (!val || val <= 0) {
-            main.innerText = "--";
-            sub.innerHTML = "";
+        if (!rawVal) {
+            resBox.innerHTML = '<div style="color: #475569;">Introduce una medida...</div>';
             return;
         }
 
+        const val = procesarEntrada(rawVal);
+        if (isNaN(val) || val <= 0) {
+            resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>';
+            return;
+        }
+
+        let resPrincipal = "", resBadge = "", resExtra = "";
+
         if (mode === 'mm_to_in') {
-            const inches = val / 25.4;
-            const frac = toFraction(inches);
-            main.innerText = frac;
-            sub.innerHTML = `<div class="detail-res">Exacto: ${inches.toFixed(4)}"</div>
-                             <div class="badge">Llave sugerida</div>`;
+            let res = tablaComercial[val] ? tablaComercial[val] : toFraction(val / 25.4);
+            let isStd = tablaComercial[val] ? true : false;
+            resPrincipal = res;
+            resBadge = `<div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
+            resExtra = `<div class="exact-val">Decimal: ${(val/25.4).toFixed(4)}"</div>`;
         } else {
             const mm = val * 25.4;
-            main.innerText = mm.toFixed(2) + " mm";
-            sub.innerHTML = `<div class="detail-res">Llave comercial: ${Math.round(mm)} mm</div>`;
+            resPrincipal = mm.toFixed(2) + '<span style="font-size:1.5rem">mm</span>';
+            resBadge = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
+            resExtra = `<div class="exact-val">Entrada: ${rawVal}"</div>`;
         }
+
+        resBox.innerHTML = `<div class="main-res">${resPrincipal}</div>${resBadge}${resExtra}`;
+        actualizarHistorial(rawVal, resPrincipal.replace(/<[^>]*>?/gm, ''), mode);
+    }
+
+    function procesarEntrada(texto) {
+        texto = texto.replace('-', ' ').trim();
+        if (texto.includes(' ')) {
+            const partes = texto.split(/\s+/);
+            if (partes[1] && partes[1].includes('/')) {
+                const f = partes[1].split('/');
+                return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
+            }
+        } else if (texto.includes('/')) {
+            const f = texto.split('/');
+            return parseFloat(f[0]) / parseFloat(f[1]);
+        }
+        return parseFloat(texto);
     }
 
     function toFraction(dec) {
         const denominators = [2, 4, 8, 16, 32, 64];
-        let bestNum = 0;
-        let bestDen = 1;
-        let minDiff = Infinity;
-
+        let bestNum = 0, bestDen = 1, minDiff = Infinity;
         for (let d of denominators) {
             let n = Math.round(dec * d);
             let diff = Math.abs(dec - n / d);
-            if (diff < minDiff) {
-                minDiff = diff;
-                bestNum = n;
-                bestDen = d;
-            }
+            if (diff < minDiff) { minDiff = diff; bestNum = n; bestDen = d; }
         }
-
-        if (bestNum === 0) return '---';
-
-        // Simplificar
+        const entero = Math.floor(bestNum / bestDen);
+        let residuoNum = bestNum % bestDen;
+        if (residuoNum === 0) return entero + '"';
         const gcd = (a, b) => b ? gcd(b, a % b) : a;
-        const common = gcd(bestNum, bestDen);
-        bestNum /= common;
-        bestDen /= common;
+        const common = gcd(residuoNum, bestDen);
+        residuoNum /= common;
+        const denFinal = bestDen / common;
+        return (entero > 0 ? entero + " " : "") + residuoNum + "/" + denFinal + '"';
+    }
 
-        return bestDen === 1 ? bestNum + '"' : `${bestNum}/${bestDen}"`;
+    function actualizarHistorial(entrada, salida, modo) {
+        if (historial.length > 0 && historial[0].entrada === entrada) return;
+        historial.unshift({ entrada, salida, modo });
+        if (historial.length > 5) historial.pop();
+        
+        const section = document.getElementById('historySection');
+        const list = document.getElementById('historyList');
+        section.style.display = 'block';
+        list.innerHTML = historial.map((item, i) => `
+            <div class="history-item" onclick="cargarHistorial(${i})">
+                <span style="color:#94a3b8">${item.modo === 'in_to_mm' ? 'IN' : 'mm'}: ${item.entrada}</span>
+                <span style="color:var(--accent); font-weight:bold">${item.salida}</span>
+            </div>
+        `).join('');
+    }
+
+    function cargarHistorial(i) {
+        const item = historial[i];
+        document.getElementById('mode').value = item.modo;
+        document.getElementById('input').value = item.entrada;
+        convert();
+    }
+
+    function limpiar() {
+        document.getElementById('input').value = '';
+        document.getElementById('resBox').innerHTML = '<div style="color: #475569;">Introduce una medida...</div>';
+        document.getElementById('input').focus();
     }
 </script>
+
 </body>
 </html>
