@@ -5,38 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mecánico Pro ⚡</title>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .card { background: var(--card); width: 100%; max-width: 420px; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
         h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
+        .input-group { margin-bottom: 20px; text-align: left; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
-        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--accent); }
-        
-        /* BOTÓN DIAGONAL FLOTANTE */
-        .slash-btn {
-            display: none; 
-            position: absolute;
-            right: 10px;
-            bottom: 8px;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            border-radius: 10px;
-            width: 45px;
-            height: 45px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
-            z-index: 10;
-        }
-        .slash-btn:active { transform: scale(0.9); background: #7dd3fc; }
-
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
+        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
+        .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
+        .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
+        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; width: 100%; }
+        .history-item { background: #16213e; padding: 12px 15px; border-radius: 12px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; }
+        
+        /* ESPACIO PARA PUBLICIDAD */
         .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
     </style>
 </head>
@@ -44,28 +29,28 @@
 
 <div class="card">
     <h2>Mecánico Pro ⚡</h2>
-    
     <div class="input-group">
         <label>Modo de Conversión</label>
-        <select id="mode" onchange="toggleSlashMode()">
+        <select id="mode" onchange="convert()">
             <option value="mm_to_in">Milímetros a Pulgadas</option>
             <option value="in_to_mm">Pulgadas a Milímetros</option>
         </select>
     </div>
-
     <div class="input-group">
-        <label>Valor a Calcular</label>
-        <input type="text" inputmode="decimal" id="input" placeholder="0" oninput="convert()" autocomplete="off">
-        <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
+        <label>Medida de Pieza</label>
+        <input type="text" id="input" placeholder="Ej: 13 o 1 1/2" oninput="convert()" autocomplete="off">
     </div>
-
     <div class="result-container" id="resBox">
-        <div style="color: #475569;">Esperando...</div>
+        <div style="color: #475569;">Introduce una medida...</div>
+    </div>
+    <div class="history-section" id="historySection" style="display:none;">
+        <span style="font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block;">Historial</span>
+        <div id="historyList"></div>
     </div>
 </div>
 
 <div class="ad-slot">
-    <span>ANUNCIO</span>
+    <span>ANUNCIO PUBLICITARIO</span>
 </div>
 
 <script>
@@ -76,58 +61,42 @@
         "16": "5/8\"", "17": "11/16\"", "18": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\""
     };
 
-    function toggleSlashMode() {
-        const mode = document.getElementById('mode').value;
-        const btn = document.getElementById('slashBtn');
-        const input = document.getElementById('input');
-        
-        input.value = '';
-        document.getElementById('resBox').innerHTML = '...';
-
-        btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
-        input.focus();
-    }
-
-    function addSlash() {
-        const input = document.getElementById('input');
-        input.value += "/";
-        input.focus();
-        convert();
-    }
+    let historial = [];
 
     function convert() {
         const raw = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        if (!raw) { resBox.innerHTML = '...'; return; }
-        
-        let val = evalFraccion(raw);
+        if (!raw) return;
+        let val = evalFrac(raw);
         if (isNaN(val) || val <= 0) return;
 
+        let resP = "", resB = "";
+
         if (mode === 'mm_to_in') {
-            let res = tablaComercial[val] || calcFraccion(val / 25.4);
-            resBox.innerHTML = `<div class="main-res">${res}</div><div class="badge">Sugerencia taller</div>`;
+            let res = tablaComercial[val] || calcFrac(val / 25.4);
+            let isStd = !!tablaComercial[val];
+            resP = res;
+            resB = `<div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
         } else {
             let mm = (val * 25.4).toFixed(2);
-            resBox.innerHTML = `<div class="main-res">${mm}mm</div><div class="badge">Exacto: ${mm} mm</div>`;
+            resP = mm + "mm";
+            resB = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
         }
+
+        resBox.innerHTML = `<div class="main-res">${resP}</div>${resB}`;
+        addHist(raw, resP, mode);
     }
 
-    function evalFraccion(t) {
-        t = t.replace(',', '.');
+    function evalFrac(t) {
         if (t.includes(' ')) {
-            let p = t.split(/\s+/);
-            try { 
-                let entero = parseFloat(p[0]) || 0;
-                let fracc = p[1] && p[1].includes('/') ? eval(p[1]) : 0;
-                return entero + fracc;
-            } catch(e) { return parseFloat(p[0]); }
+            let p = t.split(' ');
+            return parseFloat(p[0]) + (eval(p[1]) || 0);
         }
-        try { return t.includes('/') ? eval(t) : parseFloat(t); } 
-        catch(e) { return parseFloat(t); }
+        return t.includes('/') ? eval(t) : parseFloat(t);
     }
 
-    function calcFraccion(dec) {
+    function calcFrac(dec) {
         let bestN = 0, bestD = 1, minDiff = 1;
         [2, 4, 8, 16, 32, 64].forEach(d => {
             let n = Math.round(dec * d);
@@ -136,6 +105,19 @@
         const gcd = (a, b) => b ? gcd(b, a % b) : a;
         let common = gcd(bestN, bestD);
         return (bestN/common) + '/' + (bestD/common) + '"';
+    }
+
+    function addHist(e, s, m) {
+        if (historial.length > 0 && historial[0].e === e) return;
+        historial.unshift({ e, s, m });
+        if (historial.length > 5) historial.pop();
+        document.getElementById('historySection').style.display = 'block';
+        document.getElementById('historyList').innerHTML = historial.map(i => `
+            <div class="history-item">
+                <span style="color:#94a3b8">${i.m === 'in_to_mm' ? 'IN' : 'mm'}: ${i.e}</span>
+                <span style="color:var(--accent); font-weight:bold">${i.s}</span>
+            </div>
+        `).join('');
     }
 </script>
 </body>
