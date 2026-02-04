@@ -3,26 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mecánico Pro - Checkpoint V9</title>
+    <title>Mecánico Pro ⚡</title>
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: var(--card); width: 100%; max-width: 420px; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: var(--card); width: 100%; max-width: 420px; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
+        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
+        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--accent); }
+        
+        /* BOTÓN DIAGONAL */
+        .slash-btn {
+            display: none;
+            position: absolute;
+            right: 10px;
+            bottom: 6px;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 10px;
+            width: 46px;
+            height: 46px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 5;
+        }
+        .slash-btn:active { transform: scale(0.9); }
+
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; transition: 0.3s; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
         .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
         .exact-val { font-size: 0.85rem; color: #64748b; margin-top: 10px; }
-        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; }
+        
+        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; width: 100%; }
         .history-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block; }
         .history-item { background: #16213e; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
-        .history-item:hover { border-color: var(--accent); }
+        
+        /* ESPACIO PUBLICIDAD */
+        .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -31,14 +54,15 @@
     <h2>Mecánico Pro ⚡</h2>
     <div class="input-group">
         <label>Modo</label>
-        <select id="mode" onchange="convert()">
+        <select id="mode" onchange="toggleMode()">
             <option value="mm_to_in">Milímetros a Pulgadas</option>
             <option value="in_to_mm">Pulgadas a Milímetros</option>
         </select>
     </div>
     <div class="input-group">
         <label>Medida</label>
-        <input type="text" id="input" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+        <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+        <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
     </div>
     <div class="result-container" id="resBox">
         <div style="color: #475569;">Introduce una medida...</div>
@@ -47,6 +71,10 @@
         <span class="history-title">Historial Reciente</span>
         <div id="historyList"></div>
     </div>
+</div>
+
+<div class="ad-slot">
+    <span>ESPACIO PARA PUBLICIDAD</span>
 </div>
 
 <script>
@@ -59,6 +87,20 @@
     };
 
     let historial = [];
+
+    function toggleMode() {
+        const mode = document.getElementById('mode').value;
+        const btn = document.getElementById('slashBtn');
+        btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
+        convert();
+    }
+
+    function addSlash() {
+        const input = document.getElementById('input');
+        input.value += "/";
+        input.focus();
+        convert();
+    }
 
     function convert() {
         const rawVal = document.getElementById('input').value.trim();
@@ -88,7 +130,7 @@
     }
 
     function procesarEntrada(texto) {
-        texto = texto.replace('-', ' ').trim();
+        texto = texto.replace(',', '.').replace('-', ' ').trim();
         if (texto.includes(' ')) {
             const partes = texto.split(/\s+/);
             if (partes[1] && partes[1].includes('/')) {
@@ -139,6 +181,7 @@
         const item = historial[i];
         document.getElementById('mode').value = item.modo;
         document.getElementById('input').value = item.entrada;
+        toggleMode(); // Actualiza la visibilidad del botón slash
         convert();
     }
 </script>
