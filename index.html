@@ -7,21 +7,36 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: var(--card); width: 100%; max-width: 420px; padding: 25px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
-        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 20px; margin-top: 0; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
-        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+        .card { background: var(--card); width: 100%; max-width: 420px; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
+        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
+        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
+        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
+        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent); }
         
-        /* BOTONERA DE FRACCIONES */
-        .quick-fractions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
-        .f-btn { background: #334155; border: none; color: white; padding: 10px 5px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-        .f-btn:active { background: var(--accent); transform: scale(0.95); }
+        /* BOTÓN DIAGONAL FLOTANTE */
+        .slash-btn {
+            display: none; /* Se activa por JS */
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 10px;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+        }
+        .slash-btn:active { transform: scale(0.9); }
 
-        .result-container { margin-top: 20px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 20px; border: 1px solid #334155; min-height: 120px; display: flex; flex-direction: column; justify-content: center; }
-        .main-res { font-size: 2.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.75rem; margin-top: 10px; text-transform: uppercase; background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
-        .ad-slot { margin-top: 20px; width: 100%; max-width: 420px; min-height: 100px; background: rgba(255,255,255,0.03); border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
+        .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
+        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
+        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
+        .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
     </style>
 </head>
 <body>
@@ -30,27 +45,17 @@
     <h2>Mecánico Pro ⚡</h2>
     
     <div class="input-group">
-        <label>Modo</label>
-        <select id="mode" onchange="convert()">
+        <label>Modo de Conversión</label>
+        <select id="mode" onchange="toggleSlashMode()">
             <option value="mm_to_in">Milímetros a Pulgadas</option>
             <option value="in_to_mm">Pulgadas a Milímetros</option>
         </select>
     </div>
 
     <div class="input-group">
-        <label>Entrada</label>
+        <label>Valor a Calcular</label>
         <input type="text" inputmode="decimal" id="input" placeholder="0" oninput="convert()" autocomplete="off">
-        
-        <div class="quick-fractions">
-            <button class="f-btn" onclick="addF('1/4')">1/4</button>
-            <button class="f-btn" onclick="addF('1/2')">1/2</button>
-            <button class="f-btn" onclick="addF('3/4')">3/4</button>
-            <button class="f-btn" onclick="addF('/')">/</button>
-            <button class="f-btn" onclick="addF('1/8')">1/8</button>
-            <button class="f-btn" onclick="addF('3/8')">3/8</button>
-            <button class="f-btn" onclick="addF('5/8')">5/8</button>
-            <button class="f-btn" onclick="addF('7/8')">7/8</button>
-        </div>
+        <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
     </div>
 
     <div class="result-container" id="resBox">
@@ -70,16 +75,27 @@
         "16": "5/8\"", "17": "11/16\"", "18": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\""
     };
 
-    function addF(frac) {
+    function toggleSlashMode() {
+        const mode = document.getElementById('mode').value;
+        const btn = document.getElementById('slashBtn');
         const input = document.getElementById('input');
-        // Si ya hay algo y no termina en espacio, añadimos espacio antes de la fracción
-        if (input.value && !input.value.endsWith(' ') && frac !== '/') {
-            input.value += ' ' + frac;
-        } else {
-            input.value += frac;
-        }
-        convert();
+        
+        // Limpiar para evitar errores al cambiar de modo
+        input.value = '';
+        document.getElementById('resBox').innerHTML = '...';
+
+        // Mostrar botón solo en modo Pulgadas a MM
+        btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
         input.focus();
+    }
+
+    function addSlash() {
+        const input = document.getElementById('input');
+        // Si hay un número y no termina en espacio, asumimos que puede ser un número mixto
+        // Pero para la diagonal simple solo la añadimos al final
+        input.value += "/";
+        input.focus();
+        convert();
     }
 
     function convert() {
@@ -96,21 +112,20 @@
             resBox.innerHTML = `<div class="main-res">${res}</div><div class="badge">Sugerencia taller</div>`;
         } else {
             let mm = (val * 25.4).toFixed(2);
-            resBox.innerHTML = `<div class="main-res">${mm}mm</div><div class="badge">Sugerencia: ${Math.round(mm)}mm</div>`;
+            resBox.innerHTML = `<div class="main-res">${mm}mm</div><div class="badge">Equivale a: ${Math.round(mm)}mm</div>`;
         }
     }
 
     function evalFraccion(t) {
         t = t.replace(',', '.');
+        // Manejo de números mixtos tipo "1 1/2"
         if (t.includes(' ')) {
             let p = t.split(' ');
-            try { 
-                let entero = parseFloat(p[0]);
-                let fraccion = p[1].includes('/') ? eval(p[1]) : 0;
-                return entero + fraccion; 
-            } catch(e) { return parseFloat(p[0]); }
+            try { return parseFloat(p[0]) + (p[1].includes('/') ? eval(p[1]) : 0); } 
+            catch(e) { return parseFloat(p[0]); }
         }
-        try { return t.includes('/') ? eval(t) : parseFloat(t); } catch(e) { return parseFloat(t); }
+        try { return t.includes('/') ? eval(t) : parseFloat(t); } 
+        catch(e) { return parseFloat(t); }
     }
 
     function calcFraccion(dec) {
