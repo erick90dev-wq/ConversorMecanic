@@ -8,7 +8,6 @@
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         
-        /* NAVEGACIÓN */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 420px; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1e293b; color: #94a3b8; cursor: pointer; font-weight: bold; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
         .tab-btn.active { background: var(--accent); color: var(--bg); }
@@ -20,7 +19,6 @@
         .card { background: var(--card); width: 100%; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
         h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
         
-        /* INPUTS */
         .input-group { margin-bottom: 20px; text-align: left; position: relative; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
@@ -34,17 +32,15 @@
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
         
-        /* TABLAS */
-        .table-card { background: var(--card); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { color: var(--accent); text-align: left; padding: 10px; border-bottom: 2px solid #334155; }
-        td { padding: 10px; border-bottom: 1px solid #334155; color: #cbd5e1; }
+        /* ESTILOS TABLA MEJORADOS */
+        .table-card { background: var(--card); border-radius: 24px; padding: 10px; border: 1px solid rgba(255,255,255,0.05); max-height: 70vh; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        thead { position: sticky; top: 0; background: var(--card); z-index: 10; }
+        th { color: var(--accent); text-align: left; padding: 12px 8px; border-bottom: 2px solid #334155; }
+        td { padding: 10px 8px; border-bottom: 1px solid #334155; color: #cbd5e1; }
         tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+        .sticky-col { font-weight: bold; color: white; }
 
-        /* HISTORIAL */
-        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; }
-        .history-item { background: #16213e; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; }
-        
         .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
     </style>
 </head>
@@ -77,19 +73,16 @@
             <div class="result-container" id="resBox">
                 <div style="color: #475569;">Introduce una medida...</div>
             </div>
-            <div class="history-section" id="historySection" style="display:none;">
-                <div id="historyList"></div>
-            </div>
         </div>
     </div>
 
     <div id="tablesView" class="view">
         <div class="table-card">
-            <h3 style="text-align:center; color: var(--accent);">Fracciones Comunes</h3>
+            <h3 style="text-align:center; color: var(--accent); margin: 10px 0;">Equivalencias (0" a 3")</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Pulgada</th>
+                        <th>Pulgadas</th>
                         <th>Decimal</th>
                         <th>mm</th>
                     </tr>
@@ -104,8 +97,6 @@
 <div class="ad-slot"><span>ESPACIO PARA PUBLICIDAD</span></div>
 
 <script>
-    const tablaComercial = { "1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\"" };
-
     function switchView(view) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -126,45 +117,60 @@
         convert();
     }
 
-    // Llenar tabla de equivalencias
+    // GENERADOR DE TABLA HASTA 3 PULGADAS (incrementos de 1/16)
     const tableBody = document.getElementById('tableBody');
-    const fracciones = [
-        ["1/16", 0.0625, 1.588], ["1/8", 0.1250, 3.175], ["3/16", 0.1875, 4.763], ["1/4", 0.2500, 6.350],
-        ["5/16", 0.3125, 7.938], ["3/8", 0.3750, 9.525], ["7/16", 0.4375, 11.113], ["1/2", 0.5000, 12.700],
-        ["9/16", 0.5625, 14.288], ["5/8", 0.6250, 15.875], ["11/16", 0.6875, 17.463], ["3/4", 0.7500, 19.050],
-        ["13/16", 0.8125, 20.638], ["7/8", 0.8750, 22.225], ["15/16", 0.9375, 23.813], ["1\"", 1.0000, 25.400]
-    ];
-    
-    tableBody.innerHTML = fracciones.map(f => `
-        <tr>
-            <td><b>${f[0]}</b></td>
-            <td>${f[1].toFixed(4)}</td>
-            <td style="color:var(--accent)">${f[2].toFixed(3)}</td>
-        </tr>
-    `).join('');
+    let tableHTML = '';
 
+    const gcd = (a, b) => b ? gcd(b, a % b) : a;
+    function formatFrac(n, d) {
+        if (n === 0) return '';
+        if (n === d) return '1"';
+        const common = gcd(n, d);
+        return `${n/common}/${d/common}"`;
+    }
+
+    for (let i = 1; i <= 48; i++) { // 16 * 3 = 48 pasos
+        const totalInches = i / 16;
+        const mm = totalInches * 25.4;
+        
+        const whole = Math.floor(totalInches);
+        const num = i % 16;
+        let displayFrac = "";
+        
+        if (num === 0) {
+            displayFrac = whole + '"';
+        } else {
+            displayFrac = (whole > 0 ? whole + " " : "") + formatFrac(num, 16);
+        }
+
+        tableHTML += `
+            <tr>
+                <td class="sticky-col">${displayFrac}</td>
+                <td>${totalInches.toFixed(4)}"</td>
+                <td style="color:var(--accent)">${mm.toFixed(3)}</td>
+            </tr>`;
+    }
+    tableBody.innerHTML = tableHTML;
+
+    // Lógica de conversión (simplificada del checkpoint anterior)
     function convert() {
         const rawVal = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Introduce una medida...</div>'; return; }
+        if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Esperando...</div>'; return; }
+        
         const val = procesarEntrada(rawVal);
         if (isNaN(val) || val <= 0) { resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>'; return; }
 
-        let resPrincipal, resBadge, resExtra;
         if (mode === 'mm_to_in') {
-            let res = tablaComercial[val] || toFraction(val / 25.4);
-            let isStd = !!tablaComercial[val];
-            resPrincipal = res;
-            resBadge = `<div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
-            resExtra = `<div class="exact-val">Decimal: ${(val/25.4).toFixed(4)}"</div>`;
+            const inches = val / 25.4;
+            resBox.innerHTML = `<div class="main-res">${toFraction(inches)}</div>
+                                <div class="badge badge-spec">Decimal: ${inches.toFixed(4)}"</div>`;
         } else {
             const mm = val * 25.4;
-            resPrincipal = mm.toFixed(2) + '<span style="font-size:1.5rem">mm</span>';
-            resBadge = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
-            resExtra = `<div class="exact-val">Entrada: ${rawVal}"</div>`;
+            resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<span style="font-size:1.5rem">mm</span></div>
+                                <div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
         }
-        resBox.innerHTML = `<div class="main-res">${resPrincipal}</div>${resBadge}${resExtra}`;
     }
 
     function procesarEntrada(texto) {
@@ -193,7 +199,6 @@
         const entero = Math.floor(bestNum / bestDen);
         let residuoNum = bestNum % bestDen;
         if (residuoNum === 0) return entero + '"';
-        const gcd = (a, b) => b ? gcd(b, a % b) : a;
         const common = gcd(residuoNum, bestDen);
         return (entero > 0 ? entero + " " : "") + (residuoNum/common) + "/" + (bestDen/common) + '"';
     }
