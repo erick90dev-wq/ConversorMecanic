@@ -14,24 +14,30 @@
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--accent); }
         
-        /* BOTÓN DIAGONAL */
-        .slash-btn {
+        /* BOTONES DE ASISTENCIA (Diagonal y Espacio) */
+        .helper-btns {
             display: none;
             position: absolute;
-            right: 10px;
+            right: 8px;
             bottom: 6px;
+            gap: 5px;
+            z-index: 5;
+        }
+        .tool-btn {
             background: var(--accent);
             color: var(--bg);
             border: none;
             border-radius: 10px;
-            width: 46px;
-            height: 46px;
-            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .slash-btn:active { transform: scale(0.9); }
+        .tool-btn:active { transform: scale(0.9); }
 
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; transition: 0.3s; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -44,7 +50,6 @@
         .history-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block; }
         .history-item { background: #16213e; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
         
-        /* ESPACIO PUBLICIDAD */
         .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; text-align: center; }
     </style>
 </head>
@@ -62,7 +67,10 @@
     <div class="input-group">
         <label>Medida</label>
         <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
-        <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
+        <div id="helperBtns" class="helper-btns">
+            <button class="tool-btn" onclick="addChar(' ')">␣</button>
+            <button class="tool-btn" onclick="addChar('/')">/</button>
+        </div>
     </div>
     <div class="result-container" id="resBox">
         <div style="color: #475569;">Introduce una medida...</div>
@@ -90,14 +98,15 @@
 
     function toggleMode() {
         const mode = document.getElementById('mode').value;
-        const btn = document.getElementById('slashBtn');
-        btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
+        const helpers = document.getElementById('helperBtns');
+        // Mostrar botones de ayuda solo en modo Pulgadas a MM
+        helpers.style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
         convert();
     }
 
-    function addSlash() {
+    function addChar(char) {
         const input = document.getElementById('input');
-        input.value += "/";
+        input.value += char;
         input.focus();
         convert();
     }
@@ -106,7 +115,9 @@
         const rawVal = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
+        
         if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Esperando...</div>'; return; }
+        
         const val = procesarEntrada(rawVal);
         if (isNaN(val) || val <= 0) { resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>'; return; }
 
@@ -181,7 +192,7 @@
         const item = historial[i];
         document.getElementById('mode').value = item.modo;
         document.getElementById('input').value = item.entrada;
-        toggleMode(); // Actualiza la visibilidad del botón slash
+        toggleMode();
         convert();
     }
 </script>
