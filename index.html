@@ -6,42 +6,42 @@
     <title>Mecánico Pro ⚡</title>
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
         
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 420px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1e293b; color: #94a3b8; cursor: pointer; font-weight: bold; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; max-width: 500px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1e293b; color: #94a3b8; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background: var(--accent); color: var(--bg); }
 
-        .container { width: 100%; max-width: 420px; }
+        .container { width: 100%; max-width: 500px; }
         .view { display: none; }
         .view.active { display: block; }
 
-        .card { background: var(--card); width: 100%; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
-        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
+        /* TABLAS ESTILO PROFESIONAL */
+        .table-card { background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .search-table { width: 100%; padding: 10px; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; }
         
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
-        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
-        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+        .table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        thead { position: sticky; top: 0; background: #334155; }
+        th { color: var(--accent); text-align: left; padding: 12px 8px; font-size: 0.7rem; text-transform: uppercase; }
+        td { padding: 8px; border-bottom: 1px solid #334155; color: #cbd5e1; }
         
-        .helper-btns { display: none; position: absolute; right: 8px; bottom: 6px; gap: 5px; z-index: 5; }
-        .tool-btn { background: var(--accent); color: var(--bg); border: none; border-radius: 10px; width: 44px; height: 44px; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
+        /* Resaltado de filas principales (enteros y medios) */
+        .row-main { background: rgba(56, 189, 248, 0.1) !important; font-weight: bold; color: white; }
+        tr:hover { background: rgba(255,255,255,0.05); }
 
-        .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
-        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
-        .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
-        .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
-        
-        /* ESTILOS TABLA MEJORADOS */
-        .table-card { background: var(--card); border-radius: 24px; padding: 10px; border: 1px solid rgba(255,255,255,0.05); max-height: 70vh; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        thead { position: sticky; top: 0; background: var(--card); z-index: 10; }
-        th { color: var(--accent); text-align: left; padding: 12px 8px; border-bottom: 2px solid #334155; }
-        td { padding: 10px 8px; border-bottom: 1px solid #334155; color: #cbd5e1; }
-        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-        .sticky-col { font-weight: bold; color: white; }
+        .frac-col { color: var(--accent); font-weight: 600; width: 30%; }
+        .mm-col { color: var(--std); width: 35%; }
+        .dec-col { color: #94a3b8; width: 35%; }
 
-        .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
+        /* Estilo Calculadora */
+        .card { background: var(--card); padding: 25px; border-radius: 24px; text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: left; position: relative; }
+        input { width: 100%; padding: 15px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; font-size: 1.2rem; box-sizing: border-box; }
+        .helper-btns { display: none; position: absolute; right: 8px; bottom: 5px; gap: 5px; }
+        .tool-btn { background: var(--accent); border: none; border-radius: 8px; width: 40px; height: 40px; font-weight: bold; }
+        .result-container { margin-top: 15px; background: #0f172a; border-radius: 15px; padding: 20px; min-height: 100px; }
+        .main-res { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -54,17 +54,13 @@
 <div class="container">
     <div id="calcView" class="view active">
         <div class="card">
-            <h2>Mecánico Pro ⚡</h2>
+            <h2 style="margin:0 0 15px 0">Mecánico Pro ⚡</h2>
+            <select id="mode" onchange="toggleMode()" style="width:100%; padding:10px; border-radius:10px; margin-bottom:15px; background:#0f172a; color:white;">
+                <option value="mm_to_in">mm ➔ Pulgadas</option>
+                <option value="in_to_mm">Pulgadas ➔ mm</option>
+            </select>
             <div class="input-group">
-                <label>Modo</label>
-                <select id="mode" onchange="toggleMode()">
-                    <option value="mm_to_in">Milímetros a Pulgadas</option>
-                    <option value="in_to_mm">Pulgadas a Milímetros</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Medida</label>
-                <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+                <input type="text" id="input" inputmode="decimal" placeholder="Ej: 1 1/2" oninput="convert()">
                 <div id="helperBtns" class="helper-btns">
                     <button class="tool-btn" onclick="addChar(' ')">␣</button>
                     <button class="tool-btn" onclick="addChar('/')">/</button>
@@ -78,25 +74,25 @@
 
     <div id="tablesView" class="view">
         <div class="table-card">
-            <h3 style="text-align:center; color: var(--accent); margin: 10px 0;">Equivalencias (0" a 3")</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Pulgadas</th>
-                        <th>Decimal</th>
-                        <th>mm</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    </tbody>
-            </table>
+            <input type="text" id="tableSearch" class="search-table" placeholder="🔍 Buscar medida (ej: 1/64 o 2.5)..." oninput="filterTable()">
+            <div class="table-wrapper">
+                <table id="equivTable">
+                    <thead>
+                        <tr>
+                            <th>Fracción</th>
+                            <th>mm</th>
+                            <th>Decimal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="ad-slot"><span>ESPACIO PARA PUBLICIDAD</span></div>
-
 <script>
+    // --- LÓGICA DE NAVEGACIÓN ---
     function switchView(view) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -104,104 +100,99 @@
         event.currentTarget.classList.add('active');
     }
 
+    // --- GENERADOR DE TABLA (Basado en tu imagen) ---
+    const tableBody = document.getElementById('tableBody');
+    const gcd = (a, b) => b ? gcd(b, a % b) : a;
+
+    function generateTable() {
+        let html = '';
+        // Generamos incrementos de 1/64 hasta 3 pulgadas (64 * 3 = 192 pasos)
+        for (let i = 1; i <= 192; i++) {
+            const dec = i / 64;
+            const mm = dec * 25.4;
+            
+            const entero = Math.floor(i / 64);
+            const num = i % 64;
+            let fracTxt = "";
+
+            if (num === 0) {
+                fracTxt = entero + '"';
+            } else {
+                const common = gcd(num, 64);
+                fracTxt = (entero > 0 ? entero + " " : "") + (num/common) + "/" + (64/common) + '"';
+            }
+
+            // Resaltar filas de medidas principales (enteros, medios, cuartos)
+            const isMain = (num % 16 === 0); 
+            const rowClass = isMain ? 'class="row-main"' : '';
+
+            html += `<tr ${rowClass}>
+                <td class="frac-col">${fracTxt}</td>
+                <td class="mm-col">${mm.toFixed(3)} mm</td>
+                <td class="dec-col">${dec.toFixed(4)}"</td>
+            </tr>`;
+        }
+        tableBody.innerHTML = html;
+    }
+
+    function filterTable() {
+        const input = document.getElementById('tableSearch').value.toLowerCase();
+        const rows = document.getElementById('tableBody').getElementsByTagName('tr');
+        for (let row of rows) {
+            row.style.display = row.innerText.toLowerCase().includes(input) ? '' : 'none';
+        }
+    }
+
+    // --- LÓGICA CALCULADORA ---
     function toggleMode() {
         const mode = document.getElementById('mode').value;
         document.getElementById('helperBtns').style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
         convert();
     }
 
-    function addChar(char) {
-        const input = document.getElementById('input');
-        input.value += char;
-        input.focus();
-        convert();
+    function addChar(c) {
+        const i = document.getElementById('input');
+        i.value += c; i.focus(); convert();
     }
 
-    // GENERADOR DE TABLA HASTA 3 PULGADAS (incrementos de 1/16)
-    const tableBody = document.getElementById('tableBody');
-    let tableHTML = '';
-
-    const gcd = (a, b) => b ? gcd(b, a % b) : a;
-    function formatFrac(n, d) {
-        if (n === 0) return '';
-        if (n === d) return '1"';
-        const common = gcd(n, d);
-        return `${n/common}/${d/common}"`;
-    }
-
-    for (let i = 1; i <= 48; i++) { // 16 * 3 = 48 pasos
-        const totalInches = i / 16;
-        const mm = totalInches * 25.4;
-        
-        const whole = Math.floor(totalInches);
-        const num = i % 16;
-        let displayFrac = "";
-        
-        if (num === 0) {
-            displayFrac = whole + '"';
-        } else {
-            displayFrac = (whole > 0 ? whole + " " : "") + formatFrac(num, 16);
-        }
-
-        tableHTML += `
-            <tr>
-                <td class="sticky-col">${displayFrac}</td>
-                <td>${totalInches.toFixed(4)}"</td>
-                <td style="color:var(--accent)">${mm.toFixed(3)}</td>
-            </tr>`;
-    }
-    tableBody.innerHTML = tableHTML;
-
-    // Lógica de conversión (simplificada del checkpoint anterior)
     function convert() {
-        const rawVal = document.getElementById('input').value.trim();
+        const raw = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Esperando...</div>'; return; }
+        if(!raw) { resBox.innerHTML = "Esperando..."; return; }
         
-        const val = procesarEntrada(rawVal);
-        if (isNaN(val) || val <= 0) { resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>'; return; }
+        let val = 0;
+        if(raw.includes(' ')) {
+            const parts = raw.split(/\s+/);
+            const f = parts[1].split('/');
+            val = parseFloat(parts[0]) + (parseFloat(f[0])/parseFloat(f[1]));
+        } else if(raw.includes('/')) {
+            const f = raw.split('/');
+            val = parseFloat(f[0])/parseFloat(f[1]);
+        } else { val = parseFloat(raw.replace(',','.')); }
 
-        if (mode === 'mm_to_in') {
-            const inches = val / 25.4;
-            resBox.innerHTML = `<div class="main-res">${toFraction(inches)}</div>
-                                <div class="badge badge-spec">Decimal: ${inches.toFixed(4)}"</div>`;
-        } else {
+        if(isNaN(val)) return;
+
+        if(mode === 'in_to_mm') {
             const mm = val * 25.4;
-            resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<span style="font-size:1.5rem">mm</span></div>
-                                <div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
+            resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}mm</div><div style="color:var(--std)">Aprox: ${Math.round(mm)}mm</div>`;
+        } else {
+            const inches = val / 25.4;
+            resBox.innerHTML = `<div class="main-res">${toFrac(inches)}</div><div style="color:#94a3b8">Decimal: ${inches.toFixed(4)}"</div>`;
         }
     }
 
-    function procesarEntrada(texto) {
-        texto = texto.replace(',', '.').replace('-', ' ').trim();
-        if (texto.includes(' ')) {
-            const partes = texto.split(/\s+/);
-            if (partes[1]?.includes('/')) {
-                const f = partes[1].split('/');
-                return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
-            }
-        } else if (texto.includes('/')) {
-            const f = texto.split('/');
-            return parseFloat(f[0]) / parseFloat(f[1]);
-        }
-        return parseFloat(texto);
+    function toFrac(dec) {
+        const d = 64; // Precisión máxima según tu tabla
+        let n = Math.round(dec * d);
+        const entero = Math.floor(n / d);
+        n = n % d;
+        if (n === 0) return entero + '"';
+        const common = gcd(n, d);
+        return (entero > 0 ? entero + " " : "") + (n/common) + "/" + (d/common) + '"';
     }
 
-    function toFraction(dec) {
-        const denominators = [2, 4, 8, 16, 32, 64];
-        let bestNum = 0, bestDen = 1, minDiff = Infinity;
-        for (let d of denominators) {
-            let n = Math.round(dec * d);
-            let diff = Math.abs(dec - n / d);
-            if (diff < minDiff) { minDiff = diff; bestNum = n; bestDen = d; }
-        }
-        const entero = Math.floor(bestNum / bestDen);
-        let residuoNum = bestNum % bestDen;
-        if (residuoNum === 0) return entero + '"';
-        const common = gcd(residuoNum, bestDen);
-        return (entero > 0 ? entero + " " : "") + (residuoNum/common) + "/" + (bestDen/common) + '"';
-    }
+    generateTable();
 </script>
 </body>
 </html>
