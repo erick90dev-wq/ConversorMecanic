@@ -18,7 +18,7 @@
             align-items: center;
         }
 
-        /* 1. TÍTULO SUPERIOR (RECTÁNGULO ROJO) */
+        /* 1. TÍTULO SUPERIOR (ROJO) */
         .top-header {
             width: 100%;
             max-width: 450px;
@@ -26,7 +26,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 20px 0;
+            padding: 15px 0;
         }
 
         .top-header h2 {
@@ -37,19 +37,19 @@
             font-size: 1.8rem;
         }
 
-        /* 2. BOTÓN DE MENÚ (RECTÁNGULO AMARILLO) */
+        /* 2. BOTÓN DE MENÚ (AMARILLO) */
         .menu-btn {
             position: absolute;
             left: 0;
             background: none;
             border: none;
             color: var(--text);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             padding: 5px;
         }
 
-        /* 3. PESTAÑAS (RECTÁNGULO VERDE) - AHORA EN LA POSICIÓN DEL ROJO */
+        /* 3. PESTAÑAS (VERDE) */
         .nav-tabs { 
             display: flex; 
             gap: 10px; 
@@ -60,9 +60,9 @@
 
         .tab-btn { 
             flex: 1; 
-            padding: 12px; 
+            padding: 14px; 
             border: none; 
-            border-radius: 12px; 
+            border-radius: 14px; 
             background: #1e293b; 
             color: #94a3b8; 
             cursor: pointer; 
@@ -75,11 +75,11 @@
             color: var(--bg); 
         }
 
-        /* CONTENEDOR Y VISTAS */
         .container { width: 100%; max-width: 450px; }
         .view { display: none; }
         .view.active { display: block; }
 
+        /* CALCULADORA */
         .card { 
             background: var(--card); 
             padding: 25px; 
@@ -89,9 +89,30 @@
             text-align: center;
         }
 
-        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; margin-left: 5px; }
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+
+        /* BOTONES DE AYUDA (ESPACIO Y DIAGONAL) */
+        .helper-btns { 
+            display: none; 
+            position: absolute; 
+            right: 8px; 
+            bottom: 6px; 
+            gap: 5px; 
+            z-index: 5; 
+        }
+        .tool-btn { 
+            background: var(--accent); 
+            color: var(--bg); 
+            border: none; 
+            border-radius: 10px; 
+            width: 44px; 
+            height: 44px; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
 
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -99,19 +120,17 @@
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        /* TABLAS */
-        .table-card { background: var(--card); border-radius: 24px; padding: 15px; }
+        /* TABLAS Y BUSCADOR */
+        .table-card { background: var(--card); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .search-box { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; margin-bottom: 10px; box-sizing: border-box; outline: none; }
         .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         th { background: #334155; color: var(--accent); padding: 12px; text-align: left; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px solid #334155; }
+        td { padding: 10px; border-bottom: 1px solid #334155; color: #cbd5e1; }
+        .row-main { background: rgba(56, 189, 248, 0.07); font-weight: bold; }
         
-        /* MENU LATERAL (SIDEBAR) */
-        .sidebar {
-            position: fixed; left: -280px; top: 0; width: 280px; height: 100vh;
-            background: var(--card); z-index: 1000; transition: 0.3s; padding: 20px;
-            box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.1);
-        }
+        /* SIDEBAR */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 20px; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.1); }
         .sidebar.active { left: 0; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
         .overlay.active { display: block; }
@@ -122,8 +141,8 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
     <nav class="sidebar" id="sidebar">
         <h3 style="color: var(--accent)">Opciones</h3>
-        <div style="padding: 15px 0; cursor: pointer;" onclick="showConfig()">⚙️ Configuración</div>
-        <div style="padding: 15px 0; cursor: pointer;" onclick="alert('Muy pronto...')">☕ Donaciones</div>
+        <div style="padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="toggleMenu()">🔧 Calculadora</div>
+        <div style="padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="alert('Configuración próximamente')">⚙️ Ajustes</div>
     </nav>
 
     <header class="top-header">
@@ -141,7 +160,7 @@
             <div class="card">
                 <div class="input-group">
                     <label>Modo</label>
-                    <select id="mode" onchange="convert()">
+                    <select id="mode" onchange="toggleMode()">
                         <option value="mm_to_in">Milímetros a Pulgadas</option>
                         <option value="in_to_mm">Pulgadas a Milímetros</option>
                     </select>
@@ -149,6 +168,10 @@
                 <div class="input-group">
                     <label>Medida</label>
                     <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+                    <div id="helperBtns" class="helper-btns">
+                        <button class="tool-btn" onclick="addChar(' ')">␣</button>
+                        <button class="tool-btn" onclick="addChar('/')">/</button>
+                    </div>
                 </div>
                 <div class="result-container" id="resBox">
                     <div style="color: #475569;">Introduce una medida...</div>
@@ -158,10 +181,11 @@
 
         <div id="tablesView" class="view">
             <div class="table-card">
+                <input type="text" class="search-box" id="tableSearch" placeholder="🔍 Buscar medida..." oninput="filterTable()">
                 <div class="table-wrapper">
                     <table>
                         <thead>
-                            <tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr>
+                            <tr><th>Fracción</th><th>mm</th><th>Milésimas</th></tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
@@ -182,11 +206,22 @@
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(view + 'View').classList.add('active');
-        if(view === 'calc') document.getElementById('btn-calc').classList.add('active');
-        else document.getElementById('btn-tables').classList.add('active');
+        document.getElementById('btn-' + view).classList.add('active');
     }
 
-    // Lógica de conversión (del checkpoint)
+    function toggleMode() {
+        const mode = document.getElementById('mode').value;
+        document.getElementById('helperBtns').style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
+        convert();
+    }
+
+    function addChar(char) {
+        const input = document.getElementById('input');
+        input.value += char;
+        input.focus();
+        convert();
+    }
+
     function convert() {
         const rawVal = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
@@ -194,7 +229,7 @@
         if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Introduce una medida...</div>'; return; }
         
         const val = procesarEntrada(rawVal);
-        if (isNaN(val)) return;
+        if (isNaN(val) || val <= 0) return;
 
         if (mode === 'mm_to_in') {
             let res = tablaComercial[val] || toFraction(val / 25.4);
@@ -210,8 +245,10 @@
         texto = texto.replace(',', '.').replace('-', ' ').trim();
         if (texto.includes(' ')) {
             const partes = texto.split(/\s+/);
-            const f = partes[1].split('/');
-            return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
+            if (partes[1]?.includes('/')) {
+                const f = partes[1].split('/');
+                return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
+            }
         } else if (texto.includes('/')) {
             const f = texto.split('/');
             return parseFloat(f[0]) / parseFloat(f[1]);
@@ -230,15 +267,29 @@
         return (entero > 0 ? entero + " " : "") + (n/common) + "/" + (d/common) + '"';
     }
 
-    // Generar tabla
+    // Generador de Tabla 1/64
     const tableBody = document.getElementById('tableBody');
+    const gcdFunc = (a, b) => b ? gcdFunc(b, a % b) : a;
     let tableHTML = '';
-    for (let i = 1; i <= 64; i++) {
+    for (let i = 1; i <= 192; i++) {
         const dec = i / 64;
         const mm = dec * 25.4;
-        tableHTML += `<tr><td>${i}/64"</td><td>${mm.toFixed(2)}</td><td>${dec.toFixed(3)}</td></tr>`;
+        const whole = Math.floor(i / 64);
+        const rem = i % 64;
+        let fText = (rem === 0) ? whole + '"' : (whole > 0 ? whole + " " : "") + (rem/gcdFunc(rem,64)) + "/" + (64/gcdFunc(rem,64)) + '"';
+        tableHTML += `<tr ${(rem % 16 === 0) ? 'class="row-main"' : ''}>
+            <td style="color:var(--accent)">${fText}</td>
+            <td>${mm.toFixed(3)}</td>
+            <td style="color:#94a3b8">${dec.toFixed(4)}</td>
+        </tr>`;
     }
     tableBody.innerHTML = tableHTML;
+
+    function filterTable() {
+        const q = document.getElementById('tableSearch').value.toLowerCase();
+        const rows = tableBody.getElementsByTagName('tr');
+        for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'; }
+    }
 </script>
 </body>
 </html>
