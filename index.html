@@ -11,118 +11,137 @@
             font-family: 'Segoe UI', sans-serif; 
             background: var(--bg); 
             color: var(--text); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
             margin: 0; 
-            padding: 10px; 
-        }
-
-        /* DISEÑO DE PUBLICIDAD ADAPTATIVA */
-        .layout-wrapper {
+            padding: 10px;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 20px;
-        }
-
-        .ad-lateral {
-            display: none; 
-            width: 160px;
-            min-height: 600px;
-            border: 1px dashed #334155;
-            border-radius: 12px;
-            position: sticky;
-            top: 20px;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: #475569;
-            font-size: 0.7rem;
-            text-align: center;
         }
 
-        .ad-mobile {
+        /* 1. TÍTULO SUPERIOR (RECTÁNGULO ROJO) */
+        .top-header {
             width: 100%;
             max-width: 450px;
-            height: 90px;
-            border: 1px dashed #334155;
-            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #475569;
-            font-size: 0.7rem;
-            margin: 10px 0;
+            position: relative;
+            padding: 20px 0;
         }
 
-        @media (min-width: 900px) {
-            .ad-lateral { display: flex; }
-            .ad-mobile { display: none; }
+        .top-header h2 {
+            margin: 0;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
         }
 
-        /* NAVEGACIÓN */
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
-        .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: #1e293b; color: #94a3b8; cursor: pointer; font-weight: bold; font-size: 1rem; border: 1px solid rgba(255,255,255,0.05); }
-        .tab-btn.active { background: var(--accent); color: var(--bg); }
+        /* 2. BOTÓN DE MENÚ (RECTÁNGULO AMARILLO) */
+        .menu-btn {
+            position: absolute;
+            left: 0;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
 
+        /* 3. PESTAÑAS (RECTÁNGULO VERDE) - AHORA EN LA POSICIÓN DEL ROJO */
+        .nav-tabs { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            width: 100%; 
+            max-width: 450px; 
+        }
+
+        .tab-btn { 
+            flex: 1; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 12px; 
+            background: #1e293b; 
+            color: #94a3b8; 
+            cursor: pointer; 
+            font-weight: bold; 
+            border: 1px solid rgba(255,255,255,0.05); 
+        }
+
+        .tab-btn.active { 
+            background: var(--accent); 
+            color: var(--bg); 
+        }
+
+        /* CONTENEDOR Y VISTAS */
         .container { width: 100%; max-width: 450px; }
         .view { display: none; }
         .view.active { display: block; }
 
-        /* CALCULADORA */
-        .card { background: var(--card); width: 100%; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
-        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin: 0 0 25px 0; }
+        .card { 
+            background: var(--card); 
+            padding: 25px; 
+            border-radius: 28px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            text-align: center;
+        }
 
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
-        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; margin-left: 5px; }
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
-
-        .helper-btns { display: none; position: absolute; right: 8px; bottom: 6px; gap: 5px; z-index: 5; }
-        .tool-btn { background: var(--accent); color: var(--bg); border: none; border-radius: 10px; width: 44px; height: 44px; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
 
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
         .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
-        .exact-val { font-size: 0.85rem; color: #64748b; margin-top: 10px; }
 
         /* TABLAS */
-        .table-card { background: var(--card); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .search-box { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; margin-bottom: 10px; }
+        .table-card { background: var(--card); border-radius: 24px; padding: 15px; }
         .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        thead { position: sticky; top: 0; background: #334155; z-index: 2; }
-        th { color: var(--accent); text-align: left; padding: 12px 8px; }
-        td { padding: 10px 8px; border-bottom: 1px solid #334155; color: #cbd5e1; }
-        .row-main { background: rgba(56, 189, 248, 0.07); font-weight: bold; }
-
-        .ad-slot { margin-top: 20px; width: 100%; max-width: 450px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; }
+        th { background: #334155; color: var(--accent); padding: 12px; text-align: left; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #334155; }
+        
+        /* MENU LATERAL (SIDEBAR) */
+        .sidebar {
+            position: fixed; left: -280px; top: 0; width: 280px; height: 100vh;
+            background: var(--card); z-index: 1000; transition: 0.3s; padding: 20px;
+            box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar.active { left: 0; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
+        .overlay.active { display: block; }
     </style>
 </head>
 <body>
 
-<div class="ad-mobile"><span>PUBLICIDAD SUPERIOR</span></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="sidebar" id="sidebar">
+        <h3 style="color: var(--accent)">Opciones</h3>
+        <div style="padding: 15px 0; cursor: pointer;" onclick="showConfig()">⚙️ Configuración</div>
+        <div style="padding: 15px 0; cursor: pointer;" onclick="alert('Muy pronto...')">☕ Donaciones</div>
+    </nav>
 
-<div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchView('calc')">Calculadora</button>
-    <button class="tab-btn" onclick="switchView('tables')">Tablas</button>
-</div>
+    <header class="top-header">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <h2>Mecánico Pro ⚡</h2>
+    </header>
 
-<div class="layout-wrapper">
-    <div class="ad-lateral"><span>ANUNCIO<br>LATERAL IZQ</span></div>
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="btn-calc" onclick="switchView('calc')">Calculadora</button>
+        <button class="tab-btn" id="btn-tables" onclick="switchView('tables')">Tablas</button>
+    </div>
 
     <div class="container">
         <div id="calcView" class="view active">
             <div class="card">
-                <h2>Mecánico Pro ⚡</h2>
                 <div class="input-group">
                     <label>Modo</label>
-                    <select id="mode" onchange="toggleMode()">
+                    <select id="mode" onchange="convert()">
                         <option value="mm_to_in">Milímetros a Pulgadas</option>
                         <option value="in_to_mm">Pulgadas a Milímetros</option>
                     </select>
@@ -130,10 +149,6 @@
                 <div class="input-group">
                     <label>Medida</label>
                     <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
-                    <div id="helperBtns" class="helper-btns">
-                        <button class="tool-btn" onclick="addChar(' ')">␣</button>
-                        <button class="tool-btn" onclick="addChar('/')">/</button>
-                    </div>
                 </div>
                 <div class="result-container" id="resBox">
                     <div style="color: #475569;">Introduce una medida...</div>
@@ -143,15 +158,10 @@
 
         <div id="tablesView" class="view">
             <div class="table-card">
-                <input type="text" class="search-box" id="tableSearch" placeholder="🔍 Buscar medida..." oninput="filterTable()">
                 <div class="table-wrapper">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Fracción</th>
-                                <th>mm</th>
-                                <th>Milésimas</th>
-                            </tr>
+                            <tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
@@ -160,40 +170,23 @@
         </div>
     </div>
 
-    <div class="ad-lateral"><span>ANUNCIO<br>LATERAL DER</span></div>
-</div>
-
-<div class="ad-mobile"><span>PUBLICIDAD INFERIOR</span></div>
-
 <script>
-    const tablaComercial = {
-        "1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"",
-        "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"",
-        "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"",
-        "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"",
-        "25": "1\"", "25.4": "1\""
-    };
+    const tablaComercial = {"1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""};
+
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
 
     function switchView(view) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(view + 'View').classList.add('active');
-        event.currentTarget.classList.add('active');
+        if(view === 'calc') document.getElementById('btn-calc').classList.add('active');
+        else document.getElementById('btn-tables').classList.add('active');
     }
 
-    function toggleMode() {
-        const mode = document.getElementById('mode').value;
-        document.getElementById('helperBtns').style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
-        convert();
-    }
-
-    function addChar(char) {
-        const input = document.getElementById('input');
-        input.value += char;
-        input.focus();
-        convert();
-    }
-
+    // Lógica de conversión (del checkpoint)
     function convert() {
         const rawVal = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
@@ -201,33 +194,24 @@
         if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Introduce una medida...</div>'; return; }
         
         const val = procesarEntrada(rawVal);
-        if (isNaN(val) || val <= 0) { resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>'; return; }
-
-        let resPrincipal, resBadge, resExtra;
+        if (isNaN(val)) return;
 
         if (mode === 'mm_to_in') {
-            let res = tablaComercial[val] ? tablaComercial[val] : toFraction(val / 25.4);
-            let isStd = tablaComercial[val] ? true : false;
-            resPrincipal = res;
-            resBadge = `<div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
-            resExtra = `<div class="exact-val">Decimal: ${(val/25.4).toFixed(4)}"</div>`;
+            let res = tablaComercial[val] || toFraction(val / 25.4);
+            let isStd = !!tablaComercial[val];
+            resBox.innerHTML = `<div class="main-res">${res}</div><div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
         } else {
             const mm = val * 25.4;
-            resPrincipal = mm.toFixed(2) + '<span style="font-size:1.5rem">mm</span>';
-            resBadge = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
-            resExtra = `<div class="exact-val">Entrada: ${rawVal}"</div>`;
+            resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<small style="font-size:1.5rem">mm</small></div><div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
         }
-        resBox.innerHTML = `<div class="main-res">${resPrincipal}</div>${resBadge}${resExtra}`;
     }
 
     function procesarEntrada(texto) {
         texto = texto.replace(',', '.').replace('-', ' ').trim();
         if (texto.includes(' ')) {
             const partes = texto.split(/\s+/);
-            if (partes[1] && partes[1].includes('/')) {
-                const f = partes[1].split('/');
-                return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
-            }
+            const f = partes[1].split('/');
+            return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
         } else if (texto.includes('/')) {
             const f = texto.split('/');
             return parseFloat(f[0]) / parseFloat(f[1]);
@@ -236,49 +220,25 @@
     }
 
     function toFraction(dec) {
-        const denominators = [2, 4, 8, 16, 32, 64];
-        let bestNum = 0, bestDen = 1, minDiff = Infinity;
-        for (let d of denominators) {
-            let n = Math.round(dec * d);
-            let diff = Math.abs(dec - n / d);
-            if (diff < minDiff) { minDiff = diff; bestNum = n; bestDen = d; }
-        }
-        const entero = Math.floor(bestNum / bestDen);
-        let residuoNum = bestNum % bestDen;
-        if (residuoNum === 0) return entero + '"';
+        const d = 64;
+        let n = Math.round(dec * d);
+        const entero = Math.floor(n / d);
+        n = n % d;
+        if (n === 0) return entero + '"';
         const gcd = (a, b) => b ? gcd(b, a % b) : a;
-        const common = gcd(residuoNum, bestDen);
-        return (entero > 0 ? entero + " " : "") + (residuoNum/common) + "/" + (bestDen/common) + '"';
+        const common = gcd(n, d);
+        return (entero > 0 ? entero + " " : "") + (n/common) + "/" + (d/common) + '"';
     }
 
+    // Generar tabla
     const tableBody = document.getElementById('tableBody');
-    const gcd = (a, b) => b ? gcd(b, a % b) : a;
     let tableHTML = '';
-
-    for (let i = 1; i <= 192; i++) {
+    for (let i = 1; i <= 64; i++) {
         const dec = i / 64;
         const mm = dec * 25.4;
-        const whole = Math.floor(i / 64);
-        const rem = i % 64;
-        let fText = "";
-        if (rem === 0) { fText = whole + '"'; }
-        else {
-            const common = gcd(rem, 64);
-            fText = (whole > 0 ? whole + " " : "") + (rem/common) + "/" + (64/common) + '"';
-        }
-        tableHTML += `<tr ${(rem % 16 === 0) ? 'class="row-main"' : ''}>
-            <td style="color:var(--accent)">${fText}</td>
-            <td>${mm.toFixed(3)}</td>
-            <td style="color:#94a3b8">${dec.toFixed(4)}</td>
-        </tr>`;
+        tableHTML += `<tr><td>${i}/64"</td><td>${mm.toFixed(2)}</td><td>${dec.toFixed(3)}</td></tr>`;
     }
     tableBody.innerHTML = tableHTML;
-
-    function filterTable() {
-        const q = document.getElementById('tableSearch').value.toLowerCase();
-        const rows = tableBody.getElementsByTagName('tr');
-        for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'; }
-    }
 </script>
 </body>
 </html>
