@@ -19,44 +19,36 @@
         .top-header h2 { margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; }
         .menu-btn { position: absolute; left: 0; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; }
 
+        .container { width: 100%; max-width: 450px; }
+        .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; margin-bottom: 15px; }
+        
+        /* BOTONES FRACCIÓN */
+        .quick-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .q-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--accent); font-weight: bold; cursor: pointer; }
+
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
         .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid var(--border); }
         .tab-btn.active { background: var(--accent); color: white; }
 
-        .container { width: 100%; max-width: 450px; }
-        .tool-section { display: none; }
-        .tool-section.active { display: block; }
-        .view { display: none; }
-        .view.active { display: block; }
-
-        .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; margin-bottom: 15px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-left: 5px; font-weight: bold; }
         select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
-
-        .search-box { margin-bottom: 15px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; padding: 12px; color: var(--text); width: 100%; box-sizing: border-box; }
-
         .result-container { margin-top: 10px; background: rgba(0,0,0,0.05); border-radius: 20px; padding: 25px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
-        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
+        .main-res { font-size: 3.2rem; font-weight: 800; color: var(--accent); }
         .badge { display: inline-block; padding: 8px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; overflow-y: auto; }
         .sidebar.active { left: 0; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
         .overlay.active { display: block; }
-        .menu-item { padding: 15px 10px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-        .submenu { display: none; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 5px; }
-        .submenu.show { display: block; }
-        .submenu-item { padding: 12px 20px; cursor: pointer; font-size: 0.9rem; color: #94a3b8; border-bottom: 1px solid var(--border); }
 
-        .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        th { background: var(--accent); color: white; padding: 12px 5px; position: sticky; top: 0; z-index: 10; }
-        td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
-        tr:nth-child(even) { background: rgba(255,255,255,0.03); }
-        .sticky-col { position: sticky; left: 0; background: var(--card); font-weight: bold; border-right: 2px solid var(--border); z-index: 5; }
+        .table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 12px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+        th { background: var(--accent); color: white; padding: 10px 4px; position: sticky; top: 0; z-index: 10; }
+        td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
+        .sticky-col { position: sticky; left: 0; background: var(--card); font-weight: bold; border-right: 2px solid var(--border); }
+        .tool-section { display: none; }
+        .tool-section.active { display: block; }
     </style>
 </head>
 <body>
@@ -64,20 +56,13 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
     
     <nav class="sidebar" id="sidebar">
-        <h2 id="txt-menu-title" style="color: var(--accent); margin-bottom: 25px;">Menú</h2>
-        <div class="menu-item" onclick="toggleFolder('folder-mm-in')"><span id="txt-menu-tool1">mm ⇄ pulgadas fracción</span><span>▾</span></div>
-        <div id="folder-mm-in" class="submenu">
-            <div class="submenu-item" onclick="loadTool('converter', 'calc')">➤ Calculadora</div>
-            <div class="submenu-item" onclick="loadTool('converter', 'tables')">➤ Tablas</div>
-        </div>
-        <div class="menu-item" onclick="loadTool('steel', 'main')"><span>Calibre acero (mm - kg/m²)</span></div>
-        <div class="menu-item" onclick="loadTool('wire', 'main')"><span>Comparativa Cables (AWG/BWG)</span></div>
-        <div class="menu-item" onclick="toggleFolder('folder-config')"><span>⚙️ Ajustes</span><span>▾</span></div>
-        <div id="folder-config" class="submenu">
-            <div style="padding: 15px;">
-                <select id="themeSelect" onchange="changeTheme()" style="width:100%; margin-bottom:10px;"><option value="dark">🌙 Dark</option><option value="light">☀️ Light</option></select>
-                <select id="langSelect" onchange="changeLang()" style="width:100%;"><option value="es">Español</option><option value="en">English</option></select>
-            </div>
+        <h2 style="color: var(--accent);">Menú</h2>
+        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('converter')">Calculadora / Tablas</div>
+        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('steel')">Calibre Acero</div>
+        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('wire')">Comparativa Cables</div>
+        <div style="margin-top: 20px;">
+            <label style="font-size: 0.7rem;">IDIOMA / LANGUAGE</label>
+            <select id="langSelect" onchange="changeLang()"><option value="es">Español</option><option value="en">English</option></select>
         </div>
     </nav>
 
@@ -94,36 +79,29 @@
             </div>
             <div id="subview-calc" class="view active">
                 <div class="card">
-                    <div class="input-group">
-                        <label id="txt-label-mode">Modo</label>
-                        <select id="mode" onchange="convert()"><option value="mm_to_in">Milímetros a Pulgadas</option><option value="in_to_mm">Pulgadas a Milímetros</option></select>
-                    </div>
-                    <div class="input-group">
-                        <label id="txt-label-measure">Medida</label>
-                        <input type="text" id="input" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+                    <select id="mode" onchange="convert()"><option value="mm_to_in">Milímetros a Pulgadas</option><option value="in_to_mm">Pulgadas a Milímetros</option></select>
+                    <input type="text" id="input" placeholder="Medida..." oninput="convert()">
+                    <div class="quick-btns" id="fracBtns" style="display:none;">
+                        <button class="q-btn" onclick="addChar(' ')">Espacio</button>
+                        <button class="q-btn" onclick="addChar('/')">/</button>
                     </div>
                     <div class="result-container" id="resBox"></div>
                 </div>
             </div>
-            <div id="subview-tables" class="view">
-                <div class="card" style="padding: 15px;">
-                    <input type="text" id="tableSearch" class="search-box" placeholder="🔍 Buscar medida..." oninput="filterTable('tableBody', this.value)">
-                    <div class="table-wrapper">
-                        <table>
-                            <thead><tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr></thead>
-                            <tbody id="tableBody"></tbody>
-                        </table>
-                    </div>
+            <div id="subview-tables" class="view" style="display:none;">
+                <div class="card" style="padding: 10px;">
+                    <input type="text" class="search-box" placeholder="🔍 Buscar..." oninput="filterTable('tableBody', this.value)">
+                    <div class="table-wrapper"><table><thead><tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr></thead><tbody id="tableBody"></tbody></table></div>
                 </div>
             </div>
         </section>
 
         <section id="section-steel" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3 style="margin-bottom:15px;">Tabla de Calibres (Acero)</h3>
+                <h3>Calibres Acero</h3>
                 <div class="table-wrapper">
                     <table>
-                        <thead><tr><th>Calibre</th><th>mm</th><th>pulg</th><th>kg/m²</th></tr></thead>
+                        <thead><tr><th>CAL</th><th>mm</th><th>pulg</th><th>kg/m²</th></tr></thead>
                         <tbody id="steelTableBody"></tbody>
                     </table>
                 </div>
@@ -132,12 +110,12 @@
 
         <section id="section-wire" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3 style="margin-bottom:15px; font-size: 0.9rem; color: var(--accent);">TABLA COMPARATIVA DE CABLES</h3>
+                <h3>Comparativa Cables</h3>
                 <div class="table-wrapper">
-                    <table style="font-size: 0.6rem;">
+                    <table>
                         <thead>
-                            <tr><th rowspan="2" class="sticky-col">CAL.</th><th colspan="2">B.W.G.</th><th colspan="2">A.W.G.</th><th colspan="2">U.S. STD.</th><th colspan="2">S.W.G.</th></tr>
-                            <tr><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th></tr>
+                            <tr><th rowspan="2" class="sticky-col">CAL</th><th colspan="2">BWG</th><th colspan="2">AWG</th><th colspan="2">US STD</th></tr>
+                            <tr><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th></tr>
                         </thead>
                         <tbody id="wireTableBody"></tbody>
                     </table>
@@ -147,121 +125,94 @@
     </div>
 
 <script>
-    const translations = {
-        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", prompt: "Introduce medida...", std: "✓ LLAVE ESTÁNDAR", spec: "LLAVE ESPECIAL" },
-        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", prompt: "Enter value...", std: "✓ STANDARD WRENCH", spec: "SPECIAL WRENCH" }
-    };
-
-    // MAPA COMERCIAL: Corregido para forzar 13mm -> 1/2" y 25mm -> 1"
-    const commercialMap = {
-        "10": "3/8\"", "11": "7/16\"", "13": "1/2\"", "14": "9/16\"", "16": "5/8\"", 
-        "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""
-    };
-
+    const commercialMap = {"10":"3/8\"","11":"7/16\"","13":"1/2\"","14":"9/16\"","16":"5/8\"","17":"11/16\"","19":"3/4\"","22":"7/8\"","24":"15/16\"","25":"1\"","25.4":"1\""};
+    
     const steelData = [
-        ["1/2\"","12.70","0.500","99.6"], ["3/8\"","9.52","0.375","74.8"], ["1/4\"","6.35","0.250","49.8"], ["10","3.41","0.134","26.8"], ["12","2.65","0.104","20.8"], ["14","1.89","0.074","14.9"], ["16","1.51","0.059","11.9"], ["18","1.21","0.047","9.5"], ["20","0.91","0.035","7.1"]
+        ["1/2\"","12.70",".500","99.69"], ["7/16\"","11.11",".437","87.21"], ["3/8\"","9.52",".375","74.81"], ["5/16\"","7.93",".312","62.32"], ["1/4\"","6.35",".250","49.84"], ["3/16\"","4.76",".187","37.38"], ["1/8\"","3.17",".125","24.92"], ["10","3.41",".134","26.84"], ["12","2.65",".104","20.88"], ["14","1.89",".074","14.91"], ["16","1.51",".059","11.93"], ["18","1.21",".047","9.50"], ["20","0.91",".035","7.14"], ["22","0.75",".029","5.96"], ["24","0.60",".023","4.78"]
     ];
 
     const wireData = [
-        ["7/0", "-", "-", "-", "-", "12.451", "0.490", "12.700", "0.500"],
-        ["1/0", "8.636", "0.340", "8.252", "0.325", "7.783", "0.308", "8.230", "0.324"],
-        ["1", "7.620", "0.300", "7.384", "0.284", "7.003", "0.276", "7.620", "0.300"],
-        ["10", "3.404", "0.134", "2.588", "0.102", "3.503", "0.138", "3.251", "0.128"],
-        ["12", "2.769", "0.109", "2.052", "0.081", "2.723", "0.107", "2.642", "0.104"],
-        ["14", "2.108", "0.083", "1.628", "0.064", "1.946", "0.077", "2.032", "0.080"],
-        ["20", "0.889", "0.035", "0.813", "0.032", "0.835", "0.037", "0.814", "0.038"]
+        ["7/0","-","-","-","-","12.45",".490"],["6/0","-","-","14.73",".580","11.67",".460"],["5/0","12.70",".500","13.11",".519","10.89",".429"],["4/0","11.53",".454","11.68",".460","10.11",".398"],["3/0","10.79",".425","10.04",".410","9.33",".368"],["2/0","9.65",".380","9.26",".365","8.56",".337"],["1/0","8.63",".340","8.25",".325","7.78",".308"],["1","7.62",".300","7.34",".289","7.00",".275"],["2","7.21",".284","6.54",".257","6.61",".260"],["4","6.04",".238","5.18",".204","5.83",".229"],["6","5.15",".203","4.11",".162","5.05",".199"],["8","4.19",".165","3.26",".128","4.28",".168"],["10","3.40",".134","2.58",".101","3.50",".137"],["11","3.04",".120","2.30",".090","3.11",".122"],["12","2.76",".109","2.05",".080","2.72",".107"],["13","2.41",".095","1.82",".071","2.33",".091"],["14","2.10",".083","1.62",".064","1.94",".076"],["16","1.65",".065","1.29",".050","1.59",".062"],["18","1.24",".049","1.02",".040","1.24",".048"],["20","0.88",".035","0.81",".031","0.83",".032"]
     ];
 
     function init() {
         const sysLang = navigator.language.startsWith('es') ? 'es' : 'en';
-        document.getElementById('langSelect').value = localStorage.getItem('lang') || sysLang;
-        
+        document.getElementById('langSelect').value = sysLang;
         document.getElementById('steelTableBody').innerHTML = steelData.map(r => `<tr><td style="font-weight:bold">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
-        document.getElementById('wireTableBody').innerHTML = wireData.map(r => `<tr><td class="sticky-col">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[8]}</td></tr>`).join('');
-
-        const tableBody = document.getElementById('tableBody');
-        const gcd = (a, b) => b ? gcd(b, a % b) : a;
+        document.getElementById('wireTableBody').innerHTML = wireData.map(r => `<tr><td class="sticky-col">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td></tr>`).join('');
+        
         let html = '';
+        const gcd = (a, b) => b ? gcd(b, a % b) : a;
         for (let i = 1; i <= 64; i++) {
-            const d = i / 64; const c = gcd(i, 64);
+            let d = i/64; let c = gcd(i,64);
             html += `<tr><td>${i/c}/${64/c}"</td><td>${(d*25.4).toFixed(2)}</td><td>${d.toFixed(3)}</td></tr>`;
         }
-        tableBody.innerHTML = html;
-        changeLang();
+        document.getElementById('tableBody').innerHTML = html;
+        convert();
     }
+
+    function addChar(c) { const i = document.getElementById('input'); i.value += c; i.focus(); convert(); }
 
     function convert() {
         const raw = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        const lang = document.getElementById('langSelect').value;
-        if (!raw) { resBox.innerHTML = `<div style="color:#64748b">${translations[lang].prompt}</div>`; return; }
+        document.getElementById('fracBtns').style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
+
+        if (!raw) { resBox.innerHTML = "..."; return; }
         
-        let val = evalFrac(raw);
         if (mode === 'mm_to_in') {
-            // Prioridad al mapa comercial
-            let isStd = !!commercialMap[Math.round(val).toString()] || !!commercialMap[val.toString()];
-            let frac = commercialMap[Math.round(val).toString()] || toFrac(val / 25.4);
-            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?translations[lang].std:translations[lang].spec}</div>`;
+            let val = parseFloat(raw.replace(',','.'));
+            let isStd = !!commercialMap[Math.round(val)];
+            let frac = commercialMap[Math.round(val)] || toFrac(val/25.4);
+            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?'✓ ESTÁNDAR':'ESPECIAL'}</div>`;
         } else {
-            let mm = val * 25.4;
+            let mm = evalFrac(raw) * 25.4;
             resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<small style="font-size:1.5rem">mm</small></div>`;
         }
     }
 
     function toFrac(dec) {
-        const d = 64; let n = Math.round(dec * d); const e = Math.floor(n / d); n = n % d;
+        let d = 64; let n = Math.round(dec * d); let e = Math.floor(n/d); n %= d;
         if (n === 0) return e + '"';
         const gcd = (a, b) => b ? gcd(b, a % b) : a;
-        const c = gcd(n, d);
+        let c = gcd(n, d);
         return (e > 0 ? e + " " : "") + (n/c) + "/" + (d/c) + '"';
     }
 
     function evalFrac(t) {
-        t = t.replace(',', '.');
+        t = t.replace(',','.');
         if (t.includes('/')) {
-            const parts = t.split(/\s+/);
+            let parts = t.split(/\s+/);
             if (parts.length > 1) {
-                const f = parts[1].split('/');
+                let f = parts[1].split('/');
                 return parseFloat(parts[0]) + (parseFloat(f[0])/parseFloat(f[1]));
             }
-            const f = t.split('/'); return parseFloat(f[0])/parseFloat(f[1]);
+            let f = t.split('/'); return parseFloat(f[0])/parseFloat(f[1]);
         }
         return parseFloat(t);
     }
 
-    function filterTable(id, val) {
-        const rows = document.getElementById(id).getElementsByTagName('tr');
-        val = val.toLowerCase();
-        for (let row of rows) { row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none'; }
-    }
-
-    function changeLang() {
-        const lang = document.getElementById('langSelect').value;
-        localStorage.setItem('lang', lang);
-        document.getElementById('main-title').innerText = translations[lang].title;
-        document.getElementById('txt-menu-title').innerText = translations[lang].menu;
-        document.getElementById('txt-menu-tool1').innerText = translations[lang].tool1;
-        convert();
-    }
-
-    function loadTool(t, s) { 
-        document.querySelectorAll('.tool-section').forEach(x => x.classList.remove('active'));
-        document.getElementById('section-'+t).classList.add('active');
-        if(t==='converter') switchSubView(s);
+    function loadTool(id) {
+        document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('section-' + id).classList.add('active');
         toggleMenu();
     }
 
     function switchSubView(v) {
-        document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
-        document.getElementById('subview-'+v).classList.add('active');
-        document.getElementById('tab-'+v).classList.add('active');
+        document.getElementById('subview-calc').style.display = (v==='calc')?'block':'none';
+        document.getElementById('subview-tables').style.display = (v==='tables')?'block':'none';
+        document.getElementById('tab-calc').className = 'tab-btn' + (v==='calc'?' active':'');
+        document.getElementById('tab-tables').className = 'tab-btn' + (v==='tables'?' active':'');
+    }
+
+    function filterTable(id, val) {
+        const rows = document.getElementById(id).getElementsByTagName('tr');
+        for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(val.toLowerCase()) ? '' : 'none'; }
     }
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function toggleFolder(id) { document.getElementById(id).classList.toggle('show'); }
-    function changeTheme() { document.body.classList.toggle('light-mode', document.getElementById('themeSelect').value === 'light'); }
+    function changeTheme() { document.body.classList.toggle('light-mode'); }
 
     init();
 </script>
