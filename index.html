@@ -21,10 +21,12 @@
             transition: 0.3s;
         }
 
+        /* HEADER */
         .top-header { width: 100%; max-width: 450px; display: flex; align-items: center; justify-content: center; position: relative; padding: 15px 0; }
         .top-header h2 { margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; }
         .menu-btn { position: absolute; left: 0; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; }
 
+        /* TABS */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
         .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid var(--border); }
         .tab-btn.active { background: var(--accent); color: white; }
@@ -32,9 +34,8 @@
         .container { width: 100%; max-width: 450px; }
         .tool-section { display: none; }
         .tool-section.active { display: block; }
-        .view { display: none; }
-        .view.active { display: block; }
 
+        /* CARDS */
         .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; }
         .input-group { margin-bottom: 20px; text-align: left; position: relative; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-left: 5px; font-weight: bold; }
@@ -49,20 +50,22 @@
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); }
+        /* SIDEBAR */
+        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); overflow-y: auto; }
         .sidebar.active { left: 0; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
         .overlay.active { display: block; }
-        
         .menu-item { padding: 15px 10px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: 500; }
-        .submenu { display: none; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 5px; }
+        .submenu { display: none; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 5px; overflow: hidden; }
         .submenu.show { display: block; }
-        .submenu-item { padding: 12px 20px; cursor: pointer; font-size: 0.9rem; color: #94a3b8; }
+        .submenu-item { padding: 12px 20px; cursor: pointer; font-size: 0.9rem; color: #94a3b8; border-bottom: 1px solid var(--border); }
 
-        .table-wrapper { max-height: 55vh; overflow-y: auto; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { background: var(--accent); color: white; padding: 12px; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px solid var(--border); }
+        /* TABLES */
+        .table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { background: var(--accent); color: white; padding: 10px; position: sticky; top: 0; z-index: 10; }
+        td { padding: 8px; border-bottom: 1px solid var(--border); text-align: center; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
     </style>
 </head>
 <body>
@@ -76,8 +79,7 @@
             <span id="txt-menu-tool1">mm ⇄ pulgadas fracción</span>
             <span>▾</span>
         </div>
-        <div id="folder-mm-in" class="submenu show">
-            <div class="submenu-item" onclick="loadTool('converter', 'calc')" id="txt-sub-calc">➤ Calculadora</div>
+        <div id="folder-mm-in" class="submenu"> <div class="submenu-item" onclick="loadTool('converter', 'calc')" id="txt-sub-calc">➤ Calculadora</div>
             <div class="submenu-item" onclick="loadTool('converter', 'tables')" id="txt-sub-tables">➤ Tablas de equivalencia</div>
         </div>
 
@@ -118,7 +120,6 @@
                 <button class="tab-btn active" id="tab-calc" onclick="switchSubView('calc')">Calculadora</button>
                 <button class="tab-btn" id="tab-tables" onclick="switchSubView('tables')">Tablas</button>
             </div>
-
             <div id="subview-calc" class="view active">
                 <div class="card">
                     <div class="input-group">
@@ -141,10 +142,8 @@
                     </div>
                 </div>
             </div>
-
             <div id="subview-tables" class="view">
                 <div class="card" style="padding: 15px;">
-                    <input type="text" id="tableSearch" placeholder="🔍 Buscar..." oninput="filterTable()" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text);">
                     <div class="table-wrapper">
                         <table>
                             <thead><tr><th id="th-frac">Fracción</th><th>mm</th><th id="th-dec">Decimal</th></tr></thead>
@@ -156,31 +155,46 @@
         </section>
 
         <section id="section-steel" class="tool-section">
-            <div class="card">
-                <h3 id="txt-steel-title">Calibre de Acero</h3>
-                <p id="txt-steel-placeholder" style="color: #64748b;">Próximamente contenido.</p>
+            <div class="card" style="padding: 10px;">
+                <h3 id="txt-steel-title" style="margin-bottom: 15px;">Tabla de Calibres</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th id="th-cal">Calibre</th>
+                                <th id="th-mm">Espesor (mm)</th>
+                                <th id="th-in">Pulgadas</th>
+                                <th id="th-weight">Peso (kg/m²)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="steelTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </div>
 
 <script>
     const translations = {
-        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", subCalc: "➤ Calculadora", subTables: "➤ Tablas de equivalencia", steel: "Calibre acero (mm - mil pulg)", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma", calcTab: "Calculadora", tableTab: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", sugg: "Sugerencia:", thFrac: "Fracción", thDec: "Decimal" },
-        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", subCalc: "➤ Calculator", subTables: "➤ Equivalence Charts", steel: "Steel Gauge (mm - mil inch)", config: "⚙️ Settings", theme: "Appearance", lang: "Language", calcTab: "Calculator", tableTab: "Charts", mode: "Mode", measure: "Size", prompt: "Enter measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Decimal" },
-        fr: { title: "Mécanicien Pro ⚡", menu: "Menu", tool1: "mm ⇄ pouces fraction", subCalc: "➤ Calculatrice", subTables: "➤ Tableaux d'équivalence", steel: "Jauge d'acier (mm - mil)", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue", calcTab: "Calculatrice", tableTab: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez la mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Décimal" },
-        de: { title: "Mechaniker Pro ⚡", menu: "Menü", tool1: "mm ⇄ zoll bruch", subCalc: "➤ Rechner", subTables: "➤ Vergleichstabelle", steel: "Stahlstärke (mm - mil)", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache", calcTab: "Rechner", tableTab: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", sugg: "Empfehlung:", thFrac: "Bruch", thDec: "Dezimal" }
+        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", subCalc: "➤ Calculadora", subTables: "➤ Tablas de equivalencia", steel: "Calibre acero (mm - mil pulg)", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma", calcTab: "Calculadora", tableTab: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", sugg: "Sugerencia:", thFrac: "Fracción", thDec: "Decimal", stCal: "Calibre No.", stMM: "Espesor (mm)", stIn: "Espesor (pulg)", stW: "Peso (kg/m²)" },
+        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", subCalc: "➤ Calculator", subTables: "➤ Equivalence Charts", steel: "Steel Gauge (mm - mil inch)", config: "⚙️ Settings", theme: "Appearance", lang: "Language", calcTab: "Calculator", tableTab: "Charts", mode: "Mode", measure: "Size", prompt: "Enter measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Decimal", stCal: "Gauge No.", stMM: "Thickness (mm)", stIn: "Inches (mil)", stW: "Weight (kg/m²)" },
+        fr: { title: "Mécanicien Pro ⚡", menu: "Menu", tool1: "mm ⇄ pouces fraction", subCalc: "➤ Calculatrice", subTables: "➤ Tableaux d'équivalence", steel: "Jauge d'acier (mm - mil)", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue", calcTab: "Calculatrice", tableTab: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez la mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Décimal", stCal: "Jauge No.", stMM: "Épaisseur (mm)", stIn: "Pouces", stW: "Poids (kg/m²)" },
+        de: { title: "Mechaniker Pro ⚡", menu: "Menü", tool1: "mm ⇄ zoll bruch", subCalc: "➤ Rechner", subTables: "➤ Vergleichstabelle", steel: "Stahlstärke (mm - mil)", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache", calcTab: "Rechner", tableTab: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", sugg: "Empfehlung:", thFrac: "Bruch", thDec: "Dezimal", stCal: "Stärke Nr.", stMM: "Dicke (mm)", stIn: "Zoll", stW: "Gewicht (kg/m²)" }
     };
 
-    const tablaComercial = {"1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""};
+    const steelData = [
+        ["1/2\"", "12.70", "0.500", "99.695"], ["7/16\"", "11.11", "0.438", "87.214"], ["3/8\"", "9.53", "0.375", "74.811"], ["5/16\"", "7.94", "0.313", "62.329"], ["1/4\"", "6.35", "0.250", "49.848"], ["3", "6.07", "0.239", "47.650"], ["4", "5.69", "0.224", "44.667"], ["5", "5.31", "0.209", "41.684"], ["6", "4.94", "0.194", "38.779"], ["3/16\"", "4.76", "0.188", "37.366"], ["7", "4.55", "0.179", "35.718"], ["8", "4.18", "0.164", "32.813"], ["9", "3.80", "0.150", "29.830"], ["10", "3.42", "0.135", "26.847"], ["1/8\"", "3.18", "0.125", "24.963"], ["11", "3.04", "0.120", "23.864"], ["12", "2.66", "0.105", "20.881"], ["13", "2.28", "0.090", "17.898"], ["14", "1.90", "0.075", "14.915"], ["15", "1.71", "0.067", "13.424"], ["1/16\"", "1.59", "0.063", "12.482"], ["16", "1.52", "0.060", "11.932"], ["17", "1.37", "0.054", "10.755"], ["18", "1.21", "0.048", "9.499"], ["19", "1.06", "0.042", "8.321"], ["20", "0.91", "0.036", "7.144"], ["21", "0.84", "0.033", "6.594"], ["1/32\"", "0.79", "0.031", "6.202"], ["22", "0.76", "0.030", "5.966"], ["23", "0.68", "0.027", "5.338"], ["24", "0.61", "0.024", "4.789"], ["25", "0.53", "0.021", "4.161"], ["26", "0.45", "0.018", "3.533"], ["27", "0.42", "0.016", "3.297"], ["1/64\"", "0.40", "0.016", "3.140"], ["28", "0.38", "0.15", "2.983"], ["29", "0.34", "0.014", "2.669"], ["30", "0.30", "0.012", "2.355"]
+    ];
 
     function init() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        const browserLang = navigator.language.split('-')[0];
-        const savedLang = localStorage.getItem('lang') || (translations[browserLang] ? browserLang : 'es');
+        const lang = localStorage.getItem('lang') || 'es';
+        document.getElementById('langSelect').value = lang;
+        if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
         
-        document.getElementById('themeSelect').value = savedTheme;
-        document.getElementById('langSelect').value = savedLang;
-        if(savedTheme === 'light') document.body.classList.add('light-mode');
+        // Render Steel Table
+        const sBody = document.getElementById('steelTableBody');
+        sBody.innerHTML = steelData.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+        
         changeLang();
     }
 
@@ -204,8 +218,14 @@
         document.getElementById('txt-label-measure').innerText = t.measure;
         document.getElementById('opt-mm-in').innerText = t.mmIn;
         document.getElementById('opt-in-mm').innerText = t.inMm;
-        document.getElementById('th-frac').innerText = t.thFrac;
-        document.getElementById('th-dec').innerText = t.thDec;
+        
+        // Steel Table Headers
+        document.getElementById('th-cal').innerText = t.stCal;
+        document.getElementById('th-mm').innerText = t.stMM;
+        document.getElementById('th-in').innerText = t.stIn;
+        document.getElementById('th-weight').innerText = t.stW;
+        document.getElementById('txt-steel-title').innerText = t.stCal.split(' ')[0] + " STEEL";
+        
         convert();
     }
 
@@ -219,6 +239,8 @@
         if (!rawVal) { resBox.innerHTML = `<div style="color: #64748b;">${t.prompt}</div>`; return; }
         const val = procesarEntrada(rawVal);
         if (isNaN(val)) return;
+
+        const tablaComercial = {"1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""};
 
         if (mode === 'mm_to_in') {
             let res = tablaComercial[val] || toFraction(val / 25.4);
@@ -269,13 +291,9 @@
     function toggleFolder(id) { document.getElementById(id).classList.toggle('show'); }
     function toggleMode() { document.getElementById('helperBtns').style.display = (document.getElementById('mode').value === 'in_to_mm') ? 'flex' : 'none'; convert(); }
     function addChar(c) { const i = document.getElementById('input'); i.value += c; i.focus(); convert(); }
-    function changeTheme() { 
-        const theme = document.getElementById('themeSelect').value;
-        document.body.classList.toggle('light-mode', theme === 'light');
-        localStorage.setItem('theme', theme);
-    }
+    function changeTheme() { const theme = document.getElementById('themeSelect').value; document.body.classList.toggle('light-mode', theme === 'light'); localStorage.setItem('theme', theme); }
 
-    // Tabla dinámica
+    // Generar Tabla Conversión
     const tableBody = document.getElementById('tableBody');
     const gcdFunc = (a, b) => b ? gcdFunc(b, a % b) : a;
     let tH = '';
