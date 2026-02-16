@@ -23,8 +23,8 @@
         .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; margin-bottom: 15px; }
         
         /* BOTONES FRACCIÓN */
-        .quick-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .q-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--accent); font-weight: bold; cursor: pointer; }
+        .quick-btns { display: flex; gap: 10px; margin-top: 15px; }
+        .q-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--accent); font-weight: bold; cursor: pointer; font-size: 1.1rem; }
 
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
         .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid var(--border); }
@@ -32,23 +32,27 @@
 
         select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
         .result-container { margin-top: 10px; background: rgba(0,0,0,0.05); border-radius: 20px; padding: 25px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
-        .main-res { font-size: 3.2rem; font-weight: 800; color: var(--accent); }
+        .main-res { font-size: 3.5rem; font-weight: 800; color: var(--accent); line-height: 1; }
         .badge { display: inline-block; padding: 8px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; overflow-y: auto; }
+        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; overflow-y: auto; box-shadow: 10px 0 30px rgba(0,0,0,0.3); }
         .sidebar.active { left: 0; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
         .overlay.active { display: block; }
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-weight: 500; }
 
         .table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 12px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
-        th { background: var(--accent); color: white; padding: 10px 4px; position: sticky; top: 0; z-index: 10; }
-        td { padding: 8px 4px; border-bottom: 1px solid var(--border); text-align: center; }
-        .sticky-col { position: sticky; left: 0; background: var(--card); font-weight: bold; border-right: 2px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th { background: var(--accent); color: white; padding: 12px 5px; position: sticky; top: 0; z-index: 10; }
+        td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+        .sticky-col { position: sticky; left: 0; background: var(--card); font-weight: bold; border-right: 2px solid var(--border); z-index: 5; }
+        
         .tool-section { display: none; }
         .tool-section.active { display: block; }
+        .search-box { margin-bottom: 15px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; padding: 12px; color: var(--text); width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -56,13 +60,14 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
     
     <nav class="sidebar" id="sidebar">
-        <h2 style="color: var(--accent);">Menú</h2>
-        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('converter')">Calculadora / Tablas</div>
-        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('steel')">Calibre Acero</div>
-        <div style="padding: 10px 0; cursor: pointer; border-bottom: 1px solid var(--border);" onclick="loadTool('wire')">Comparativa Cables</div>
-        <div style="margin-top: 20px;">
-            <label style="font-size: 0.7rem;">IDIOMA / LANGUAGE</label>
-            <select id="langSelect" onchange="changeLang()"><option value="es">Español</option><option value="en">English</option></select>
+        <h2 style="color: var(--accent); margin-bottom: 20px;">Menú</h2>
+        <div class="menu-item" onclick="loadTool('converter')">📐 Calculadora y Tablas</div>
+        <div class="menu-item" onclick="loadTool('steel')">🏗️ Calibre Acero</div>
+        <div class="menu-item" onclick="loadTool('wire')">🔌 Comparativa Cables</div>
+        <div style="margin-top: 30px;">
+            <label style="font-size: 0.7rem; color: #64748b;">CONFIGURACIÓN</label>
+            <select id="langSelect" onchange="changeLang()" style="margin-top:10px;"><option value="es">Español</option><option value="en">English</option></select>
+            <select id="themeSelect" onchange="changeTheme()" style="margin-top:10px;"><option value="dark">Modo Oscuro</option><option value="light">Modo Claro</option></select>
         </div>
     </nav>
 
@@ -77,31 +82,43 @@
                 <button class="tab-btn active" id="tab-calc" onclick="switchSubView('calc')">Calculadora</button>
                 <button class="tab-btn" id="tab-tables" onclick="switchSubView('tables')">Tablas</button>
             </div>
+
             <div id="subview-calc" class="view active">
                 <div class="card">
-                    <select id="mode" onchange="convert()"><option value="mm_to_in">Milímetros a Pulgadas</option><option value="in_to_mm">Pulgadas a Milímetros</option></select>
-                    <input type="text" id="input" placeholder="Medida..." oninput="convert()">
+                    <select id="mode" onchange="convert()">
+                        <option value="mm_to_in">Milímetros a Pulgadas</option>
+                        <option value="in_to_mm">Pulgadas a Milímetros</option>
+                    </select>
+                    <input type="text" id="input" placeholder="Ingresa medida..." oninput="convert()">
+                    
                     <div class="quick-btns" id="fracBtns" style="display:none;">
                         <button class="q-btn" onclick="addChar(' ')">Espacio</button>
                         <button class="q-btn" onclick="addChar('/')">/</button>
                     </div>
+
                     <div class="result-container" id="resBox"></div>
                 </div>
             </div>
+
             <div id="subview-tables" class="view" style="display:none;">
                 <div class="card" style="padding: 10px;">
-                    <input type="text" class="search-box" placeholder="🔍 Buscar..." oninput="filterTable('tableBody', this.value)">
-                    <div class="table-wrapper"><table><thead><tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+                    <input type="text" class="search-box" placeholder="🔍 Buscar medida..." oninput="filterTable('tableBody', this.value)">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr></thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="section-steel" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3>Calibres Acero</h3>
+                <h3 style="margin-bottom:15px;">Tabla de Calibres Acero</h3>
                 <div class="table-wrapper">
                     <table>
-                        <thead><tr><th>CAL</th><th>mm</th><th>pulg</th><th>kg/m²</th></tr></thead>
+                        <thead><tr><th>Calibre</th><th>mm</th><th>pulg</th><th>kg/m²</th></tr></thead>
                         <tbody id="steelTableBody"></tbody>
                     </table>
                 </div>
@@ -110,12 +127,23 @@
 
         <section id="section-wire" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3>Comparativa Cables</h3>
+                <h3 style="margin-bottom:15px; font-size: 0.9rem; color: var(--accent);">COMPARATIVA AWG / BWG / SWG</h3>
                 <div class="table-wrapper">
                     <table>
                         <thead>
-                            <tr><th rowspan="2" class="sticky-col">CAL</th><th colspan="2">BWG</th><th colspan="2">AWG</th><th colspan="2">US STD</th></tr>
-                            <tr><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th><th>mm</th><th>pulg</th></tr>
+                            <tr>
+                                <th rowspan="2" class="sticky-col">CAL</th>
+                                <th colspan="2">BWG (Birmingham)</th>
+                                <th colspan="2">AWG (Brown&S)</th>
+                                <th colspan="2">US STD (Acero)</th>
+                                <th colspan="2">SWG (British)</th>
+                            </tr>
+                            <tr>
+                                <th>mm</th><th>pulg</th>
+                                <th>mm</th><th>pulg</th>
+                                <th>mm</th><th>pulg</th>
+                                <th>mm</th><th>pulg</th>
+                            </tr>
                         </thead>
                         <tbody id="wireTableBody"></tbody>
                     </table>
@@ -126,20 +154,48 @@
 
 <script>
     const commercialMap = {"10":"3/8\"","11":"7/16\"","13":"1/2\"","14":"9/16\"","16":"5/8\"","17":"11/16\"","19":"3/4\"","22":"7/8\"","24":"15/16\"","25":"1\"","25.4":"1\""};
-    
+
     const steelData = [
-        ["1/2\"","12.70",".500","99.69"], ["7/16\"","11.11",".437","87.21"], ["3/8\"","9.52",".375","74.81"], ["5/16\"","7.93",".312","62.32"], ["1/4\"","6.35",".250","49.84"], ["3/16\"","4.76",".187","37.38"], ["1/8\"","3.17",".125","24.92"], ["10","3.41",".134","26.84"], ["12","2.65",".104","20.88"], ["14","1.89",".074","14.91"], ["16","1.51",".059","11.93"], ["18","1.21",".047","9.50"], ["20","0.91",".035","7.14"], ["22","0.75",".029","5.96"], ["24","0.60",".023","4.78"]
+        ["1/2\"","12.70",".500","99.69"], ["7/16\"","11.11",".437","87.21"], ["3/8\"","9.52",".375","74.81"], ["5/16\"","7.93",".312","62.32"], ["1/4\"","6.35",".250","49.84"], ["3/16\"","4.76",".187","37.38"], ["1/8\"","3.17",".125","24.92"], 
+        ["10","3.41",".134","26.84"], ["11","3.04",".120","23.86"], ["12","2.65",".104","20.88"], ["13","2.27",".089","17.90"], ["14","1.89",".074","14.91"], ["16","1.51",".059","11.93"], ["18","1.21",".047","9.50"], ["20","0.91",".035","7.14"], ["22","0.75",".029","5.96"], ["24","0.60",".023","4.78"]
     ];
 
     const wireData = [
-        ["7/0","-","-","-","-","12.45",".490"],["6/0","-","-","14.73",".580","11.67",".460"],["5/0","12.70",".500","13.11",".519","10.89",".429"],["4/0","11.53",".454","11.68",".460","10.11",".398"],["3/0","10.79",".425","10.04",".410","9.33",".368"],["2/0","9.65",".380","9.26",".365","8.56",".337"],["1/0","8.63",".340","8.25",".325","7.78",".308"],["1","7.62",".300","7.34",".289","7.00",".275"],["2","7.21",".284","6.54",".257","6.61",".260"],["4","6.04",".238","5.18",".204","5.83",".229"],["6","5.15",".203","4.11",".162","5.05",".199"],["8","4.19",".165","3.26",".128","4.28",".168"],["10","3.40",".134","2.58",".101","3.50",".137"],["11","3.04",".120","2.30",".090","3.11",".122"],["12","2.76",".109","2.05",".080","2.72",".107"],["13","2.41",".095","1.82",".071","2.33",".091"],["14","2.10",".083","1.62",".064","1.94",".076"],["16","1.65",".065","1.29",".050","1.59",".062"],["18","1.24",".049","1.02",".040","1.24",".048"],["20","0.88",".035","0.81",".031","0.83",".032"]
+        ["7/0","-","-","-","-","12.45",".490","12.70",".500"],
+        ["6/0","-","-","14.73",".580","11.67",".460","11.78",".464"],
+        ["5/0","12.70",".500","13.11",".519","10.89",".429","10.97",".432"],
+        ["4/0","11.53",".454","11.68",".460","10.11",".398","10.16",".400"],
+        ["3/0","10.79",".425","10.04",".410","9.33",".368","9.44",".372"],
+        ["2/0","9.65",".380","9.26",".365","8.56",".337","8.83",".348"],
+        ["1/0","8.63",".340","8.25",".325","7.78",".308","8.23",".324"],
+        ["1","7.62",".300","7.34",".289","7.00",".275","7.62",".300"],
+        ["2","7.21",".284","6.54",".257","6.61",".260","7.01",".276"],
+        ["3","6.57",".259","5.82",".229","6.22",".245","6.40",".252"],
+        ["4","6.04",".238","5.18",".204","5.83",".229","5.89",".232"],
+        ["5","5.58",".220","4.62",".181","5.44",".214","5.38",".212"],
+        ["6","5.15",".203","4.11",".162","5.05",".199","4.87",".192"],
+        ["7","4.57",".180","3.66",".144","4.67",".184","4.47",".176"],
+        ["8","4.19",".165","3.26",".128","4.28",".168","4.06",".160"],
+        ["9","3.75",".148","2.90",".114","3.89",".153","3.65",".144"],
+        ["10","3.40",".134","2.58",".101","3.50",".137","3.25",".128"],
+        ["11","3.04",".120","2.30",".090","3.11",".122","2.94",".116"],
+        ["12","2.76",".109","2.05",".080","2.72",".107","2.64",".104"],
+        ["13","2.41",".095","1.82",".071","2.33",".091","2.33",".092"],
+        ["14","2.10",".083","1.62",".064","1.94",".076","2.03",".080"],
+        ["15","1.82",".072","1.45",".057","1.75",".069","1.82",".072"],
+        ["16","1.65",".065","1.29",".050","1.59",".062","1.62",".064"],
+        ["17","1.47",".058","1.15",".045","1.42",".056","1.42",".056"],
+        ["18","1.24",".049","1.02",".040","1.24",".048","1.21",".048"],
+        ["19","1.06",".042","0.91",".035","1.06",".041","1.01",".040"],
+        ["20","0.88",".035","0.81",".031","0.83",".032","0.91",".036"]
     ];
 
     function init() {
         const sysLang = navigator.language.startsWith('es') ? 'es' : 'en';
         document.getElementById('langSelect').value = sysLang;
+        
         document.getElementById('steelTableBody').innerHTML = steelData.map(r => `<tr><td style="font-weight:bold">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
-        document.getElementById('wireTableBody').innerHTML = wireData.map(r => `<tr><td class="sticky-col">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td></tr>`).join('');
+        document.getElementById('wireTableBody').innerHTML = wireData.map(r => `<tr><td class="sticky-col">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[8]}</td></tr>`).join('');
         
         let html = '';
         const gcd = (a, b) => b ? gcd(b, a % b) : a;
@@ -151,7 +207,12 @@
         convert();
     }
 
-    function addChar(c) { const i = document.getElementById('input'); i.value += c; i.focus(); convert(); }
+    function addChar(c) {
+        const i = document.getElementById('input');
+        i.value += c;
+        i.focus();
+        convert();
+    }
 
     function convert() {
         const raw = document.getElementById('input').value.trim();
@@ -159,13 +220,13 @@
         const resBox = document.getElementById('resBox');
         document.getElementById('fracBtns').style.display = (mode === 'in_to_mm') ? 'flex' : 'none';
 
-        if (!raw) { resBox.innerHTML = "..."; return; }
+        if (!raw) { resBox.innerHTML = "<div style='color:#64748b'>...</div>"; return; }
         
         if (mode === 'mm_to_in') {
             let val = parseFloat(raw.replace(',','.'));
             let isStd = !!commercialMap[Math.round(val)];
             let frac = commercialMap[Math.round(val)] || toFrac(val/25.4);
-            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?'✓ ESTÁNDAR':'ESPECIAL'}</div>`;
+            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?'✓ LLAVE ESTÁNDAR':'LLAVE ESPECIAL'}</div>`;
         } else {
             let mm = evalFrac(raw) * 25.4;
             resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<small style="font-size:1.5rem">mm</small></div>`;
@@ -211,8 +272,14 @@
         for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(val.toLowerCase()) ? '' : 'none'; }
     }
 
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function changeTheme() { document.body.classList.toggle('light-mode'); }
+    function toggleMenu() { 
+        document.getElementById('sidebar').classList.toggle('active'); 
+        document.getElementById('overlay').classList.toggle('active'); 
+    }
+    
+    function changeTheme() { 
+        document.body.classList.toggle('light-mode', document.getElementById('themeSelect').value === 'light'); 
+    }
 
     init();
 </script>
