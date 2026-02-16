@@ -7,42 +7,40 @@
     <style>
         :root { 
             --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; 
-            --std: #4ade80; --spec: #fbbf24; --input-bg: #0f172a;
+            --std: #4ade80; --spec: #fbbf24; --input-bg: #0f172a; --border: rgba(255,255,255,0.1);
         }
         
-        /* ESTILOS MODO CLARO */
         .light-mode {
             --bg: #f1f5f9; --card: #ffffff; --accent: #0284c7; --text: #1e293b;
-            --std: #16a34a; --spec: #d97706; --input-bg: #f8fafc;
+            --std: #16a34a; --spec: #d97706; --input-bg: #f8fafc; --border: rgba(0,0,0,0.1);
         }
 
         body { 
             font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); 
             margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center;
-            transition: background 0.3s, color 0.3s;
+            transition: 0.3s;
         }
 
-        /* TÍTULO Y HEADER */
+        /* HEADER */
         .top-header { width: 100%; max-width: 450px; display: flex; align-items: center; justify-content: center; position: relative; padding: 15px 0; }
         .top-header h2 { margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; }
         .menu-btn { position: absolute; left: 0; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; }
 
-        /* NAVEGACIÓN */
+        /* TABS */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
-        .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid rgba(0,0,0,0.05); }
+        .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid var(--border); }
         .tab-btn.active { background: var(--accent); color: white; }
 
         .container { width: 100%; max-width: 450px; }
         .view { display: none; }
         .view.active { display: block; }
 
-        /* TARJETAS E INPUTS */
-        .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); text-align: center; }
+        /* CARDS */
+        .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; }
         .input-group { margin-bottom: 20px; text-align: left; position: relative; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-left: 5px; font-weight: bold; }
-        select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid #33415544; border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+        select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
 
-        /* BOTONES DE AYUDA */
         .helper-btns { display: none; position: absolute; right: 8px; bottom: 6px; gap: 5px; z-index: 5; }
         .tool-btn { background: var(--accent); color: white; border: none; border-radius: 10px; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; }
 
@@ -52,20 +50,21 @@
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        /* TABLA */
+        /* SIDEBAR & SUBMENU */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); overflow-y: auto; }
+        .sidebar.active { left: 0; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .overlay.active { display: block; }
+        
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .submenu { display: none; padding-left: 15px; padding-top: 10px; }
+        .submenu.show { display: block; }
+        
         .table-card { background: var(--card); border-radius: 24px; padding: 15px; }
         .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         th { background: var(--accent); color: white; padding: 12px; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px solid #33415522; }
-
-        /* SIDEBAR CONFIGURACIÓN */
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); }
-        .sidebar.active { left: 0; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-        .overlay.active { display: block; }
-        .config-item { margin-bottom: 25px; }
-        .config-item label { display: block; margin-bottom: 8px; }
+        td { padding: 10px; border-bottom: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -73,27 +72,32 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
     
     <nav class="sidebar" id="sidebar">
-        <h2 id="txt-config-title" style="color: var(--accent); margin-bottom: 30px;">⚙️ Ajustes</h2>
+        <h2 style="color: var(--accent); margin-bottom: 20px;">Menu</h2>
         
-        <div class="config-item">
-            <label id="txt-label-theme">Apariencia</label>
-            <select id="themeSelect" onchange="changeTheme()">
-                <option value="dark">🌙 Dark Mode</option>
-                <option value="light">☀️ Light Mode</option>
-            </select>
+        <div class="menu-item" onclick="switchView('calc'); toggleMenu();">🔧 <span id="txt-menu-calc">Calculadora</span></div>
+        <div class="menu-item" onclick="switchView('tables'); toggleMenu();">📊 <span id="txt-menu-tables">Tablas</span></div>
+        
+        <div class="menu-item" onclick="toggleSubmenu()">⚙️ <span id="txt-menu-config">Ajustes</span> ▾</div>
+        <div id="configSubmenu" class="submenu">
+            <div style="margin-bottom: 15px;">
+                <label id="txt-label-theme" style="font-size: 0.7rem;">Apariencia</label>
+                <select id="themeSelect" onchange="changeTheme()">
+                    <option value="dark">🌙 Dark</option>
+                    <option value="light">☀️ Light</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label id="txt-label-lang" style="font-size: 0.7rem;">Idioma</label>
+                <select id="langSelect" onchange="changeLang()">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
         </div>
 
-        <div class="config-item">
-            <label id="txt-label-lang">Idioma / Language</label>
-            <select id="langSelect" onchange="changeLang()">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-            </select>
-        </div>
-        
-        <button onclick="toggleMenu()" style="width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer;">OK</button>
+        <div class="menu-item" onclick="alert('☕ Próximamente...')">☕ <span id="txt-menu-coffee">Donaciones</span></div>
     </nav>
 
     <header class="top-header">
@@ -132,7 +136,7 @@
 
         <div id="tablesView" class="view">
             <div class="table-card">
-                <input type="text" class="search-box" id="tableSearch" placeholder="🔍 Buscar..." oninput="filterTable()" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #33415522;">
+                <input type="text" class="search-box" id="tableSearch" placeholder="🔍 Buscar..." oninput="filterTable()" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text);">
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -147,10 +151,10 @@
 
 <script>
     const translations = {
-        es: { title: "Mecánico Pro ⚡", calc: "Calculadora", tables: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", thFrac: "Fracción", thDec: "Decimal", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma" },
-        en: { title: "Mechanic Pro ⚡", calc: "Calculator", tables: "Charts", mode: "Mode", measure: "Size", prompt: "Enter a measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", thFrac: "Fraction", thDec: "Decimal", config: "⚙️ Settings", theme: "Appearance", lang: "Language" },
-        fr: { title: "Mécanicien Pro ⚡", calc: "Calculatrice", tables: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez une mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", thFrac: "Fraction", thDec: "Décimal", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue" },
-        de: { title: "Mechaniker Pro ⚡", calc: "Rechner", tables: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", thFrac: "Bruch", thDec: "Dezimal", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache" }
+        es: { title: "Mecánico Pro ⚡", calc: "Calculadora", tables: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", thFrac: "Fracción", thDec: "Decimal", config: "Ajustes", theme: "Apariencia", lang: "Idioma", coffee: "Donaciones" },
+        en: { title: "Mechanic Pro ⚡", calc: "Calculator", tables: "Charts", mode: "Mode", measure: "Size", prompt: "Enter a measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", thFrac: "Fraction", thDec: "Decimal", config: "Settings", theme: "Appearance", lang: "Language", coffee: "Donate" },
+        fr: { title: "Mécanicien Pro ⚡", calc: "Calculatrice", tables: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez une mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", thFrac: "Fraction", thDec: "Décimal", config: "Réglages", theme: "Apparence", lang: "Langue", coffee: "Donation" },
+        de: { title: "Mechaniker Pro ⚡", calc: "Rechner", tables: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", thFrac: "Bruch", thDec: "Dezimal", config: "Einstellungen", theme: "Aussehen", lang: "Sprache", coffee: "Spenden" }
     };
 
     function initSettings() {
@@ -163,6 +167,10 @@
         
         if(savedTheme === 'light') document.body.classList.add('light-mode');
         changeLang();
+    }
+
+    function toggleSubmenu() {
+        document.getElementById('configSubmenu').classList.toggle('show');
     }
 
     function changeTheme() {
@@ -178,8 +186,10 @@
         localStorage.setItem('lang', lang);
 
         document.getElementById('main-title').innerText = t.title;
-        document.getElementById('btn-calc').innerText = t.calc;
-        document.getElementById('btn-tables').innerText = t.tables;
+        document.querySelectorAll('#btn-calc, #txt-menu-calc').forEach(el => el.innerText = t.calc);
+        document.querySelectorAll('#btn-tables, #txt-menu-tables').forEach(el => el.innerText = t.tables);
+        document.getElementById('txt-menu-config').innerText = t.config;
+        document.getElementById('txt-menu-coffee').innerText = t.coffee;
         document.getElementById('txt-label-mode').innerText = t.mode;
         document.getElementById('txt-label-measure').innerText = t.measure;
         document.getElementById('opt-mm-in').innerText = t.mmIn;
@@ -187,17 +197,23 @@
         document.getElementById('txt-prompt').innerText = t.prompt;
         document.getElementById('th-frac').innerText = t.thFrac;
         document.getElementById('th-dec').innerText = t.thDec;
-        document.getElementById('txt-config-title').innerText = t.config;
         document.getElementById('txt-label-theme').innerText = t.theme;
         document.getElementById('txt-label-lang').innerText = t.lang;
     }
 
-    // Funciones base de calculadora
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function switchView(view) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(view + 'View').classList.add('active'); document.getElementById('btn-' + view).classList.add('active'); }
+    
+    function switchView(view) { 
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+        document.getElementById(view + 'View').classList.add('active'); 
+        document.getElementById('btn-' + view).classList.add('active'); 
+    }
+
     function toggleMode() { document.getElementById('helperBtns').style.display = (document.getElementById('mode').value === 'in_to_mm') ? 'flex' : 'none'; convert(); }
     function addChar(c) { const i = document.getElementById('input'); i.value += c; i.focus(); convert(); }
 
+    // Logica de conversión y tabla (Igual que antes)
     const tablaComercial = {"1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""};
 
     function convert() {
@@ -206,10 +222,8 @@
         const resBox = document.getElementById('resBox');
         const lang = localStorage.getItem('lang') || 'es';
         if (!rawVal) { resBox.innerHTML = `<div style="color: #64748b;">${translations[lang].prompt}</div>`; return; }
-        
         const val = procesarEntrada(rawVal);
         if (isNaN(val)) return;
-
         if (mode === 'mm_to_in') {
             let res = tablaComercial[val] || toFraction(val / 25.4);
             let isStd = !!tablaComercial[val];
@@ -241,13 +255,11 @@
         return (e > 0 ? e + " " : "") + (n/c) + "/" + (d/c) + '"';
     }
 
-    // Inicializar Tabla e Idioma
     const tableBody = document.getElementById('tableBody');
     const gcdFunc = (a, b) => b ? gcdFunc(b, a % b) : a;
     let tH = '';
     for (let i = 1; i <= 64; i++) {
-        const d = i / 64; const m = d * 25.4;
-        const c = gcdFunc(i, 64);
+        const d = i / 64; const m = d * 25.4; const c = gcdFunc(i, 64);
         tH += `<tr><td>${i/c}/${64/c}"</td><td>${m.toFixed(2)}</td><td>${d.toFixed(3)}</td></tr>`;
     }
     tableBody.innerHTML = tH;
