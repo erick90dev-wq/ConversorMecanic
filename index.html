@@ -60,9 +60,9 @@
 
         /* TABLAS ESTILO PROFESIONAL */
         .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { background: var(--accent); color: white; padding: 12px 5px; position: sticky; top: 0; z-index: 10; }
-        td { padding: 10px 5px; border-bottom: 1px solid var(--border); text-align: center; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th { background: var(--accent); color: white; padding: 12px 2px; position: sticky; top: 0; z-index: 10; font-size: 0.7rem; }
+        td { padding: 8px 2px; border-bottom: 1px solid var(--border); text-align: center; }
         tr:nth-child(even) { background: rgba(255,255,255,0.03); }
     </style>
 </head>
@@ -84,6 +84,10 @@
 
         <div class="menu-item" onclick="loadTool('steel', 'main')">
             <span id="txt-menu-steel">Calibre acero (mm - mil pulg)</span>
+        </div>
+
+        <div class="menu-item" onclick="loadTool('wire', 'main')">
+            <span id="txt-menu-wire">Comparativa de Calibres (Cable)</span>
         </div>
         
         <div class="menu-item" onclick="toggleFolder('folder-config')">
@@ -120,7 +124,6 @@
                 <button class="tab-btn active" id="tab-calc" onclick="switchSubView('calc')">Calculadora</button>
                 <button class="tab-btn" id="tab-tables" onclick="switchSubView('tables')">Tablas</button>
             </div>
-
             <div id="subview-calc" class="view active">
                 <div class="card">
                     <div class="input-group">
@@ -143,7 +146,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="subview-tables" class="view">
                 <div class="card" style="padding: 15px;">
                     <div class="table-wrapper">
@@ -175,18 +177,43 @@
             </div>
         </section>
 
+        <section id="section-wire" class="tool-section">
+            <div class="card" style="padding: 10px;">
+                <h3 id="txt-wire-title" style="margin-bottom:15px;">Calibres de Cable (mm)</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cal.</th>
+                                <th>A.W.G.</th>
+                                <th>B.W.G.</th>
+                                <th>U.S. STD.</th>
+                                <th>S.W.G.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wireTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </div>
 
 <script>
     const translations = {
-        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", subCalc: "➤ Calculadora", subTables: "➤ Tablas de equivalencia", steel: "Calibre acero (mm - mil pulg)", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma", calcTab: "Calculadora", tableTab: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", sugg: "Sugerencia:", thFrac: "Fracción", thDec: "Decimal", stCal: "Calibre", stMM: "Espesor (mm)", stIn: "Pulgadas", stW: "Peso (kg/m²)" },
-        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", subCalc: "➤ Calculator", subTables: "➤ Equivalence Charts", steel: "Steel Gauge (mm - mil inch)", config: "⚙️ Settings", theme: "Appearance", lang: "Language", calcTab: "Calculator", tableTab: "Charts", mode: "Mode", measure: "Size", prompt: "Enter measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Decimal", stCal: "Gauge", stMM: "Thickness (mm)", stIn: "Inches (mil)", stW: "Weight (kg/m²)" },
-        fr: { title: "Mécanicien Pro ⚡", menu: "Menu", tool1: "mm ⇄ pouces fraction", subCalc: "➤ Calculatrice", subTables: "➤ Tableaux d'équivalence", steel: "Jauge d'acier (mm - mil)", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue", calcTab: "Calculatrice", tableTab: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez la mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Décimal", stCal: "Jauge", stMM: "Épaisseur (mm)", stIn: "Pouces", stW: "Poids (kg/m²)" },
-        de: { title: "Mechaniker Pro ⚡", menu: "Menü", tool1: "mm ⇄ zoll bruch", subCalc: "➤ Rechner", subTables: "➤ Vergleichstabelle", steel: "Stahlstärke (mm - mil)", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache", calcTab: "Rechner", tableTab: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", sugg: "Empfehlung:", thFrac: "Bruch", thDec: "Dezimal", stCal: "Stärke", stMM: "Dicke (mm)", stIn: "Zoll", stW: "Gewicht (kg/m²)" }
+        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", subCalc: "➤ Calculadora", subTables: "➤ Tablas de equivalencia", steel: "Calibre acero (mm - mil pulg)", wire: "Comparativa Calibres (Cable)", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma", calcTab: "Calculadora", tableTab: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", sugg: "Sugerencia:", thFrac: "Fracción", thDec: "Decimal", stCal: "Calibre", wireTitle: "Tabla Comparativa mm" },
+        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", subCalc: "➤ Calculator", subTables: "➤ Equivalence Charts", steel: "Steel Gauge (mm - mil inch)", wire: "Wire Gauge Comparison", config: "⚙️ Settings", theme: "Appearance", lang: "Language", calcTab: "Calculator", tableTab: "Charts", mode: "Mode", measure: "Size", prompt: "Enter measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Decimal", stCal: "Gauge", wireTitle: "Comparison Chart mm" },
+        fr: { title: "Mécanicien Pro ⚡", menu: "Menu", tool1: "mm ⇄ pouces fraction", subCalc: "➤ Calculatrice", subTables: "➤ Tableaux d'équivalence", steel: "Jauge d'acier (mm - mil)", wire: "Comparaison des Jauges", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue", calcTab: "Calculatrice", tableTab: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez la mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", sugg: "Suggestion:", thFrac: "Fraction", thDec: "Décimal", stCal: "Jauge", wireTitle: "Tableau Comparatif mm" },
+        de: { title: "Mechaniker Pro ⚡", menu: "Menü", tool1: "mm ⇄ zoll bruch", subCalc: "➤ Rechner", subTables: "➤ Vergleichstabelle", steel: "Stahlstärke (mm - mil)", wire: "Kabelstärken-Vergleich", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache", calcTab: "Rechner", tableTab: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", sugg: "Empfehlung:", thFrac: "Bruch", thDec: "Dezimal", stCal: "Stärke", wireTitle: "Vergleichstabelle mm" }
     };
 
     const steelData = [
         ["1/2\"", "12.70", "0.500", "99.695"], ["7/16\"", "11.11", "0.438", "87.214"], ["3/8\"", "9.53", "0.375", "74.811"], ["5/16\"", "7.94", "0.313", "62.329"], ["1/4\"", "6.35", "0.250", "49.848"], ["3", "6.07", "0.239", "47.650"], ["4", "5.69", "0.224", "44.667"], ["5", "5.31", "0.209", "41.684"], ["6", "4.94", "0.194", "38.779"], ["3/16\"", "4.76", "0.188", "37.366"], ["7", "4.55", "0.179", "35.718"], ["8", "4.18", "0.164", "32.813"], ["9", "3.80", "0.150", "29.830"], ["10", "3.42", "0.135", "26.847"], ["1/8\"", "3.18", "0.125", "24.963"], ["11", "3.04", "0.120", "23.864"], ["12", "2.66", "0.105", "20.881"], ["13", "2.28", "0.090", "17.898"], ["14", "1.90", "0.075", "14.915"], ["15", "1.71", "0.067", "13.424"], ["1/16\"", "1.59", "0.063", "12.482"], ["16", "1.52", "0.060", "11.932"], ["17", "1.37", "0.054", "10.755"], ["18", "1.21", "0.048", "9.499"], ["19", "1.06", "0.042", "8.321"], ["20", "0.91", "0.036", "7.144"], ["21", "0.84", "0.033", "6.594"], ["1/32\"", "0.79", "0.031", "6.202"], ["22", "0.76", "0.030", "5.966"], ["23", "0.68", "0.027", "5.338"], ["24", "0.61", "0.024", "4.789"], ["25", "0.53", "0.021", "4.161"], ["26", "0.45", "0.018", "3.533"], ["27", "0.42", "0.016", "3.297"], ["1/64\"", "0.40", "0.016", "3.140"], ["28", "0.38", "0.15", "2.983"], ["29", "0.34", "0.014", "2.669"], ["30", "0.30", "0.012", "2.355"]
+    ];
+
+    // Datos Comparativos de Cable (mm)
+    const wireData = [
+        ["0", "8.25", "8.64", "8.74", "8.23"], ["1", "7.35", "7.62", "7.14", "7.62"], ["2", "6.54", "7.21", "6.75", "7.01"], ["4", "5.19", "6.05", "5.95", "5.89"], ["6", "4.11", "5.16", "5.16", "4.88"], ["8", "3.26", "4.19", "4.37", "4.06"], ["10", "2.59", "3.40", "3.57", "3.25"], ["12", "2.05", "2.77", "2.78", "2.64"], ["14", "1.63", "2.11", "1.98", "2.03"], ["16", "1.29", "1.65", "1.59", "1.63"], ["18", "1.02", "1.24", "1.21", "1.22"], ["20", "0.81", "0.89", "0.91", "0.91"], ["22", "0.64", "0.71", "0.75", "0.71"], ["24", "0.51", "0.56", "0.61", "0.56"], ["26", "0.40", "0.46", "0.46", "0.46"], ["30", "0.25", "0.30", "0.31", "0.31"]
     ];
 
     function init() {
@@ -195,10 +222,12 @@
         if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
         
         // Render Steel Table
-        const sBody = document.getElementById('steelTableBody');
-        sBody.innerHTML = steelData.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+        document.getElementById('steelTableBody').innerHTML = steelData.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
         
-        // Render Equivalence Table
+        // Render Wire Table
+        document.getElementById('wireTableBody').innerHTML = wireData.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('');
+
+        // Render Conversion Table
         const tableBody = document.getElementById('tableBody');
         const gcdFunc = (a, b) => b ? gcdFunc(b, a % b) : a;
         let tH = '';
@@ -222,6 +251,7 @@
         document.getElementById('txt-sub-calc').innerText = t.subCalc;
         document.getElementById('txt-sub-tables').innerText = t.subTables;
         document.getElementById('txt-menu-steel').innerText = t.steel;
+        document.getElementById('txt-menu-wire').innerText = t.wire;
         document.getElementById('txt-menu-config').innerText = t.config;
         document.getElementById('txt-label-theme').innerText = t.theme;
         document.getElementById('txt-label-lang').innerText = t.lang;
@@ -233,13 +263,9 @@
         document.getElementById('opt-in-mm').innerText = t.inMm;
         document.getElementById('th-frac').innerText = t.thFrac;
         document.getElementById('th-dec').innerText = t.thDec;
-        
-        // Calibre Headers
         document.getElementById('th-cal').innerText = t.stCal;
-        document.getElementById('th-mm').innerText = "mm";
-        document.getElementById('th-in').innerText = "pulg";
-        document.getElementById('th-weight').innerText = "kg/m²";
         document.getElementById('txt-steel-title').innerText = t.stCal + " (Steel)";
+        document.getElementById('txt-wire-title').innerText = t.wireTitle;
         
         convert();
     }
