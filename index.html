@@ -30,11 +30,11 @@
         .view.active { display: block; }
 
         .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border); text-align: center; margin-bottom: 15px; }
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
+        .input-group { margin-bottom: 20px; text-align: left; }
         label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-left: 5px; font-weight: bold; }
         select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
 
-        .search-box { margin-bottom: 15px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; padding: 12px; color: var(--text); width: 100%; box-sizing: border-box; outline: none; }
+        .search-box { margin-bottom: 15px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; padding: 12px; color: var(--text); width: 100%; box-sizing: border-box; }
 
         .result-container { margin-top: 10px; background: rgba(0,0,0,0.05); border-radius: 20px; padding: 25px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -42,11 +42,11 @@
         .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
         .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
 
-        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); overflow-y: auto; }
+        .sidebar { position: fixed; left: -300px; top: 0; width: 300px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         .sidebar.active { left: 0; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
         .overlay.active { display: block; }
-        .menu-item { padding: 15px 10px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: 500; }
+        .menu-item { padding: 15px 10px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
         .submenu { display: none; background: rgba(0,0,0,0.1); border-radius: 8px; margin-top: 5px; }
         .submenu.show { display: block; }
         .submenu-item { padding: 12px 20px; cursor: pointer; font-size: 0.9rem; color: #94a3b8; border-bottom: 1px solid var(--border); }
@@ -67,12 +67,12 @@
         <h2 id="txt-menu-title" style="color: var(--accent); margin-bottom: 25px;">Menú</h2>
         <div class="menu-item" onclick="toggleFolder('folder-mm-in')"><span id="txt-menu-tool1">mm ⇄ pulgadas fracción</span><span>▾</span></div>
         <div id="folder-mm-in" class="submenu">
-            <div class="submenu-item" onclick="loadTool('converter', 'calc')" id="txt-sub-calc">➤ Calculadora</div>
-            <div class="submenu-item" onclick="loadTool('converter', 'tables')" id="txt-sub-tables">➤ Tablas de equivalencia</div>
+            <div class="submenu-item" onclick="loadTool('converter', 'calc')">➤ Calculadora</div>
+            <div class="submenu-item" onclick="loadTool('converter', 'tables')">➤ Tablas</div>
         </div>
-        <div class="menu-item" onclick="loadTool('steel', 'main')"><span id="txt-menu-steel">Calibre acero (mm - mil pulg)</span></div>
-        <div class="menu-item" onclick="loadTool('wire', 'main')"><span id="txt-menu-wire">Comparativa Calibres (Cable)</span></div>
-        <div class="menu-item" onclick="toggleFolder('folder-config')"><span id="txt-menu-config">⚙️ Ajustes</span><span>▾</span></div>
+        <div class="menu-item" onclick="loadTool('steel', 'main')"><span>Calibre acero (mm - kg/m²)</span></div>
+        <div class="menu-item" onclick="loadTool('wire', 'main')"><span>Comparativa Cables (AWG/BWG)</span></div>
+        <div class="menu-item" onclick="toggleFolder('folder-config')"><span>⚙️ Ajustes</span><span>▾</span></div>
         <div id="folder-config" class="submenu">
             <div style="padding: 15px;">
                 <select id="themeSelect" onchange="changeTheme()" style="width:100%; margin-bottom:10px;"><option value="dark">🌙 Dark</option><option value="light">☀️ Light</option></select>
@@ -110,7 +110,7 @@
                     <input type="text" id="tableSearch" class="search-box" placeholder="🔍 Buscar medida..." oninput="filterTable('tableBody', this.value)">
                     <div class="table-wrapper">
                         <table>
-                            <thead><tr><th id="th-frac">Fracción</th><th>mm</th><th id="th-dec">Decimal</th></tr></thead>
+                            <thead><tr><th>Fracción</th><th>mm</th><th>Decimal</th></tr></thead>
                             <tbody id="tableBody"></tbody>
                         </table>
                     </div>
@@ -120,7 +120,7 @@
 
         <section id="section-steel" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3 style="margin-bottom:15px; font-size: 1rem;">Tabla de Calibres (Acero)</h3>
+                <h3 style="margin-bottom:15px;">Tabla de Calibres (Acero)</h3>
                 <div class="table-wrapper">
                     <table>
                         <thead><tr><th>Calibre</th><th>mm</th><th>pulg</th><th>kg/m²</th></tr></thead>
@@ -132,7 +132,7 @@
 
         <section id="section-wire" class="tool-section">
             <div class="card" style="padding: 10px;">
-                <h3 style="margin-bottom:15px; font-size: 0.9rem; color: var(--accent);">TABLA COMPARATIVA DE CALIBRES (CABLE)</h3>
+                <h3 style="margin-bottom:15px; font-size: 0.9rem; color: var(--accent);">TABLA COMPARATIVA DE CABLES</h3>
                 <div class="table-wrapper">
                     <table style="font-size: 0.6rem;">
                         <thead>
@@ -148,37 +148,27 @@
 
 <script>
     const translations = {
-        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", subCalc: "➤ Calculadora", subTables: "➤ Tablas de equivalencia", steel: "Calibre acero (mm - mil pulg)", wire: "Comparativa Calibres (Cable)", config: "⚙️ Ajustes", prompt: "Introduce medida...", std: "✓ LLAVE ESTÁNDAR", spec: "LLAVE ESPECIAL" },
-        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", subCalc: "➤ Calculator", subTables: "➤ Charts", steel: "Steel Gauge", wire: "Wire Gauge", config: "⚙️ Settings", prompt: "Enter value...", std: "✓ STANDARD WRENCH", spec: "SPECIAL WRENCH" }
+        es: { title: "Mecánico Pro ⚡", menu: "Menú", tool1: "mm ⇄ pulgadas fracción", prompt: "Introduce medida...", std: "✓ LLAVE ESTÁNDAR", spec: "LLAVE ESPECIAL" },
+        en: { title: "Mechanic Pro ⚡", menu: "Menu", tool1: "mm ⇄ fraction inches", prompt: "Enter value...", std: "✓ STANDARD WRENCH", spec: "SPECIAL WRENCH" }
     };
 
-    // Lógica comercial: Fuerza que 13mm sea 1/2" y detecta llaves estándar
-    const wrenchMap = {"1.5":"1/16\"","2":"5/64\"","2.5":"3/32\"","3":"1/8\"","4":"5/32\"","5":"3/16\"","5.5":"7/32\"","6":"1/4\"","7":"9/32\"","8":"5/16\"","9":"11/32\"","10":"3/8\"","11":"7/16\"","12":"15/32\"","13":"1/2\"","14":"9/16\"","15":"19/32\"","16":"5/8\"","17":"11/16\"","18":"23/32\"","19":"3/4\"","21":"13/16\"","22":"7/8\"","24":"15/16\"","25.4":"1\""};
+    // MAPA COMERCIAL: Corregido para forzar 13mm -> 1/2" y 25mm -> 1"
+    const commercialMap = {
+        "10": "3/8\"", "11": "7/16\"", "13": "1/2\"", "14": "9/16\"", "16": "5/8\"", 
+        "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""
+    };
 
     const steelData = [
-        ["1/2\"","12.70","0.500","99.6"], ["7/16\"","11.11","0.437","87.2"], ["3/8\"","9.52","0.375","74.8"], ["5/16\"","7.93","0.312","62.3"], ["1/4\"","6.35","0.250","49.8"], ["3/16\"","4.76","0.187","37.3"], ["1/8\"","3.17","0.125","24.9"], ["10","3.41","0.134","26.8"], ["12","2.65","0.104","20.8"], ["14","1.89","0.074","14.9"], ["16","1.51","0.059","11.9"], ["18","1.21","0.047","9.5"], ["20","0.91","0.035","7.1"]
+        ["1/2\"","12.70","0.500","99.6"], ["3/8\"","9.52","0.375","74.8"], ["1/4\"","6.35","0.250","49.8"], ["10","3.41","0.134","26.8"], ["12","2.65","0.104","20.8"], ["14","1.89","0.074","14.9"], ["16","1.51","0.059","11.9"], ["18","1.21","0.047","9.5"], ["20","0.91","0.035","7.1"]
     ];
 
     const wireData = [
         ["7/0", "-", "-", "-", "-", "12.451", "0.490", "12.700", "0.500"],
-        ["6/0", "-", "-", "14.732", "0.580", "11.674", "0.460", "11.786", "0.464"],
-        ["5/0", "12.700", "0.500", "13.119", "0.519", "10.894", "0.429", "10.973", "0.432"],
-        ["4/0", "11.532", "0.454", "11.684", "0.460", "10.117", "0.398", "10.160", "0.400"],
-        ["3/0", "10.795", "0.425", "10.040", "0.410", "9.337", "0.368", "9.449", "0.372"],
-        ["2/0", "9.652", "0.380", "9.266", "0.365", "8.560", "0.337", "8.839", "0.348"],
         ["1/0", "8.636", "0.340", "8.252", "0.325", "7.783", "0.308", "8.230", "0.324"],
         ["1", "7.620", "0.300", "7.384", "0.284", "7.003", "0.276", "7.620", "0.300"],
-        ["2", "7.214", "0.284", "6.543", "0.258", "6.614", "0.260", "7.010", "0.278"],
-        ["4", "6.045", "0.238", "5.181", "0.204", "5.837", "0.230", "5.883", "0.232"],
-        ["6", "5.156", "0.203", "4.115", "0.152", "5.057", "0.199", "4.877", "0.192"],
-        ["8", "4.191", "0.165", "3.264", "0.129", "4.280", "0.164", "4.064", "0.160"],
         ["10", "3.404", "0.134", "2.588", "0.102", "3.503", "0.138", "3.251", "0.128"],
-        ["11", "3.048", "0.120", "2.304", "0.091", "3.112", "0.123", "2.946", "0.116"],
         ["12", "2.769", "0.109", "2.052", "0.081", "2.723", "0.107", "2.642", "0.104"],
-        ["13", "2.413", "0.095", "1.829", "0.072", "2.334", "0.092", "2.337", "0.092"],
         ["14", "2.108", "0.083", "1.628", "0.064", "1.946", "0.077", "2.032", "0.080"],
-        ["16", "1.651", "0.065", "1.291", "0.051", "1.590", "0.063", "1.626", "0.064"],
-        ["18", "1.245", "0.049", "1.024", "0.040", "1.245", "0.049", "1.219", "0.048"],
         ["20", "0.889", "0.035", "0.813", "0.032", "0.835", "0.037", "0.814", "0.038"]
     ];
 
@@ -204,15 +194,15 @@
         const raw = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        const t = translations[document.getElementById('langSelect').value];
-        if (!raw) { resBox.innerHTML = `<div style="color:#64748b">${t.prompt}</div>`; return; }
+        const lang = document.getElementById('langSelect').value;
+        if (!raw) { resBox.innerHTML = `<div style="color:#64748b">${translations[lang].prompt}</div>`; return; }
         
         let val = evalFrac(raw);
         if (mode === 'mm_to_in') {
-            // Lógica para que 13mm de 1/2" directamente
-            let frac = wrenchMap[val] || toFrac(val / 25.4);
-            let isStd = !!wrenchMap[val];
-            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?t.std:t.spec}</div>`;
+            // Prioridad al mapa comercial
+            let isStd = !!commercialMap[Math.round(val).toString()] || !!commercialMap[val.toString()];
+            let frac = commercialMap[Math.round(val).toString()] || toFrac(val / 25.4);
+            resBox.innerHTML = `<div class="main-res">${frac}</div><div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?translations[lang].std:translations[lang].spec}</div>`;
         } else {
             let mm = val * 25.4;
             resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<small style="font-size:1.5rem">mm</small></div>`;
@@ -251,6 +241,7 @@
         localStorage.setItem('lang', lang);
         document.getElementById('main-title').innerText = translations[lang].title;
         document.getElementById('txt-menu-title').innerText = translations[lang].menu;
+        document.getElementById('txt-menu-tool1').innerText = translations[lang].tool1;
         convert();
     }
 
