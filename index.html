@@ -3,262 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mecánico Pro ⚡</title>
+    <title>Mecánico Pro ⚡ | Calculadora de mm a Pulgadas y Tablas de Calibres</title>
+    <meta name="description" content="Calculadora técnica profesional para mecánicos, herreros y torneros. Conversión de milímetros a fracciones, tablas de calibres de acero y comparativa de cables AWG/BWG.">
+    
     <style>
         :root { 
-            --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; 
-            --std: #4ade80; --spec: #fbbf24; --input-bg: #0f172a;
-        }
-        
-        /* ESTILOS MODO CLARO */
-        .light-mode {
-            --bg: #f1f5f9; --card: #ffffff; --accent: #0284c7; --text: #1e293b;
-            --std: #16a34a; --spec: #d97706; --input-bg: #f8fafc;
+            --bg: #0f172a; 
+            --card: #1e293b; 
+            --accent: #38bdf8; 
+            --text: #f1f5f9; 
+            --std: #4ade80; 
+            --spec: #fbbf24; 
+            --border: rgba(255,255,255,0.05); 
+            --danger: #ef4444;
         }
 
         body { 
-            font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); 
-            margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center;
-            transition: background 0.3s, color 0.3s;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 15px; 
+        }
+        
+        /* NAVEGACIÓN POR PESTAÑAS */
+        .tabs { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            width: 100%; 
+            max-width: 450px; 
+        }
+        .tab-btn { 
+            flex: 1; 
+            padding: 14px; 
+            border-radius: 15px; 
+            border: 1px solid var(--border); 
+            background: var(--card); 
+            color: #94a3b8; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 0.85rem; 
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active { 
+            background: var(--accent); 
+            color: var(--bg); 
+            border-color: var(--accent); 
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
         }
 
-        /* TÍTULO Y HEADER */
-        .top-header { width: 100%; max-width: 450px; display: flex; align-items: center; justify-content: center; position: relative; padding: 15px 0; }
-        .top-header h2 { margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; }
-        .menu-btn { position: absolute; left: 0; background: none; border: none; color: var(--text); font-size: 1.8rem; cursor: pointer; }
+        /* CARD PRINCIPAL */
+        .card { 
+            background: var(--card); 
+            width: 100%; 
+            max-width: 450px; 
+            padding: 30px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); 
+            border: 1px solid var(--border); 
+            text-align: center; 
+            box-sizing: border-box; 
+        }
+        h1 { 
+            background: linear-gradient(135deg, #38bdf8, #818cf8); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            font-size: 2rem; 
+            margin: 0 0 25px 0; 
+            font-weight: 800;
+        }
+        
+        .input-group { 
+            margin-bottom: 25px; 
+            text-align: left; 
+            position: relative; 
+        }
+        label { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            color: #94a3b8; 
+            letter-spacing: 1.2px; 
+            margin-left: 8px;
+            font-weight: 600;
+        }
+        select, input { 
+            width: 100%; 
+            padding: 18px; 
+            background: #0f172a; 
+            border: 2px solid #334155; 
+            border-radius: 16px; 
+            color: white; 
+            font-size: 1.2rem; 
+            margin-top: 8px; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: all 0.3s ease; 
+        }
+        input:focus { 
+            border-color: var(--accent); 
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15); 
+        }
+        
+        /* BOTONES DE ENTRADA RÁPIDA (FIDELIDAD) */
+        .slash-btn-container { 
+            position: absolute; 
+            right: 12px; 
+            bottom: 8px; 
+            display: none; 
+            gap: 8px; 
+        }
+        .q-btn { 
+            background: var(--accent); 
+            color: var(--bg); 
+            border: none; 
+            border-radius: 12px; 
+            width: 48px; 
+            height: 48px; 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: transform 0.1s; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .q-btn:active { transform: scale(0.9); }
 
-        /* NAVEGACIÓN */
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 450px; }
-        .tab-btn { flex: 1; padding: 14px; border: none; border-radius: 14px; background: var(--card); color: #94a3b8; cursor: pointer; font-weight: bold; border: 1px solid rgba(0,0,0,0.05); }
-        .tab-btn.active { background: var(--accent); color: white; }
+        /* CONTENEDOR DE RESULTADOS */
+        .result-container { 
+            margin-top: 15px; 
+            background: rgba(15, 23, 42, 0.7); 
+            border-radius: 24px; 
+            padding: 30px; 
+            border: 1px solid #334155; 
+            min-height: 160px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            position: relative;
+        }
+        .main-res { 
+            font-size: 3.8rem; 
+            font-weight: 900; 
+            color: var(--accent); 
+            line-height: 1; 
+        }
+        .badge { 
+            display: inline-block; 
+            padding: 8px 18px; 
+            border-radius: 50px; 
+            font-weight: 800; 
+            font-size: 0.8rem; 
+            margin-top: 20px; 
+            text-transform: uppercase; 
+        }
+        .badge-std { background: rgba(74, 222, 128, 0.15); color: var(--std); border: 1px solid var(--std); }
+        .badge-spec { background: rgba(251, 191, 36, 0.15); color: var(--spec); border: 1px solid var(--spec); }
+        
+        /* TABLAS TÉCNICAS EXPANDIDAS */
+        .view-section { 
+            display: none; 
+            width: 100%; 
+            max-width: 450px; 
+            animation: slideUp 0.4s ease-out; 
+        }
+        .view-section.active { display: block; }
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
-        .container { width: 100%; max-width: 450px; }
-        .view { display: none; }
-        .view.active { display: block; }
+        .table-wrap { 
+            background: var(--card); 
+            border-radius: 28px; 
+            border: 1px solid var(--border); 
+            overflow: hidden; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        .scroll-area { 
+            max-height: 68vh; 
+            overflow-y: auto; 
+            scrollbar-width: thin; 
+            scrollbar-color: var(--accent) #0f172a; 
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { 
+            background: #0f172a; 
+            padding: 18px 10px; 
+            color: var(--accent); 
+            position: sticky; 
+            top: 0; 
+            z-index: 20; 
+            border-bottom: 2px solid #334155; 
+            font-weight: 800;
+        }
+        td { padding: 14px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); text-align: center; color: #cbd5e1; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+        .sticky-col { 
+            position: sticky; 
+            left: 0; 
+            background: #1e293b; 
+            font-weight: 800; 
+            border-right: 2px solid #334155; 
+            color: var(--accent); 
+        }
 
-        /* TARJETAS E INPUTS */
-        .card { background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); text-align: center; }
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
-        label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-left: 5px; font-weight: bold; }
-        select, input { width: 100%; padding: 16px; background: var(--input-bg); border: 2px solid #33415544; border-radius: 14px; color: var(--text); font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
+        /* HISTORIAL DE CONSULTAS */
+        .history-section { 
+            margin-top: 30px; 
+            text-align: left; 
+            border-top: 1px solid #334155; 
+            padding-top: 20px; 
+        }
+        .history-title { 
+            font-size: 0.75rem; 
+            color: #64748b; 
+            text-transform: uppercase; 
+            margin-bottom: 15px; 
+            display: block; 
+            letter-spacing: 1.5px; 
+            font-weight: 700;
+        }
+        .history-item { 
+            background: #16213e; 
+            padding: 14px 18px; 
+            border-radius: 14px; 
+            margin-bottom: 10px; 
+            font-size: 0.95rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 5px solid var(--accent); 
+        }
 
-        /* BOTONES DE AYUDA */
-        .helper-btns { display: none; position: absolute; right: 8px; bottom: 6px; gap: 5px; z-index: 5; }
-        .tool-btn { background: var(--accent); color: white; border: none; border-radius: 10px; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; }
+        /* CONTENIDO SEO ESTRATÉGICO */
+        .seo-content { 
+            max-width: 450px; 
+            margin-top: 40px; 
+            padding: 25px; 
+            color: #94a3b8; 
+            font-size: 0.95rem; 
+            line-height: 1.7; 
+            text-align: left; 
+            background: rgba(30, 41, 59, 0.4); 
+            border-radius: 24px; 
+            border: 1px solid var(--border); 
+        }
+        .seo-content h2 { color: var(--accent); font-size: 1.2rem; margin-top: 0; font-weight: 800; }
+        .seo-content p { margin-bottom: 15px; }
 
-        .result-container { margin-top: 10px; background: rgba(0,0,0,0.05); border-radius: 20px; padding: 25px; min-height: 140px; display: flex; flex-direction: column; justify-content: center; }
-        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
-        .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
-        .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
-
-        /* TABLA */
-        .table-card { background: var(--card); border-radius: 24px; padding: 15px; }
-        .table-wrapper { max-height: 60vh; overflow-y: auto; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { background: var(--accent); color: white; padding: 12px; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px solid #33415522; }
-
-        /* SIDEBAR CONFIGURACIÓN */
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); z-index: 1000; transition: 0.3s; padding: 25px; box-sizing: border-box; box-shadow: 10px 0 30px rgba(0,0,0,0.2); }
-        .sidebar.active { left: 0; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-        .overlay.active { display: block; }
-        .config-item { margin-bottom: 25px; }
-        .config-item label { display: block; margin-bottom: 8px; }
+        footer { 
+            margin: 50px 0 30px 0; 
+            padding: 25px; 
+            font-size: 0.8rem; 
+            color: #475569; 
+            text-align: center; 
+            border-top: 1px solid var(--border); 
+            width: 100%; 
+            max-width: 450px; 
+        }
+        footer a { color: var(--accent); text-decoration: none; font-weight: 600; margin: 0 10px; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-    
-    <nav class="sidebar" id="sidebar">
-        <h2 id="txt-config-title" style="color: var(--accent); margin-bottom: 30px;">⚙️ Ajustes</h2>
-        
-        <div class="config-item">
-            <label id="txt-label-theme">Apariencia</label>
-            <select id="themeSelect" onchange="changeTheme()">
-                <option value="dark">🌙 Dark Mode</option>
-                <option value="light">☀️ Light Mode</option>
+<div class="tabs">
+    <button class="tab-btn active" onclick="showTab('calc', this)">Calculadora</button>
+    <button class="tab-btn" onclick="showTab('steel', this)">Lámina/Acero</button>
+    <button class="tab-btn" onclick="showTab('wire', this)">Cables/Alambre</button>
+</div>
+
+<section id="view-calc" class="view-section active">
+    <div class="card">
+        <h1>Mecánico Pro ⚡</h1>
+        <div class="input-group">
+            <label>Modo de Conversión</label>
+            <select id="mode" onchange="toggleMode()">
+                <option value="mm_to_in">Milímetros a Pulgadas (Fracción)</option>
+                <option value="in_to_mm">Pulgadas a Milímetros (Métrico)</option>
             </select>
         </div>
-
-        <div class="config-item">
-            <label id="txt-label-lang">Idioma / Language</label>
-            <select id="langSelect" onchange="changeLang()">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-            </select>
+        <div class="input-group">
+            <label id="labelMedida">Medida en Milímetros</label>
+            <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13" oninput="convert()">
+            <div id="btnContainer" class="slash-btn-container">
+                <button class="q-btn" onclick="addChar(' ')">␣</button>
+                <button class="q-btn" onclick="addChar('/')">/</button>
+            </div>
+        </div>
+        <div class="result-container" id="resBox">
+            <div style="color: #475569;">Esperando datos para calcular...</div>
         </div>
         
-        <button onclick="toggleMenu()" style="width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer;">OK</button>
-    </nav>
-
-    <header class="top-header">
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-        <h2 id="main-title">Mecánico Pro ⚡</h2>
-    </header>
-
-    <div class="nav-tabs">
-        <button class="tab-btn active" id="btn-calc" onclick="switchView('calc')">Calculadora</button>
-        <button class="tab-btn" id="btn-tables" onclick="switchView('tables')">Tablas</button>
-    </div>
-
-    <div class="container">
-        <div id="calcView" class="view active">
-            <div class="card">
-                <div class="input-group">
-                    <label id="txt-label-mode">Modo</label>
-                    <select id="mode" onchange="toggleMode()">
-                        <option value="mm_to_in" id="opt-mm-in">Milímetros a Pulgadas</option>
-                        <option value="in_to_mm" id="opt-in-mm">Pulgadas a Milímetros</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label id="txt-label-measure">Medida</label>
-                    <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
-                    <div id="helperBtns" class="helper-btns">
-                        <button class="tool-btn" onclick="addChar(' ')">␣</button>
-                        <button class="tool-btn" onclick="addChar('/')">/</button>
-                    </div>
-                </div>
-                <div class="result-container" id="resBox">
-                    <div id="txt-prompt" style="color: #64748b;">Introduce una medida...</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tablesView" class="view">
-            <div class="table-card">
-                <input type="text" class="search-box" id="tableSearch" placeholder="🔍 Buscar..." oninput="filterTable()" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #33415522;">
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr><th id="th-frac">Fracción</th><th>mm</th><th id="th-dec">Decimal</th></tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="history-section" id="historyBox" style="display:none;">
+            <span class="history-title">Últimas Conversiones</span>
+            <div id="historyList"></div>
         </div>
     </div>
+
+    <div class="seo-content">
+        <h2>¿Por qué usar Mecánico Pro?</h2>
+        <p>En el mundo de la <strong>herrería, mecánica automotriz e industria</strong>, la precisión no es opcional. Nuestra herramienta permite convertir medidas milimétricas a sus equivalentes comerciales más cercanos en fracciones de pulgada.</p>
+        <p>Identifica al instante si necesitas una llave estándar (1/2, 9/16, 3/4) o si la medida requiere una herramienta especial. Además, consulta nuestras tablas de calibres para seleccionar el material correcto en tus proyectos de construcción.</p>
+    </div>
+</section>
+
+<section id="view-steel" class="view-section">
+    <div class="table-wrap">
+        <div class="scroll-area">
+            <table>
+                <thead>
+                    <tr><th>Calibre</th><th>mm</th><th>Pulg</th><th>kg/m²</th></tr>
+                </thead>
+                <tbody id="steelBody">
+                    <tr><td>1/2"</td><td>12.70</td><td>.500</td><td>99.69</td></tr>
+                    <tr><td>7/16"</td><td>11.11</td><td>.438</td><td>87.21</td></tr>
+                    <tr><td>3/8"</td><td>9.53</td><td>.375</td><td>74.81</td></tr>
+                    <tr><td>5/16"</td><td>7.94</td><td>.313</td><td>62.32</td></tr>
+                    <tr><td>1/4"</td><td>6.35</td><td>.250</td><td>49.84</td></tr>
+                    <tr><td>Cal 3</td><td>6.07</td><td>.239</td><td>47.65</td></tr>
+                    <tr><td>Cal 4</td><td>5.69</td><td>.224</td><td>44.66</td></tr>
+                    <tr><td>Cal 5</td><td>5.31</td><td>.209</td><td>41.68</td></tr>
+                    <tr><td>Cal 6</td><td>4.94</td><td>.194</td><td>38.77</td></tr>
+                    <tr><td>3/16"</td><td>4.76</td><td>.188</td><td>37.36</td></tr>
+                    <tr><td>Cal 7</td><td>4.55</td><td>.179</td><td>35.71</td></tr>
+                    <tr><td>Cal 8</td><td>4.18</td><td>.164</td><td>32.81</td></tr>
+                    <tr><td>Cal 9</td><td>3.80</td><td>.150</td><td>29.83</td></tr>
+                    <tr><td>Cal 10</td><td>3.42</td><td>.135</td><td>26.84</td></tr>
+                    <tr><td>1/8"</td><td>3.18</td><td>.125</td><td>24.96</td></tr>
+                    <tr><td>Cal 11</td><td>3.04</td><td>.120</td><td>23.86</td></tr>
+                    <tr><td>Cal 12</td><td>2.66</td><td>.105</td><td>20.88</td></tr>
+                    <tr><td>Cal 13</td><td>2.28</td><td>.090</td><td>17.89</td></tr>
+                    <tr><td>Cal 14</td><td>1.90</td><td>.075</td><td>14.91</td></tr>
+                    <tr><td>Cal 15</td><td>1.71</td><td>.067</td><td>13.42</td></tr>
+                    <tr><td>1/16"</td><td>1.59</td><td>.063</td><td>12.48</td></tr>
+                    <tr><td>Cal 16</td><td>1.52</td><td>.060</td><td>11.93</td></tr>
+                    <tr><td>Cal 17</td><td>1.37</td><td>.054</td><td>10.75</td></tr>
+                    <tr><td>Cal 18</td><td>1.21</td><td>.048</td><td>9.50</td></tr>
+                    <tr><td>Cal 19</td><td>1.06</td><td>.042</td><td>8.32</td></tr>
+                    <tr><td>Cal 20</td><td>0.91</td><td>.036</td><td>7.14</td></tr>
+                    <tr><td>Cal 21</td><td>0.84</td><td>.033</td><td>6.59</td></tr>
+                    <tr><td>1/32"</td><td>0.79</td><td>.031</td><td>6.20</td></tr>
+                    <tr><td>Cal 22</td><td>0.76</td><td>.030</td><td>5.96</td></tr>
+                    <tr><td>Cal 23</td><td>0.68</td><td>.027</td><td>5.33</td></tr>
+                    <tr><td>Cal 24</td><td>0.61</td><td>.024</td><td>4.79</td></tr>
+                    <tr><td>Cal 25</td><td>0.53</td><td>.021</td><td>4.16</td></tr>
+                    <tr><td>Cal 26</td><td>0.45</td><td>.018</td><td>3.53</td></tr>
+                    <tr><td>Cal 27</td><td>0.42</td><td>.016</td><td>3.29</td></tr>
+                    <tr><td>Cal 28</td><td>0.38</td><td>.015</td><td>2.98</td></tr>
+                    <tr><td>Cal 30</td><td>0.30</td><td>.012</td><td>2.35</td></tr>
+                    <tr><td>Cal 32</td><td>0.25</td><td>.010</td><td>1.96</td></tr>
+                    <tr><td>Cal 34</td><td>0.21</td><td>.008</td><td>1.65</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section id="view-wire" class="view-section">
+    <div class="table-wrap">
+        <div class="scroll-area">
+            <table>
+                <thead>
+                    <tr><th class="sticky-col">CAL</th><th>BWG (mm)</th><th>AWG (mm)</th><th>STD (mm)</th></tr>
+                </thead>
+                <tbody id="wireBody">
+                    <tr><td class="sticky-col">7/0</td><td>-</td><td>-</td><td>12.45</td></tr>
+                    <tr><td class="sticky-col">6/0</td><td>14.73</td><td>11.68</td><td>11.67</td></tr>
+                    <tr><td class="sticky-col">5/0</td><td>12.70</td><td>13.12</td><td>10.89</td></tr>
+                    <tr><td class="sticky-col">4/0</td><td>11.53</td><td>11.68</td><td>10.12</td></tr>
+                    <tr><td class="sticky-col">3/0</td><td>10.79</td><td>10.04</td><td>9.34</td></tr>
+                    <tr><td class="sticky-col">2/0</td><td>9.65</td><td>9.26</td><td>8.56</td></tr>
+                    <tr><td class="sticky-col">1/0</td><td>8.63</td><td>8.25</td><td>7.78</td></tr>
+                    <tr><td class="sticky-col">1</td><td>7.62</td><td>7.34</td><td>7.00</td></tr>
+                    <tr><td class="sticky-col">2</td><td>7.21</td><td>6.54</td><td>6.61</td></tr>
+                    <tr><td class="sticky-col">3</td><td>6.58</td><td>5.83</td><td>6.20</td></tr>
+                    <tr><td class="sticky-col">4</td><td>6.04</td><td>5.18</td><td>5.83</td></tr>
+                    <tr><td class="sticky-col">5</td><td>5.59</td><td>4.62</td><td>5.38</td></tr>
+                    <tr><td class="sticky-col">6</td><td>5.15</td><td>4.11</td><td>5.05</td></tr>
+                    <tr><td class="sticky-col">8</td><td>4.19</td><td>3.26</td><td>4.28</td></tr>
+                    <tr><td class="sticky-col">10</td><td>3.40</td><td>2.58</td><td>3.50</td></tr>
+                    <tr><td class="sticky-col">12</td><td>2.76</td><td>2.05</td><td>2.72</td></tr>
+                    <tr><td class="sticky-col">14</td><td>2.10</td><td>1.62</td><td>1.94</td></tr>
+                    <tr><td class="sticky-col">16</td><td>1.65</td><td>1.29</td><td>1.55</td></tr>
+                    <tr><td class="sticky-col">18</td><td>1.24</td><td>1.02</td><td>1.24</td></tr>
+                    <tr><td class="sticky-col">20</td><td>0.88</td><td>0.81</td><td>0.83</td></tr>
+                    <tr><td class="sticky-col">22</td><td>0.71</td><td>0.64</td><td>0.71</td></tr>
+                    <tr><td class="sticky-col">24</td><td>0.56</td><td>0.51</td><td>0.56</td></tr>
+                    <tr><td class="sticky-col">26</td><td>0.46</td><td>0.40</td><td>0.46</td></tr>
+                    <tr><td class="sticky-col">28</td><td>0.35</td><td>0.32</td><td>0.35</td></tr>
+                    <tr><td class="sticky-col">30</td><td>0.30</td><td>0.25</td><td>0.31</td></tr>
+                    <tr><td class="sticky-col">35</td><td>0.12</td><td>0.14</td><td>0.21</td></tr>
+                    <tr><td class="sticky-col">40</td><td>-</td><td>0.07</td><td>0.13</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Mecánico Pro | <a href="#">Aviso de Privacidad</a> | <a href="#">Términos</a> | <a href="#">Contacto</a></p>
+</footer>
 
 <script>
-    const translations = {
-        es: { title: "Mecánico Pro ⚡", calc: "Calculadora", tables: "Tablas", mode: "Modo", measure: "Medida", prompt: "Introduce una medida...", mmIn: "Milímetros a Pulgadas", inMm: "Pulgadas a Milímetros", std: "✓ Llave Estándar", spec: "Llave Especial", thFrac: "Fracción", thDec: "Decimal", config: "⚙️ Ajustes", theme: "Apariencia", lang: "Idioma" },
-        en: { title: "Mechanic Pro ⚡", calc: "Calculator", tables: "Charts", mode: "Mode", measure: "Size", prompt: "Enter a measurement...", mmIn: "MM to Inches", inMm: "Inches to MM", std: "✓ Standard Wrench", spec: "Special Wrench", thFrac: "Fraction", thDec: "Decimal", config: "⚙️ Settings", theme: "Appearance", lang: "Language" },
-        fr: { title: "Mécanicien Pro ⚡", calc: "Calculatrice", tables: "Tableaux", mode: "Mode", measure: "Mesure", prompt: "Entrez une mesure...", mmIn: "MM en Pouces", inMm: "Pouces en MM", std: "✓ Clé Standard", spec: "Clé Spéciale", thFrac: "Fraction", thDec: "Décimal", config: "⚙️ Réglages", theme: "Apparence", lang: "Langue" },
-        de: { title: "Mechaniker Pro ⚡", calc: "Rechner", tables: "Tabellen", mode: "Modus", measure: "Maß", prompt: "Maß eingeben...", mmIn: "MM zu Zoll", inMm: "Zoll zu MM", std: "✓ Standard-Schlüssel", spec: "Spezial-Schlüssel", thFrac: "Bruch", thDec: "Dezimal", config: "⚙️ Einstellungen", theme: "Aussehen", lang: "Sprache" }
+    // LÓGICA DE CONVERSIÓN Y DATOS MAESTROS
+    const tablaComercial = { 
+        "1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", 
+        "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", 
+        "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", 
+        "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", 
+        "25": "1\"", "25.4": "1\"" 
     };
+    
+    let history = [];
 
-    function initSettings() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        const browserLang = navigator.language.split('-')[0];
-        const savedLang = localStorage.getItem('lang') || (translations[browserLang] ? browserLang : 'es');
-
-        document.getElementById('themeSelect').value = savedTheme;
-        document.getElementById('langSelect').value = savedLang;
-        
-        if(savedTheme === 'light') document.body.classList.add('light-mode');
-        changeLang();
+    function showTab(id, btn) {
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('view-' + id).classList.add('active');
+        btn.classList.add('active');
     }
 
-    function changeTheme() {
-        const theme = document.getElementById('themeSelect').value;
-        if(theme === 'light') document.body.classList.add('light-mode');
-        else document.body.classList.remove('light-mode');
-        localStorage.setItem('theme', theme);
+    function toggleMode() {
+        const mode = document.getElementById('mode').value;
+        const isFrac = mode === 'in_to_mm';
+        document.getElementById('btnContainer').style.display = isFrac ? 'flex' : 'none';
+        document.getElementById('labelMedida').innerText = isFrac ? 'Medida en Pulgadas (Fracción o Decimal)' : 'Medida en Milímetros';
+        document.getElementById('input').placeholder = isFrac ? 'Ej: 1 1/2 o 0.75' : 'Ej: 13';
+        convert();
     }
 
-    function changeLang() {
-        const lang = document.getElementById('langSelect').value;
-        const t = translations[lang];
-        localStorage.setItem('lang', lang);
-
-        document.getElementById('main-title').innerText = t.title;
-        document.getElementById('btn-calc').innerText = t.calc;
-        document.getElementById('btn-tables').innerText = t.tables;
-        document.getElementById('txt-label-mode').innerText = t.mode;
-        document.getElementById('txt-label-measure').innerText = t.measure;
-        document.getElementById('opt-mm-in').innerText = t.mmIn;
-        document.getElementById('opt-in-mm').innerText = t.inMm;
-        document.getElementById('txt-prompt').innerText = t.prompt;
-        document.getElementById('th-frac').innerText = t.thFrac;
-        document.getElementById('th-dec').innerText = t.thDec;
-        document.getElementById('txt-config-title').innerText = t.config;
-        document.getElementById('txt-label-theme').innerText = t.theme;
-        document.getElementById('txt-label-lang').innerText = t.lang;
+    function addChar(c) {
+        const input = document.getElementById('input');
+        input.value += c;
+        input.focus();
+        convert();
     }
-
-    // Funciones base de calculadora
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function switchView(view) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(view + 'View').classList.add('active'); document.getElementById('btn-' + view).classList.add('active'); }
-    function toggleMode() { document.getElementById('helperBtns').style.display = (document.getElementById('mode').value === 'in_to_mm') ? 'flex' : 'none'; convert(); }
-    function addChar(c) { const i = document.getElementById('input'); i.value += c; i.focus(); convert(); }
-
-    const tablaComercial = {"1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"", "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"", "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"", "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"", "25": "1\"", "25.4": "1\""};
 
     function convert() {
-        const rawVal = document.getElementById('input').value.trim();
+        const raw = document.getElementById('input').value.trim();
         const mode = document.getElementById('mode').value;
         const resBox = document.getElementById('resBox');
-        const lang = localStorage.getItem('lang') || 'es';
-        if (!rawVal) { resBox.innerHTML = `<div style="color: #64748b;">${translations[lang].prompt}</div>`; return; }
         
-        const val = procesarEntrada(rawVal);
-        if (isNaN(val)) return;
+        if (!raw) { 
+            resBox.innerHTML = "<div style='color: #475569;'>Introduce una medida...</div>"; 
+            return; 
+        }
+
+        const val = parseInput(raw);
+        if (isNaN(val) || val <= 0) { 
+            resBox.innerHTML = "<span style='color:var(--danger); font-weight:bold;'>Error: Formato no válido</span>"; 
+            return; 
+        }
+
+        let main = "", badge = "", sub = "";
 
         if (mode === 'mm_to_in') {
-            let res = tablaComercial[val] || toFraction(val / 25.4);
-            let isStd = !!tablaComercial[val];
-            resBox.innerHTML = `<div class="main-res">${res}</div><div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? translations[lang].std : translations[lang].spec}</div>`;
+            const cleanMm = Math.round(val * 10) / 10;
+            const frac = tablaComercial[cleanMm] || toFraction(val / 25.4);
+            const isStd = !!tablaComercial[cleanMm];
+            main = frac;
+            badge = `<div class="badge ${isStd?'badge-std':'badge-spec'}">${isStd?'✓ Medida Estándar':'Medida Especial'}</div>`;
+            sub = `Equivalente Decimal: ${(val/25.4).toFixed(4)}"`;
         } else {
             const mm = val * 25.4;
-            resBox.innerHTML = `<div class="main-res">${mm.toFixed(2)}<small style="font-size:1.5rem">mm</small></div><div class="badge badge-std">~ ${Math.round(mm)}mm</div>`;
+            main = mm.toFixed(2) + '<span style="font-size:1.5rem">mm</span>';
+            badge = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
+            sub = `Valor original: ${raw}"`;
         }
+
+        resBox.innerHTML = `
+            <div class="main-res">${main}</div>
+            ${badge}
+            <div style="font-size:0.85rem; margin-top:15px; color:#64748b; font-weight:500;">${sub}</div>
+        `;
+        
+        updateHistory(raw, main.replace(/<[^>]*>?/gm, ''));
     }
 
-    function procesarEntrada(t) {
+    function parseInput(t) {
         t = t.replace(',', '.').replace('-', ' ').trim();
         if (t.includes(' ')) {
-            const p = t.split(/\s+/);
-            const f = p[1].split('/');
-            return parseFloat(p[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
+            const parts = t.split(/\s+/);
+            const frac = parts[1].split('/');
+            return parseFloat(parts[0]) + (parseFloat(frac[0] || 0) / parseFloat(frac[1] || 1));
         } else if (t.includes('/')) {
-            const f = t.split('/');
-            return parseFloat(f[0]) / parseFloat(f[1]);
+            const frac = t.split('/');
+            return parseFloat(frac[0] || 0) / parseFloat(frac[1] || 1);
         }
         return parseFloat(t);
     }
 
     function toFraction(dec) {
-        const d = 64; let n = Math.round(dec * d); const e = Math.floor(n / d); n = n % d;
-        if (n === 0) return e + '"';
-        const gcd = (a, b) => b ? gcd(b, a % b) : a;
-        const c = gcd(n, d);
-        return (e > 0 ? e + " " : "") + (n/c) + "/" + (d/c) + '"';
+        const denominators = [2, 4, 8, 16, 32, 64];
+        let bestN = 0, bestD = 1, minDiff = 1;
+        
+        for (let d of denominators) {
+            let n = Math.round(dec * d);
+            let diff = Math.abs(dec - n/d);
+            if (diff < minDiff) { 
+                minDiff = diff; bestN = n; bestD = d; 
+            }
+        }
+        
+        const whole = Math.floor(bestN / bestD);
+        const rem = bestN % bestD;
+        
+        if (rem === 0) return whole + '"';
+        
+        const getGCD = (a, b) => b ? getGCD(b, a % b) : a;
+        const common = getGCD(rem, bestD);
+        
+        return (whole > 0 ? whole + " " : "") + (rem/common) + "/" + (bestD/common) + '"';
     }
 
-    // Inicializar Tabla e Idioma
-    const tableBody = document.getElementById('tableBody');
-    const gcdFunc = (a, b) => b ? gcdFunc(b, a % b) : a;
-    let tH = '';
-    for (let i = 1; i <= 64; i++) {
-        const d = i / 64; const m = d * 25.4;
-        const c = gcdFunc(i, 64);
-        tH += `<tr><td>${i/c}/${64/c}"</td><td>${m.toFixed(2)}</td><td>${d.toFixed(3)}</td></tr>`;
+    function updateHistory(entrada, resultado) {
+        if (history[0]?.e === entrada) return;
+        history.unshift({e: entrada, r: resultado});
+        if (history.length > 4) history.pop();
+        
+        const box = document.getElementById('historyBox');
+        box.style.display = 'block';
+        document.getElementById('historyList').innerHTML = history.map(item => `
+            <div class="history-item">
+                <span style="color:#94a3b8">${item.e}</span>
+                <span style="color:var(--accent); font-weight:800">${item.r}</span>
+            </div>
+        `).join('');
     }
-    tableBody.innerHTML = tH;
-
-    function filterTable() {
-        const q = document.getElementById('tableSearch').value.toLowerCase();
-        const rows = tableBody.getElementsByTagName('tr');
-        for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none'; }
-    }
-
-    initSettings();
 </script>
 </body>
 </html>
