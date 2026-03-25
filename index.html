@@ -14,24 +14,32 @@
         select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--accent); }
         
-        /* BOTÓN DIAGONAL */
-        .slash-btn {
+        /* BOTONES AUXILIARES PULGADAS */
+        .slash-btn, .space-btn {
             display: none;
             position: absolute;
-            right: 10px;
             bottom: 6px;
-            background: var(--accent);
-            color: var(--bg);
             border: none;
             border-radius: 10px;
             width: 46px;
             height: 46px;
-            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
             z-index: 5;
         }
-        .slash-btn:active { transform: scale(0.9); }
+        .slash-btn {
+            right: 10px;
+            background: var(--accent);
+            color: var(--bg);
+            font-size: 1.5rem;
+        }
+        .space-btn {
+            right: 62px;
+            background: #475569;
+            color: white;
+            font-size: 0.8rem;
+        }
+        .slash-btn:active, .space-btn:active { transform: scale(0.9); }
 
         .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; transition: 0.3s; }
         .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -44,7 +52,6 @@
         .history-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block; }
         .history-item { background: #16213e; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
         
-        /* ESPACIO PUBLICIDAD */
         .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; text-align: center; }
     </style>
 </head>
@@ -62,6 +69,7 @@
     <div class="input-group">
         <label>Medida</label>
         <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
+        <button id="spaceBtn" class="space-btn" onclick="addSpace()">ESP</button>
         <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
     </div>
     <div class="result-container" id="resBox">
@@ -90,14 +98,25 @@
 
     function toggleMode() {
         const mode = document.getElementById('mode').value;
-        const btn = document.getElementById('slashBtn');
-        btn.style.display = (mode === 'in_to_mm') ? 'block' : 'none';
+        const slashBtn = document.getElementById('slashBtn');
+        const spaceBtn = document.getElementById('spaceBtn');
+        const showBtns = (mode === 'in_to_mm') ? 'block' : 'none';
+        
+        slashBtn.style.display = showBtns;
+        spaceBtn.style.display = showBtns;
         convert();
     }
 
     function addSlash() {
         const input = document.getElementById('input');
         input.value += "/";
+        input.focus();
+        convert();
+    }
+
+    function addSpace() {
+        const input = document.getElementById('input');
+        input.value += " ";
         input.focus();
         convert();
     }
@@ -181,7 +200,7 @@
         const item = historial[i];
         document.getElementById('mode').value = item.modo;
         document.getElementById('input').value = item.entrada;
-        toggleMode(); // Actualiza la visibilidad del botón slash
+        toggleMode(); 
         convert();
     }
 </script>
