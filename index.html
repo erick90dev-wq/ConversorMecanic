@@ -1,208 +1,1317 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mecánico Pro ⚡</title>
-    <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --std: #4ade80; --spec: #fbbf24; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: var(--card); width: 100%; max-width: 420px; padding: 30px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); text-align: center; box-sizing: border-box; }
-        h2 { background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.8rem; margin-bottom: 25px; margin-top: 0; }
-        .input-group { margin-bottom: 20px; text-align: left; position: relative; }
-        label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-left: 5px; }
-        select, input { width: 100%; padding: 16px; background: #0f172a; border: 2px solid #334155; border-radius: 14px; color: white; font-size: 1.1rem; margin-top: 5px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--accent); }
-        
-        /* BOTONES AUXILIARES PULGADAS */
-        .slash-btn, .space-btn {
-            display: none;
-            position: absolute;
-            bottom: 6px;
-            border: none;
-            border-radius: 10px;
-            width: 46px;
-            height: 46px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 5;
-        }
-        .slash-btn {
-            right: 10px;
-            background: var(--accent);
-            color: var(--bg);
-            font-size: 1.5rem;
-        }
-        .space-btn {
-            right: 62px;
-            background: #475569;
-            color: white;
-            font-size: 0.8rem;
-        }
-        .slash-btn:active, .space-btn:active { transform: scale(0.9); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IngenieriaPro ⚙ | Herramientas Técnicas para Ingeniería y Taller</title>
+<meta name="description" content="IngenieriaPro: Calculadoras profesionales para ingenieros y mecánicos. Equivalencias mm-pulgadas, O-Ring Parker completo, rodamientos, roscas M1-M50, calibres, velocidades de corte, tolerancias ISO, conversión de unidades y propiedades de materiales.">
+<meta name="theme-color" content="#0b0f1a">
+<link rel="manifest" id="pwa-manifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f1a;--bg2:#111827;--card:#1a2235;--card2:#0f172a;--border:#1e3050;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--text2:#94a3b8;--text3:#475569;--shadow:rgba(0,0,0,0.6);--menu-bg:#0f1928;--input-bg:#070e1a;}
+[data-theme="light"]{--bg:#f0f4f8;--bg2:#e2e8f0;--card:#ffffff;--card2:#f8fafc;--border:#cbd5e1;--text:#0f172a;--text2:#475569;--text3:#94a3b8;--shadow:rgba(0,0,0,0.12);--menu-bg:#ffffff;--input-bg:#f1f5f9;}
+[data-theme="contrast"]{--bg:#000;--bg2:#0a0a0a;--card:#111;--card2:#000;--border:#ffff00;--accent:#ffff00;--accent2:#ff6600;--accent3:#00ff88;--text:#fff;--text2:#ffff99;--text3:#cccc00;--shadow:rgba(255,255,0,0.2);--menu-bg:#0a0a0a;--input-bg:#111;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s;}
 
-        .result-container { margin-top: 10px; background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 25px; border: 1px solid #334155; min-height: 140px; display: flex; flex-direction: column; justify-content: center; transition: 0.3s; }
-        .main-res { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .badge { display: inline-block; padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; }
-        .badge-std { background: rgba(74, 222, 128, 0.2); color: var(--std); border: 1px solid var(--std); }
-        .badge-spec { background: rgba(251, 191, 36, 0.2); color: var(--spec); border: 1px solid var(--spec); }
-        .exact-val { font-size: 0.85rem; color: #64748b; margin-top: 10px; }
-        
-        .history-section { margin-top: 25px; text-align: left; border-top: 1px solid #334155; padding-top: 15px; width: 100%; }
-        .history-title { font-size: 0.7rem; color: #64748b; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .history-item { background: #16213e; padding: 10px 15px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; cursor: pointer; border: 1px solid transparent; }
-        
-        .ad-slot { margin-top: 30px; width: 100%; max-width: 420px; min-height: 100px; border: 1px dashed #334155; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.7rem; text-align: center; }
-    </style>
+/* NAV */
+.topnav{background:var(--menu-bg);border-bottom:1px solid var(--border);padding:0 10px;display:flex;align-items:center;height:52px;position:sticky;top:0;z-index:1000;box-shadow:0 4px 20px var(--shadow);gap:4px;}
+.logo-wrap{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-right:4px;}
+.logo{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
+.logo-sub{font-size:0.58rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;display:none;}
+.nav-items{display:flex;align-items:center;flex:1;overflow-x:auto;scrollbar-width:none;gap:1px;}
+.nav-items::-webkit-scrollbar{display:none;}
+.nav-btn{background:none;border:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:500;padding:6px 8px;border-radius:7px;cursor:pointer;white-space:nowrap;transition:all 0.18s;display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.nav-btn:hover{background:rgba(255,255,255,0.07);color:var(--text);}
+.nav-btn.active{background:rgba(0,212,255,0.12);color:var(--accent);border-bottom:2px solid var(--accent);border-radius:7px 7px 0 0;}
+.nav-sep{width:1px;height:22px;background:var(--border);margin:0 2px;flex-shrink:0;}
+.nav-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.icon-btn{background:none;border:1px solid var(--border);color:var(--text2);width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;font-size:0.9rem;flex-shrink:0;}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.07);}
+#pwa-btn{display:none;font-size:0.65rem;width:auto;padding:0 8px;gap:4px;white-space:nowrap;}
+#pwa-btn.show{display:flex;}
+
+/* CONFIG */
+.config-panel{position:fixed;top:60px;right:10px;background:var(--card);border:1px solid var(--border);border-radius:15px;padding:16px;width:240px;z-index:2000;box-shadow:0 20px 60px var(--shadow);display:none;}
+.config-panel.open{display:block;animation:sI 0.18s ease;}
+@keyframes sI{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.cfg-t{font-size:0.63rem;text-transform:uppercase;letter-spacing:1.4px;color:var(--text3);margin-bottom:8px;}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
+.t-opt,.l-opt{background:var(--card2);border:2px solid var(--border);color:var(--text2);border-radius:8px;cursor:pointer;text-align:center;transition:all 0.17s;font-family:'Inter',sans-serif;}
+.t-opt{padding:8px 5px;font-size:0.71rem;}
+.t-opt span{display:block;font-size:1.1rem;margin-bottom:2px;}
+.t-opt:hover,.l-opt:hover{border-color:var(--accent);color:var(--text);}
+.t-opt.active,.l-opt.active{border-color:var(--accent);background:rgba(0,212,255,0.1);color:var(--accent);}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.l-opt{padding:7px 4px;font-size:0.7rem;}
+.overlay{position:fixed;inset:0;z-index:1500;display:none;}
+.overlay.open{display:block;}
+
+/* INFO MODAL */
+.info-modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);}
+.info-modal.open{display:flex;}
+.info-modal-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;max-width:460px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 30px 80px var(--shadow);animation:sI 0.2s ease;}
+.info-modal-box h3{font-family:'Rajdhani',sans-serif;font-size:1.3rem;color:var(--accent);margin-bottom:12px;}
+.info-modal-box p{font-size:0.83rem;color:var(--text2);line-height:1.7;margin-bottom:10px;}
+.info-modal-box ul{font-size:0.82rem;color:var(--text2);line-height:1.8;padding-left:18px;margin-bottom:10px;}
+.info-modal-box .close-btn{margin-top:14px;background:var(--accent);color:var(--bg);border:none;padding:9px 20px;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:0.85rem;width:100%;}
+
+/* MAIN */
+.main{display:flex;justify-content:center;padding:22px 10px 80px;}
+.panel{display:none;width:100%;max-width:560px;}
+.panel.active{display:block;animation:fI 0.2s ease;}
+@keyframes fI{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 14px 46px var(--shadow);margin-bottom:16px;}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
+.info-btn{background:none;border:2px solid var(--border);color:var(--text3);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;transition:all 0.17s;flex-shrink:0;margin-left:8px;margin-top:2px;}
+.info-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.08);}
+.card-sub{font-size:0.77rem;color:var(--text2);margin-bottom:15px;line-height:1.5;}
+
+/* INPUTS */
+.ig{margin-bottom:12px;}
+.lbl{font-size:0.67rem;text-transform:uppercase;letter-spacing:1.1px;color:var(--text3);margin-bottom:4px;display:block;}
+.inp,select{width:100%;padding:10px 12px;background:var(--input-bg);border:2px solid var(--border);border-radius:9px;color:var(--text);font-size:0.92rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.17s;-webkit-appearance:none;}
+.inp:focus,select:focus{border-color:var(--accent);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.sw{position:relative;}
+.sw::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:0.88rem;pointer-events:none;}
+.sw select{padding-right:26px;}
+
+/* RESULT */
+.res-box{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:14px;min-height:70px;text-align:center;margin-top:5px;}
+.res-main{font-family:'Rajdhani',sans-serif;font-size:2.5rem;font-weight:700;color:var(--accent);line-height:1;}
+.badge{display:inline-block;padding:4px 10px;border-radius:50px;font-size:0.68rem;font-weight:600;margin-top:7px;text-transform:uppercase;}
+.badge-ok{background:rgba(16,185,129,0.15);color:var(--accent3);border:1px solid var(--accent3);}
+.badge-warn{background:rgba(245,158,11,0.15);color:var(--warn);border:1px solid var(--warn);}
+.res-sub{font-size:0.76rem;color:var(--text3);margin-top:5px;}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:9px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:0.79rem;}
+th{background:var(--card2);color:var(--text2);font-size:0.64rem;text-transform:uppercase;letter-spacing:0.8px;padding:7px 9px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,0.033);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr.hl td{background:rgba(0,212,255,0.09);color:var(--accent);font-weight:600;}
+tr:hover td{background:rgba(255,255,255,0.022);}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;}
+.tb{background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:6px;font-size:0.73rem;cursor:pointer;transition:all 0.13s;font-family:'Inter',sans-serif;}
+.tb:hover{border-color:var(--accent);color:var(--accent);}
+.tb.active{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);}
+
+/* AUX BUTTONS */
+.ia{position:relative;}
+.ax{position:absolute;bottom:5px;border:none;border-radius:7px;width:37px;height:37px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ax-s{right:6px;background:var(--accent);color:var(--bg);font-size:1.2rem;font-family:'Rajdhani',sans-serif;font-weight:700;}
+.ax-sp{right:48px;background:var(--text3);color:white;}
+.ax:active{transform:scale(0.9);}
+
+/* HIST */
+.hs{margin-top:12px;border-top:1px solid var(--border);padding-top:10px;}
+.ht{font-size:0.63rem;text-transform:uppercase;letter-spacing:1.3px;color:var(--text3);margin-bottom:6px;}
+.hi{background:var(--card2);border:1px solid var(--border);padding:7px 10px;border-radius:7px;margin-bottom:4px;display:flex;justify-content:space-between;font-size:0.76rem;cursor:pointer;transition:border-color 0.13s;}
+.hi:hover{border-color:var(--accent);}
+
+/* LINK ROW */
+.link-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-radius:9px;cursor:pointer;transition:all 0.17s;}
+.link-row:hover{background:rgba(0,212,255,0.12);border-color:var(--accent);}
+.link-row span{font-size:0.8rem;color:var(--accent);font-weight:500;}
+.link-row svg{flex-shrink:0;}
+
+/* GAUGE */
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px;}
+.gc{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.gn{font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;color:var(--accent);}
+.gl{font-size:0.65rem;color:var(--text2);margin-top:2px;}
+
+/* INFO STRIP */
+.istrip{background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.17);border-radius:8px;padding:8px 11px;font-size:0.74rem;color:var(--text2);margin-bottom:10px;line-height:1.55;}
+.istrip b{color:var(--accent);}
+
+/* SEO */
+.seo{padding:11px 13px;background:var(--card2);border:1px solid var(--border);border-radius:9px;border-left:3px solid var(--accent);}
+.seo p{font-size:0.73rem;color:var(--text2);line-height:1.65;}
+.seo-t{font-size:0.62rem;text-transform:uppercase;letter-spacing:1.3px;color:var(--text3);margin-bottom:3px;}
+
+/* OCUPA */
+.ocupa{background:linear-gradient(135deg,rgba(0,212,255,0.07),rgba(124,58,237,0.07));border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px;}
+.rt{font-size:0.67rem;text-transform:uppercase;letter-spacing:0.9px;color:var(--accent);margin-bottom:5px;border-left:3px solid var(--accent);padding-left:7px;font-weight:600;}
+
+/* CONV CARD */
+.cgr{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px;}
+.cc{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;}
+.cv{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;color:var(--accent);}
+.cu{font-size:0.67rem;color:var(--text2);}
+
+/* FULL TABLE MODAL */
+.ftable-modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:12px;background:rgba(0,0,0,0.8);backdrop-filter:blur(5px);}
+.ftable-modal.open{display:flex;animation:fI 0.2s ease;}
+.ftable-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px var(--shadow);}
+.ftable-box h3{font-family:'Rajdhani',sans-serif;font-size:1.25rem;color:var(--accent);margin-bottom:12px;}
+.ftable-close{float:right;background:none;border:1px solid var(--border);color:var(--text2);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+.ftable-close:hover{border-color:var(--danger);color:var(--danger);}
+.ftable-search{width:100%;padding:8px 11px;background:var(--input-bg);border:2px solid var(--border);border-radius:8px;color:var(--text);font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;margin-bottom:10px;}
+.ftable-search:focus{border-color:var(--accent);}
+
+details summary{cursor:pointer;font-size:0.75rem;color:var(--text2);padding:8px 0;border-top:1px solid var(--border);outline:none;list-style:none;user-select:none;}
+details summary::-webkit-details-marker{display:none;}
+
+@media(min-width:640px){.logo-sub{display:block;} .logo{font-size:1.3rem;}}
+@media(max-width:500px){.r2,.r3{grid-template-columns:1fr;} .gg,.cgr{grid-template-columns:1fr 1fr;}}
+</style>
 </head>
-<body>
+<body data-theme="dark">
 
-<div class="card">
-    <h2>Mecánico Pro ⚡</h2>
-    <div class="input-group">
-        <label>Modo</label>
-        <select id="mode" onchange="toggleMode()">
-            <option value="mm_to_in">Milímetros a Pulgadas</option>
-            <option value="in_to_mm">Pulgadas a Milímetros</option>
-        </select>
+<!-- ===================== NAV ===================== -->
+<nav class="topnav">
+  <div class="logo-wrap">
+    <div>
+      <div class="logo">⚙ IngenieriaPro</div>
+      <div class="logo-sub">Herramientas Técnicas</div>
     </div>
-    <div class="input-group">
-        <label>Medida</label>
-        <input type="text" id="input" inputmode="decimal" placeholder="Ej: 13 o 1 1/2" oninput="convert()">
-        <button id="spaceBtn" class="space-btn" onclick="addSpace()">ESP</button>
-        <button id="slashBtn" class="slash-btn" onclick="addSlash()">/</button>
-    </div>
-    <div class="result-container" id="resBox">
-        <div style="color: #475569;">Introduce una medida...</div>
-    </div>
-    <div class="history-section" id="historySection" style="display:none;">
-        <span class="history-title">Historial Reciente</span>
-        <div id="historyList"></div>
-    </div>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-items">
+    <button class="nav-btn active" onclick="showPanel('conv')" id="nb-conv">📐 mm↔pulg</button>
+    <button class="nav-btn" onclick="showPanel('oring')" id="nb-oring">⭕ O-Ring</button>
+    <button class="nav-btn" onclick="showPanel('rod')" id="nb-rod">🔵 Rodamientos</button>
+    <button class="nav-btn" onclick="showPanel('ros')" id="nb-ros">🔧 Roscas</button>
+    <button class="nav-btn" onclick="showPanel('cal')" id="nb-cal">📏 Calibres</button>
+    <div class="nav-sep"></div>
+    <button class="nav-btn" onclick="showPanel('dureza')" id="nb-dureza">💎 Dureza</button>
+    <button class="nav-btn" onclick="showPanel('velcorte')" id="nb-velcorte">⚡ Vel.Corte</button>
+    <button class="nav-btn" onclick="showPanel('tolerancia')" id="nb-tolerancia">📊 Tolerancias</button>
+    <button class="nav-btn" onclick="showPanel('unidades')" id="nb-unidades">🔄 Unidades</button>
+    <button class="nav-btn" onclick="showPanel('mater')" id="nb-mater">🔩 Materiales</button>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" id="pwa-btn" onclick="pwaBtnClick()" title="Instalar / Agregar">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v13M8 11l4 4 4-4M3 17v3a2 2 0 002 2h14a2 2 0 002-2v-3"/></svg>
+      <span id="pwa-label">Instalar</span>
+    </button>
+    <button class="icon-btn" onclick="toggleConfig()" title="Configuración">⚙️</button>
+  </div>
+</nav>
+
+<!-- CONFIG -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="config-panel" id="cfgPanel">
+  <div class="cfg-t">Tema visual</div>
+  <div class="theme-grid">
+    <div class="t-opt active" id="th-dark" onclick="setTheme('dark')"><span>🌙</span>Oscuro</div>
+    <div class="t-opt" id="th-light" onclick="setTheme('light')"><span>☀️</span>Claro</div>
+    <div class="t-opt" id="th-contrast" onclick="setTheme('contrast')"><span>🔆</span>Contraste<br><small style="font-size:0.58rem;color:var(--text3)">(bajo luz solar)</small></div>
+  </div>
+  <div class="cfg-t">Idioma</div>
+  <div class="lang-grid">
+    <div class="l-opt active" id="lg-es" onclick="setLang('es')">🇲🇽 Español</div>
+    <div class="l-opt" id="lg-en" onclick="setLang('en')">🇺🇸 English</div>
+    <div class="l-opt" id="lg-pt" onclick="setLang('pt')">🇧🇷 Português</div>
+    <div class="l-opt" id="lg-fr" onclick="setLang('fr')">🇫🇷 Français</div>
+  </div>
 </div>
 
-<div class="ad-slot">
-    <span>ESPACIO PARA PUBLICIDAD</span>
+<!-- INFO MODAL -->
+<div class="info-modal" id="infoModal" onclick="closeInfoModal(event)">
+  <div class="info-modal-box">
+    <h3 id="info-title">Información</h3>
+    <div id="info-body"></div>
+    <button class="close-btn" onclick="closeInfoModal()" id="info-close-btn">✓ Entendido</button>
+  </div>
 </div>
+
+<!-- FULL TABLE MODAL -->
+<div class="ftable-modal" id="ftModal" onclick="closeFtModal(event)">
+  <div class="ftable-box">
+    <button class="ftable-close" onclick="closeFtModal()">✕</button>
+    <h3>Tabla Completa: Equivalencias Pulgadas ↔ mm</h3>
+    <input class="ftable-search" type="text" placeholder="Filtrar por fracción o mm..." id="ft-search" oninput="filterFtable()">
+    <div id="ft-table-wrap" class="tw" style="max-height:65vh;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ===================== MAIN ===================== -->
+<div class="main">
+
+<!-- ===== PANEL 1: mm ↔ pulg ===== -->
+<div class="panel active" id="panel-conv">
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Equivalencias mm ↔ Pulgadas</div>
+        <div class="card-sub">Convierte milímetros a pulgadas fraccionarias y viceversa. Identifica llaves estándar SAE.</div>
+      </div>
+      <button class="info-btn" onclick="showInfo('conv')">ℹ</button>
+    </div>
+    <div class="ig">
+      <span class="lbl">Modo</span>
+      <div class="sw"><select id="a_mode" onchange="antiToggle()">
+        <option value="mm_to_in">Milímetros → Pulgadas</option>
+        <option value="in_to_mm">Pulgadas → Milímetros</option>
+      </select></div>
+    </div>
+    <div class="ig">
+      <span class="lbl">Medida</span>
+      <div class="ia">
+        <input class="inp" type="text" id="a_in" inputmode="decimal" placeholder="Ej: 13 ó 1 1/2" oninput="antiConv()" style="padding-right:90px">
+        <button id="a_sp" class="ax ax-sp" onclick="antiSp()" style="display:none" title="Espacio">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="1" y="8" width="16" height="3" rx="1.5" fill="white"/><rect x="1" y="1" width="3" height="5" rx="1.5" fill="white"/><rect x="14" y="1" width="3" height="5" rx="1.5" fill="white"/></svg>
+        </button>
+        <button id="a_sl" class="ax ax-s" onclick="antiSl()" style="display:none">/</button>
+      </div>
+    </div>
+    <div class="res-box" id="a_res"><div style="color:var(--text3)">Introduce una medida...</div></div>
+    <!-- Link to full table -->
+    <div class="link-row" onclick="openFtable()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      <span>Ver tabla completa de equivalencias Fracción / mm / Milésimas de pulgada</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="margin-left:auto;flex-shrink:0"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+    <div id="a_hs" class="hs" style="display:none">
+      <div class="ht">Historial</div>
+      <div id="a_hl"></div>
+    </div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div>
+    <p>Convertidor mm a pulgadas fraccionarias para mecánicos. Identifica llaves estándar SAE. Incluye tabla completa de equivalencias hasta 64avos de pulgada.</p></div>
+</div>
+
+<!-- ===== PANEL 2: O-RING ===== -->
+<div class="panel" id="panel-oring">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Buscador de O-Ring Parker</div>
+        <div class="card-sub">Catálogo Parker Serie 2 y Serie 3. Busca por código, Ø interior, exterior o sección.</div></div>
+      <button class="info-btn" onclick="showInfo('oring')">ℹ</button>
+    </div>
+    <div class="istrip">Los O-rings se miden por <b>D.I.</b> (diámetro interior) y <b>W</b> (sección/grueso).<br>2-0XX: W≈1.78mm · 2-1XX: W≈2.62mm · 2-2XX: W≈3.53mm · 2-3XX: W≈5.33mm · 2-4XX: W≈6.99mm</div>
+    <div class="ig">
+      <span class="lbl">Modo de búsqueda</span>
+      <div class="sw"><select id="or_mode" onchange="orModeChange()">
+        <option value="code">🔍 Por código (ej: 2-321, 3-901)</option>
+        <option value="id">📏 Por Ø Interior D.I. (mm)</option>
+        <option value="od">📏 Por Ø Exterior D.E. (mm)</option>
+        <option value="cs">📏 Por Sección W (mm)</option>
+        <option value="all">📋 Tabla completa</option>
+      </select></div>
+    </div>
+    <div id="or_code_a"><div class="ig"><span class="lbl">Código Parker</span><input class="inp" type="text" id="or_code" placeholder="2-321" oninput="orSearch()"></div></div>
+    <div id="or_dim_a" style="display:none">
+      <div class="r2">
+        <div class="ig"><span class="lbl" id="or_dlbl">Dimensión (mm)</span><input class="inp" type="number" id="or_dv" placeholder="29.51" oninput="orSearch()"></div>
+        <div class="ig"><span class="lbl">Tolerancia ±mm</span><div class="sw"><select class="inp" id="or_tol" onchange="orSearch()"><option value="0.3">±0.3 exacto</option><option value="0.8" selected>±0.8 cercano</option><option value="1.5">±1.5 amplio</option><option value="3">±3.0 muy amplio</option></select></div></div>
+      </div>
+    </div>
+    <div id="or_res"><div class="res-box"><div style="color:var(--text3)">Selecciona un modo...</div></div></div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div>
+    <p>Catálogo Parker O-Ring Serie 2 (2-001 a 2-474) y Serie 3. Busca por código como 2-321, Ø interior, exterior o sección. Medidas en pulgadas y milímetros.</p></div>
+</div>
+
+<!-- ===== PANEL 3: RODAMIENTOS ===== -->
+<div class="panel" id="panel-rod">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Buscador de Rodamientos</div>
+        <div class="card-sub">Catálogo Rodinar: Rígidos, Oscilantes, Cónicos, Cilíndricos, Agujas, Lineales y Soportes.</div></div>
+      <button class="info-btn" onclick="showInfo('rod')">ℹ</button>
+    </div>
+    <div style="text-align:center;margin:6px 0 12px">
+      <svg viewBox="0 0 380 163" xmlns="http://www.w3.org/2000/svg" style="max-width:340px;width:100%">
+        <rect x="1" y="1" width="378" height="161" rx="9" fill="var(--card2)" stroke="var(--border)" stroke-width="1"/>
+        <circle cx="105" cy="81" r="64" fill="none" stroke="var(--text2)" stroke-width="12"/><circle cx="105" cy="81" r="33" fill="none" stroke="var(--text2)" stroke-width="9"/>
+        <g opacity="0.5"><circle cx="105" cy="22" r="6" fill="var(--text3)"/><circle cx="142" cy="34" r="6" fill="var(--text3)"/><circle cx="160" cy="71" r="6" fill="var(--text3)"/><circle cx="149" cy="112" r="6" fill="var(--text3)"/><circle cx="112" cy="138" r="6" fill="var(--text3)"/><circle cx="71" cy="138" r="6" fill="var(--text3)"/><circle cx="44" cy="113" r="6" fill="var(--text3)"/><circle cx="35" cy="73" r="6" fill="var(--text3)"/><circle cx="52" cy="34" r="6" fill="var(--text3)"/></g>
+        <line x1="41" y1="150" x2="169" y2="150" stroke="var(--accent)" stroke-width="1.5"/><line x1="41" y1="146" x2="41" y2="154" stroke="var(--accent)" stroke-width="1.5"/><line x1="169" y1="146" x2="169" y2="154" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="105" y="162" fill="var(--accent)" font-size="9.5" font-family="Rajdhani,sans-serif" font-weight="700" text-anchor="middle">D — Ø Exterior</text>
+        <line x1="73" y1="81" x2="137" y2="81" stroke="var(--accent2)" stroke-width="1.5"/><line x1="73" y1="76" x2="73" y2="86" stroke="var(--accent2)" stroke-width="1.5"/><line x1="137" y1="76" x2="137" y2="86" stroke="var(--accent2)" stroke-width="1.5"/>
+        <text x="105" y="73" fill="var(--accent2)" font-size="9.5" font-family="Rajdhani,sans-serif" font-weight="700" text-anchor="middle">d — Ø Interior</text>
+        <line x1="204" y1="17" x2="204" y2="145" stroke="var(--accent3)" stroke-width="1.5"/><line x1="200" y1="17" x2="208" y2="17" stroke="var(--accent3)" stroke-width="1.5"/><line x1="200" y1="145" x2="208" y2="145" stroke="var(--accent3)" stroke-width="1.5"/>
+        <text x="218" y="86" fill="var(--accent3)" font-size="11" font-family="Rajdhani,sans-serif" font-weight="700">B</text><text x="215" y="97" fill="var(--accent3)" font-size="8" font-family="Inter,sans-serif">Ancho</text>
+        <rect x="245" y="15" width="128" height="128" rx="7" fill="rgba(0,0,0,0.22)" stroke="var(--border)"/>
+        <text x="309" y="31" fill="var(--text2)" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" opacity="0.9">Referencia</text>
+        <circle cx="261" cy="46" r="4" fill="var(--accent)"/><text x="271" y="50" fill="var(--accent)" font-size="8" font-family="Inter,sans-serif">D = Ø ext. total</text>
+        <circle cx="261" cy="63" r="4" fill="var(--accent2)"/><text x="271" y="67" fill="var(--accent2)" font-size="8" font-family="Inter,sans-serif">d = Ø del eje</text>
+        <circle cx="261" cy="80" r="4" fill="var(--accent3)"/><text x="271" y="84" fill="var(--accent3)" font-size="8" font-family="Inter,sans-serif">B = espesor</text>
+        <rect x="252" y="98" width="112" height="32" rx="5" fill="rgba(0,212,255,0.05)" stroke="var(--border)"/>
+        <text x="308" y="110" fill="var(--text3)" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Ej: 6205</text>
+        <text x="308" y="122" fill="var(--accent)" font-size="7.5" font-family="Rajdhani,sans-serif" text-anchor="middle">d20 · D52 · B15mm</text>
+      </svg>
+    </div>
+    <div class="ig"><span class="lbl">Modo de búsqueda</span><div class="sw"><select id="rb_mode" onchange="rbModeChange()"><option value="d">Por d — Ø Interior (mm)</option><option value="D">Por D — Ø Exterior (mm)</option><option value="B">Por B — Ancho (mm)</option><option value="code">Por código (ej: 6205)</option><option value="all">Ver tabla completa</option></select></div></div>
+    <div id="rb_va"><div class="ig"><span class="lbl" id="rb_vlbl">Valor (mm)</span><input class="inp" type="text" id="rb_v" placeholder="25" oninput="rodSearch()"></div></div>
+    <div class="ig"><span class="lbl">Tipo</span><div class="sw"><select class="inp" id="rb_type" onchange="rodSearch()"><option value="all">Todos</option><option value="rigid">Rígidos a Bolas (600/6000/6200/6300)</option><option value="osc">Oscilantes a Bolas (1200/2200/1300)</option><option value="ang">Contacto Angular (7200/7300)</option><option value="axb">Axiales a Bolas (51100/51200/51300)</option><option value="con">Rodillos Cónicos (30000/32000/33000)</option><option value="cil">Rodillos Cilíndricos (NU/NJ/N)</option><option value="agu">Casquillos Agujas (HK)</option><option value="lin">Lineales a Bolas (KH)</option><option value="ucp">Soportes UCP · UCF · UCFL</option></select></div></div>
+    <div id="rb_res"><div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div></div>
+    <details style="margin-top:9px"><summary>▶ Ver tabla completa de rodamientos</summary><div class="tw" style="margin-top:7px;max-height:360px;overflow-y:auto" id="rb_ft"></div></details>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Catálogo Rodinar completo. Rígidos, oscilantes, cónicos, cilíndricos, agujas HK, lineales KH y soportes UCP/UCF/UCFL. Compatible SKF, NSK, FAG, NTN, Timken.</p></div>
+</div>
+
+<!-- ===== PANEL 4: ROSCAS ===== -->
+<div class="panel" id="panel-ros">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Roscas y Orificios de Machuelo</div>
+        <div class="card-sub">Diámetro de broca para machuelo — Métrico M1–M50, Pulgadas UNC/UNF y NPT.</div></div>
+      <button class="info-btn" onclick="showInfo('ros')">ℹ</button>
+    </div>
+    <div class="btn-row">
+      <button class="tb active" id="ros_t_m" onclick="setRosTab('m')">Métrico (M)</button>
+      <button class="tb" id="ros_t_in" onclick="setRosTab('in')">Pulgadas (UNC/UNF)</button>
+      <button class="tb" id="ros_t_npt" onclick="setRosTab('npt')">NPT</button>
+    </div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Tamaño</span><div class="sw"><select class="inp" id="ros_sz" onchange="rosResult()"><option value="">-- Selecciona --</option></select></div></div>
+      <div class="ig" id="ros_tw"><span class="lbl">Tipo de paso</span><div class="sw"><select class="inp" id="ros_tp" onchange="rosResult()"><option value="std">Estándar / Grueso</option><option value="fine">Fino (MF / UNF)</option></select></div></div>
+    </div>
+    <div id="ros_res"><div class="res-box"><div style="color:var(--text3)">Selecciona una rosca...</div></div></div>
+    <div id="ros_diag" style="display:none;margin-top:10px"></div>
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:11px">
+      <div class="rt">Vista: Rosca Externa (Macho) y Rosca Interna (Hembra)</div>
+      <div id="ros_ie"><div class="res-box" style="padding:8px"><div style="color:var(--text3);font-size:0.76rem">Selecciona una rosca para ver el diagrama...</div></div></div>
+    </div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Tabla completa de roscas métricas M1–M50 (paso completo), pulgadas UNC/UNF y NPT. Diámetro de broca estándar y fino. Diagramas técnicos de rosca macho y hembra.</p></div>
+</div>
+
+<!-- ===== PANEL 5: CALIBRES ===== -->
+<div class="panel" id="panel-cal">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Calibres de Lámina de Acero</div>
+        <div class="card-sub">Encuentra el calibre por espesor. USSG, Galvanizado GSG y Aluminio AWG.</div></div>
+      <button class="info-btn" onclick="showInfo('cal')">ℹ</button>
+    </div>
+    <div class="btn-row"><button class="tb active" id="cal_sg" onclick="setCalTab('sg')">Steel (USSG)</button><button class="tb" id="cal_ga" onclick="setCalTab('ga')">Galvanized (GSG)</button><button class="tb" id="cal_al" onclick="setCalTab('al')">Aluminio (AWG)</button></div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Espesor (mm)</span><input class="inp" type="number" id="cal_mm" placeholder="Ej: 2.0" oninput="calSearch()"></div>
+      <div class="ig"><span class="lbl">o en pulgadas</span><input class="inp" type="number" id="cal_in" placeholder="Ej: 0.078" step="0.001" oninput="calSearchIn()"></div>
+    </div>
+    <div id="cal_res"></div>
+    <div id="cal_tw" class="tw" style="margin-top:11px"></div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Tabla calibres USSG, GSG y AWG en mm y pulgadas. Para hojalatería, herrería, HVAC y fabricación metálica.</p></div>
+</div>
+
+<!-- ===== PANEL 6: DUREZA ===== -->
+<div class="panel" id="panel-dureza">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Conversión de Dureza</div>
+        <div class="card-sub">Convierte entre HRC, HRB, Brinell HB, Vickers HV y resistencia tensil MPa.</div></div>
+      <button class="info-btn" onclick="showInfo('dureza')">ℹ</button>
+    </div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Escala origen</span><div class="sw"><select class="inp" id="h_from" onchange="calcH()"><option value="hrc">Rockwell C (HRC)</option><option value="hrb">Rockwell B (HRB)</option><option value="hb">Brinell (HB)</option><option value="hv">Vickers (HV)</option></select></div></div>
+      <div class="ig"><span class="lbl">Valor</span><input class="inp" type="number" id="h_val" placeholder="Ej: 45" oninput="calcH()"></div>
+    </div>
+    <div id="h_res"><div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div></div>
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+      <div class="rt">Tabla de referencia de durezas por material</div>
+      <div class="tw" style="max-height:260px;overflow-y:auto"><table><thead><tr><th>Material</th><th>HRC</th><th>HB</th><th>HV</th><th>MPa</th></tr></thead><tbody><tr><td>Acero recocido</td><td>—</td><td>120–180</td><td>125–190</td><td>400–620</td></tr><tr><td>Acero estructural</td><td>—</td><td>160–200</td><td>168–210</td><td>550–690</td></tr><tr><td>Acero temple medio</td><td>25–35</td><td>240–310</td><td>252–330</td><td>820–1070</td></tr><tr><td>Acero temple duro</td><td>40–50</td><td>370–480</td><td>392–513</td><td>1280–1650</td></tr><tr><td>Acero inox 304</td><td>—</td><td>160–190</td><td>168–200</td><td>515–620</td></tr><tr><td>Acero herramienta</td><td>55–65</td><td>595–746</td><td>640–832</td><td>2050–2580</td></tr><tr><td>Aluminio 6061-T6</td><td>—</td><td>95</td><td>107</td><td>310</td></tr><tr><td>Hierro fundido gris</td><td>—</td><td>170–250</td><td>179–265</td><td>170–370</td></tr><tr><td>Titanio Ti-6Al-4V</td><td>36</td><td>334</td><td>349</td><td>950–1100</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Conversión entre HRC, HRB, Brinell HB, Vickers HV y resistencia tensil MPa. Tabla de referencia para ingeniería de materiales.</p></div>
+</div>
+
+<!-- ===== PANEL 7: VELOCIDADES CORTE ===== -->
+<div class="panel" id="panel-velcorte">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Velocidades de Corte (RPM)</div>
+        <div class="card-sub">Calcula RPM para fresado, torneado y taladrado. RPM = (Vc × 1000) / (π × D)</div></div>
+      <button class="info-btn" onclick="showInfo('vel')">ℹ</button>
+    </div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Ø herramienta (mm)</span><input class="inp" type="number" id="vc_d" placeholder="Ej: 20" oninput="calcVc()"></div>
+      <div class="ig"><span class="lbl">Vc (m/min)</span><input class="inp" type="number" id="vc_v" placeholder="Ej: 120" oninput="calcVc()"></div>
+    </div>
+    <div class="ig"><span class="lbl">Material (autocompletará Vc)</span><div class="sw"><select class="inp" id="vc_mat" onchange="vcMat()"><option value="">— Selecciona material —</option><option value="200">Aluminio (100–350 m/min) → 200</option><option value="80">Acero suave (&lt;0.3%C) → 80</option><option value="60">Acero medio carbono → 60</option><option value="40">Acero duro / Inox 304 → 40</option><option value="25">Acero inox endurecido → 25</option><option value="30">Hierro fundido gris → 30</option><option value="100">Cobre / Latón → 100</option><option value="50">Titanio → 50</option><option value="200">Plástico (HDPE, Nylon) → 200</option></select></div></div>
+    <div id="vc_res"><div class="res-box"><div style="color:var(--text3)">Ingresa diámetro y velocidad...</div></div></div>
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+      <div class="rt">Velocidades recomendadas por material</div>
+      <div class="tw"><table><thead><tr><th>Material</th><th>Vc HSS (m/min)</th><th>Vc Carburo</th><th>Avance mm/rev</th></tr></thead><tbody><tr><td>Aluminio</td><td>100–350</td><td>300–900</td><td>0.05–0.3</td></tr><tr><td>Cobre / Latón</td><td>60–120</td><td>150–300</td><td>0.05–0.2</td></tr><tr><td>Acero suave</td><td>25–90</td><td>90–250</td><td>0.05–0.25</td></tr><tr><td>Acero medio C</td><td>20–60</td><td>60–180</td><td>0.04–0.2</td></tr><tr><td>Acero inox 304</td><td>15–40</td><td>40–120</td><td>0.03–0.15</td></tr><tr><td>Hierro fundido</td><td>15–45</td><td>60–150</td><td>0.05–0.3</td></tr><tr><td>Titanio</td><td>10–50</td><td>40–100</td><td>0.02–0.1</td></tr><tr><td>Plástico</td><td>100–300</td><td>200–500</td><td>0.1–0.5</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Calculadora RPM para torno, fresadora y taladro. Velocidades de corte recomendadas por material para herramientas HSS y carburo.</p></div>
+</div>
+
+<!-- ===== PANEL 8: TOLERANCIAS ===== -->
+<div class="panel" id="panel-tolerancia">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Tolerancias y Ajustes ISO</div>
+        <div class="card-sub">Calcula límites ISO 286 para ejes y agujeros. Ajustes de juego, transición y apriete.</div></div>
+      <button class="info-btn" onclick="showInfo('tol')">ℹ</button>
+    </div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Dimensión nominal (mm)</span><input class="inp" type="number" id="tol_d" placeholder="Ej: 25" oninput="calcTol()"></div>
+      <div class="ig"><span class="lbl">Calidad IT</span><div class="sw"><select class="inp" id="tol_it" onchange="calcTol()"><option value="5">IT5 (muy preciso)</option><option value="6">IT6 (preciso)</option><option value="7" selected>IT7 (normal)</option><option value="8">IT8 (media)</option><option value="9">IT9 (amplia)</option><option value="11">IT11 (libre)</option></select></div></div>
+    </div>
+    <div class="r2">
+      <div class="ig"><span class="lbl">Agujero</span><div class="sw"><select class="inp" id="tol_hole" onchange="calcTol()"><option value="H">H (base agujero)</option><option value="G">G (juego pequeño)</option><option value="F">F (juego medio)</option><option value="E">E (juego amplio)</option><option value="D">D (juego máximo)</option></select></div></div>
+      <div class="ig"><span class="lbl">Eje</span><div class="sw"><select class="inp" id="tol_shaft" onchange="calcTol()"><option value="h">h (libre)</option><option value="g">g (deslizamiento)</option><option value="f">f (rodamiento)</option><option value="k">k (transición)</option><option value="n">n (ligero apriete)</option><option value="p">p (apriete)</option><option value="s">s (apriete fuerte)</option></select></div></div>
+    </div>
+    <div id="tol_res"><div class="res-box"><div style="color:var(--text3)">Ingresa una dimensión...</div></div></div>
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+      <div class="rt">Ajustes ISO más comunes</div>
+      <div class="tw" style="max-height:240px;overflow-y:auto"><table><thead><tr><th>Ajuste</th><th>Designación</th><th>Uso típico</th></tr></thead><tbody><tr><td>Juego amplio</td><td>H8/f7</td><td>Cojinetes, ejes giratorios</td></tr><tr><td>Juego normal</td><td>H7/f6</td><td>Rodamientos deslizantes</td></tr><tr><td>Juego pequeño</td><td>H7/g6</td><td>Guías, émbolos</td></tr><tr><td>Libre</td><td>H7/h6</td><td>Piezas desmontables</td></tr><tr><td>Transición</td><td>H7/k6</td><td>Engranajes, poleas</td></tr><tr><td>Transición</td><td>H7/n6</td><td>Bujes de bronce</td></tr><tr><td>Apriete ligero</td><td>H7/p6</td><td>Casquillos permanentes</td></tr><tr><td>Apriete fuerte</td><td>H7/s6</td><td>Unión permanente</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Calculadora de tolerancias y ajustes ISO 286. Límites de tolerancia para ejes y agujeros. Ajustes de juego, transición y apriete para ingeniería mecánica.</p></div>
+</div>
+
+<!-- ===== PANEL 9: UNIDADES ===== -->
+<div class="panel" id="panel-unidades">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Conversión de Unidades</div>
+        <div class="card-sub">Presión, temperatura, fuerza, torque, potencia y flujo.</div></div>
+      <button class="info-btn" onclick="showInfo('units')">ℹ</button>
+    </div>
+    <div class="btn-row"><button class="tb active" id="un_t_pres" onclick="setUnTab('pres')">Presión</button><button class="tb" id="un_t_temp" onclick="setUnTab('temp')">Temperatura</button><button class="tb" id="un_t_fuerza" onclick="setUnTab('fuerza')">Fuerza</button><button class="tb" id="un_t_torque" onclick="setUnTab('torque')">Torque</button><button class="tb" id="un_t_pot" onclick="setUnTab('pot')">Potencia</button><button class="tb" id="un_t_flow" onclick="setUnTab('flow')">Flujo</button></div>
+    <div class="r2">
+      <div class="ig"><span class="lbl" id="un_lbl">Valor</span><input class="inp" type="number" id="un_val" placeholder="Ej: 100" oninput="calcU()"></div>
+      <div class="ig"><span class="lbl">Unidad origen</span><div class="sw"><select class="inp" id="un_from" onchange="calcU()"></select></div></div>
+    </div>
+    <div id="un_res"><div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div></div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Conversor de unidades técnicas: presión (PSI, bar, MPa), temperatura (°C, °F, K), fuerza, torque, potencia y flujo.</p></div>
+</div>
+
+<!-- ===== PANEL 10: MATERIALES ===== -->
+<div class="panel" id="panel-mater">
+  <div class="card">
+    <div class="card-header">
+      <div><div class="card-title">Propiedades de Materiales</div>
+        <div class="card-sub">Propiedades mecánicas y físicas de materiales comunes en industria.</div></div>
+      <button class="info-btn" onclick="showInfo('mat')">ℹ</button>
+    </div>
+    <div class="ig"><span class="lbl">Buscar material</span><input class="inp" type="text" id="mat_q" placeholder="Ej: acero, aluminio, titanio..." oninput="matSearch()"></div>
+    <div id="mat_res" class="tw" style="max-height:440px;overflow-y:auto"></div>
+  </div>
+  <div class="card seo"><div class="seo-t">📌 Acerca</div><p>Propiedades mecánicas: densidad, módulo de Young, límite elástico, resistencia tensil, dureza y coeficiente de expansión térmica.</p></div>
+</div>
+
+</div><!-- /main -->
 
 <script>
-    const tablaComercial = {
-        "1.5": "1/16\"", "2": "5/64\"", "2.5": "3/32\"", "3": "1/8\"", "4": "5/32\"",
-        "5": "3/16\"", "5.5": "7/32\"", "6": "1/4\"", "8": "5/16\"", "10": "3/8\"",
-        "11": "7/16\"", "12": "15/32\"", "13": "1/2\"", "14": "9/16\"", "15": "19/32\"",
-        "16": "5/8\"", "17": "11/16\"", "19": "3/4\"", "22": "7/8\"", "24": "15/16\"",
-        "25": "1\"", "25.4": "1\""
-    };
+/* ============================================================
+   CORE: THEME, LANG, NAV
+   ============================================================ */
+function setTheme(th){document.body.setAttribute('data-theme',th);document.querySelectorAll('.t-opt').forEach(e=>e.classList.remove('active'));document.getElementById('th-'+th).classList.add('active');localStorage.setItem('ip_theme',th);}
 
-    let historial = [];
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+const TR={
+es:{
+  logo_sub:'Herramientas Técnicas',
+  nav_conv:'mm↔pulg',nav_oring:'O-Ring',nav_rod:'Rodamientos',nav_ros:'Roscas',nav_cal:'Calibres',
+  nav_dur:'Dureza',nav_vel:'Vel.Corte',nav_tol:'Tolerancias',nav_uni:'Unidades',nav_mat:'Materiales',
+  cfg_theme:'Tema visual',cfg_lang:'Idioma',
+  th_dark:'Oscuro',th_light:'Claro',th_contrast:'Contraste',th_sub:'(bajo luz solar)',
+  pwa_install:'Instalar App',pwa_fav:'Agregar a favoritos',
+  pwa_title:'Guardar en favoritos',
+  pwa_body:'<p>Para acceso rápido puedes agregar esta página a tus favoritos:</p><ul><li><b>Atajo:</b> <kbd style="background:var(--card2);padding:2px 8px;border-radius:5px;font-family:monospace">Ctrl+D</kbd> (Mac: Cmd+D)</li><li><b>Chrome/Edge:</b> ☆ en la barra URL → "Agregar marcador"</li><li><b>Firefox:</b> Estrella → "Marcar esta página"</li><li><b>Safari:</b> Compartir → "Añadir a marcadores"</li></ul>',
+  understood:'✓ Entendido',
+  // Panel 1
+  conv_title:'Equivalencias mm ↔ Pulgadas',
+  conv_sub:'Convierte milímetros a pulgadas fraccionarias y viceversa. Identifica llaves estándar SAE.',
+  conv_mode:'Modo',
+  conv_mmi:'Milímetros → Pulgadas',conv_imm:'Pulgadas → Milímetros',
+  conv_measure:'Medida',conv_placeholder:'Ej: 13 ó 1 1/2',
+  conv_table_link:'Ver tabla completa de equivalencias Fracción / mm / Milésimas de pulgada',
+  conv_hist:'Historial',conv_std:'✓ Llave Estándar SAE',conv_spec:'Llave Especial',conv_dec:'Decimal:',
+  conv_wait:'Introduce una medida...',conv_invalid:'Formato no válido',
+  conv_seo:'Convertidor mm a pulgadas fraccionarias para mecánicos. Identifica llaves estándar SAE. Incluye tabla completa de equivalencias hasta 64avos de pulgada.',
+  ft_title:'Tabla Completa: Equivalencias Pulgadas ↔ mm',ft_filter:'Filtrar por fracción o mm...',
+  ft_col1:'Fracción',ft_col2:'mm',ft_col3:'Milésimas de pulg',ft_col4:'Decimal (pulg)',
+  // Panel 2
+  or_title:'Buscador de O-Ring Parker',
+  or_sub:'Catálogo Parker Serie 2 y Serie 3. Busca por código, Ø interior, exterior o sección.',
+  or_strip:'Los O-rings se miden por <b>D.I.</b> (diámetro interior) y <b>W</b> (sección/grueso).<br>2-0XX: W≈1.78mm · 2-1XX: W≈2.62mm · 2-2XX: W≈3.53mm · 2-3XX: W≈5.33mm · 2-4XX: W≈6.99mm',
+  or_mode:'Modo de búsqueda',
+  or_m_code:'🔍 Por código (ej: 2-321, 3-901)',or_m_id:'📏 Por Ø Interior D.I. (mm)',or_m_od:'📏 Por Ø Exterior D.E. (mm)',or_m_cs:'📏 Por Sección W (mm)',or_m_all:'📋 Tabla completa',
+  or_code_lbl:'Código Parker',or_code_ph:'2-321',
+  or_dim_id:'Ø Interior D.I. (mm)',or_dim_od:'Ø Exterior D.E. (mm)',or_dim_cs:'Sección W (mm)',
+  or_dim_ph:'29.51',or_tol_lbl:'Tolerancia ±mm',
+  or_tol0:'±0.3 exacto',or_tol1:'±0.8 cercano',or_tol2:'±1.5 amplio',or_tol3:'±3.0 muy amplio',
+  or_wait:'Selecciona un modo...',or_wait_code:'Escribe un código (ej: 2-321)...',or_not_found:'⚠ No encontrado. Ej: 2-321, 3-901',or_no_match:'⚠ Sin coincidencias — aumenta tolerancia',
+  or_found:'Resultados:',or_efound:'Encontrados:',
+  or_seo:'Catálogo Parker O-Ring Serie 2 (2-001 a 2-474) y Serie 3. Busca por código como 2-321, Ø interior, exterior o sección.',
+  // Panel 3
+  rb_title:'Buscador de Rodamientos',
+  rb_sub:'Catálogo Rodinar: Rígidos, Oscilantes, Cónicos, Cilíndricos, Agujas, Lineales y Soportes.',
+  rb_mode:'Modo de búsqueda',
+  rb_m_d:'Por d — Ø Interior (mm)',rb_m_D:'Por D — Ø Exterior (mm)',rb_m_B:'Por B — Ancho (mm)',rb_m_code:'Por código (ej: 6205)',rb_m_all:'Ver tabla completa',
+  rb_type:'Tipo',
+  rb_ty_all:'Todos',rb_ty_rig:'Rígidos a Bolas (600/6000/6200/6300)',rb_ty_osc:'Oscilantes a Bolas (1200/2200/1300)',rb_ty_ang:'Contacto Angular (7200/7300)',rb_ty_axb:'Axiales a Bolas (51100/51200/51300)',rb_ty_con:'Rodillos Cónicos (30000/32000/33000)',rb_ty_cil:'Rodillos Cilíndricos (NU/NJ/N)',rb_ty_agu:'Casquillos Agujas (HK)',rb_ty_lin:'Lineales a Bolas (KH)',rb_ty_ucp:'Soportes UCP · UCF · UCFL',
+  rb_val_d:'d — Ø Interior (mm)',rb_val_D:'D — Ø Exterior (mm)',rb_val_B:'B — Ancho (mm)',rb_val_code:'Código (ej: 6205)',
+  rb_ph:'25',rb_wait:'Ingresa un valor...',rb_invalid:'Valor inválido',rb_not_found:'⚠ Sin resultados — cambia tipo o revisa el valor',rb_found:'Encontrados:',rb_showing:'rodamientos.',
+  rb_full_toggle:'▶ Ver tabla completa de rodamientos',
+  rb_seo:'Catálogo Rodinar completo. Rígidos, oscilantes, cónicos, cilíndricos, agujas HK, lineales KH y soportes UCP/UCF/UCFL. Compatible SKF, NSK, FAG, NTN, Timken.',
+  // Panel 4
+  ros_title:'Roscas y Orificios de Machuelo',
+  ros_sub:'Diámetro de broca para machuelo — Métrico M1–M50, Pulgadas UNC/UNF y NPT.',
+  ros_t_m:'Métrico (M)',ros_t_in:'Pulgadas (UNC/UNF)',ros_t_npt:'NPT',
+  ros_size:'Tamaño',ros_type:'Tipo de paso',
+  ros_std:'Estándar / Grueso',ros_fine:'Fino (MF / UNF)',
+  ros_wait:'Selecciona una rosca...',ros_wait_diag:'Selecciona una rosca para ver el diagrama...',
+  ros_special:'Rosca especial — No es medida comercial estándar. Requiere herramienta de corte especial o pedido especial al proveedor.',
+  ros_ocupa:'⚙ Ocupa para esta rosca',ros_drill:'Broca / Orificio',ros_pitch:'Paso de cuerda',
+  ros_male:'Rosca Externa (Macho)',ros_female:'Rosca Interna (Hembra)',
+  ros_major:'Ø Mayor:',ros_minor:'Ø Menor:',ros_bit:'⌀ Broca:',ros_step:'Paso:',
+  ros_seo:'Tabla completa de roscas métricas M1–M50 (paso completo), pulgadas UNC/UNF y NPT. Diámetro de broca estándar y fino.',
+  // Panel 5
+  cal_title:'Calibres de Lámina de Acero',
+  cal_sub:'Encuentra el calibre por espesor. USSG, Galvanizado GSG y Aluminio AWG.',
+  cal_mm:'Espesor (mm)',cal_in:'o en pulgadas',
+  cal_ph_mm:'Ej: 2.0',cal_ph_in:'Ej: 0.078',
+  cal_gauge:'Calibre',cal_mm_t:'Espesor mm',cal_in_t:'Espesor in',cal_weight:'Peso',
+  cal_seo:'Tabla calibres USSG, GSG y AWG en mm y pulgadas. Para hojalatería, herrería, HVAC y fabricación metálica.',
+  // Panel 6
+  dur_title:'Conversión de Dureza',
+  dur_sub:'Convierte entre HRC, HRB, Brinell HB, Vickers HV y resistencia tensil MPa.',
+  dur_from:'Escala origen',dur_val:'Valor',dur_val_ph:'Ej: 45',dur_wait:'Ingresa un valor...',
+  dur_tbl_title:'Tabla de referencia de durezas por material',
+  dur_warn:'⚠ Valores aproximados (ASTM E140). Para aplicaciones críticas use tablas certificadas.',
+  dur_tensil:'Resistencia tensil aprox.',
+  dur_seo:'Conversión entre HRC, HRB, Brinell HB, Vickers HV y resistencia tensil MPa.',
+  // Panel 7
+  vc_title:'Velocidades de Corte (RPM)',
+  vc_sub:'Calcula RPM para fresado, torneado y taladrado. RPM = (Vc × 1000) / (π × D)',
+  vc_d:'Ø herramienta (mm)',vc_v:'Vc (m/min)',vc_mat:'Material (autocompletará Vc)',
+  vc_mat0:'— Selecciona material —',
+  vc_wait:'Ingresa diámetro y velocidad...',
+  vc_advance:'Avance ref. mm/min',vc_sec:'Seg/revolución',
+  vc_tbl_title:'Velocidades recomendadas por material',
+  vc_seo:'Calculadora RPM para torno, fresadora y taladro. Velocidades de corte recomendadas por material para herramientas HSS y carburo.',
+  // Panel 8
+  tol_title:'Tolerancias y Ajustes ISO',
+  tol_sub:'Calcula límites ISO 286 para ejes y agujeros. Ajustes de juego, transición y apriete.',
+  tol_d:'Dimensión nominal (mm)',tol_it:'Calidad IT',tol_hole:'Agujero',tol_shaft:'Eje',
+  tol_d_ph:'Ej: 25',tol_wait:'Ingresa una dimensión...',tol_out_range:'Dimensión fuera de rango (0.5–500mm)',
+  tol_fit_clear:'Ajuste con juego ✓',tol_fit_trans:'Ajuste de transición ↕',tol_fit_press:'Ajuste con apriete ⬤',
+  tol_it5:'IT5 (muy preciso)',tol_it6:'IT6 (preciso)',tol_it7:'IT7 (normal)',tol_it8:'IT8 (media)',tol_it9:'IT9 (amplia)',tol_it11:'IT11 (libre)',
+  tol_h_H:'H (base agujero)',tol_h_G:'G (juego pequeño)',tol_h_F:'F (juego medio)',tol_h_E:'E (juego amplio)',tol_h_D:'D (juego máximo)',
+  tol_s_h:'h (libre)',tol_s_g:'g (deslizamiento)',tol_s_f:'f (rodamiento)',tol_s_k:'k (transición)',tol_s_n:'n (ligero apriete)',tol_s_p:'p (apriete)',tol_s_s:'s (apriete fuerte)',
+  tol_tbl_title:'Ajustes ISO más comunes',tol_col_fit:'Ajuste',tol_col_des:'Designación',tol_col_use:'Uso típico',
+  tol_clearance:'Juego:',tol_press_fit:'Apriete:',tol_trans:'Transición: 0',
+  tol_seo:'Calculadora de tolerancias y ajustes ISO 286. Límites de tolerancia para ejes y agujeros.',
+  // Panel 9
+  un_title:'Conversión de Unidades',
+  un_sub:'Presión, temperatura, fuerza, torque, potencia y flujo.',
+  un_pres:'Presión',un_temp:'Temperatura',un_fuerza:'Fuerza',un_torque:'Torque',un_pot:'Potencia',un_flow:'Flujo',
+  un_val_ph:'Ej: 100',un_from:'Unidad origen',un_wait:'Ingresa un valor...',un_equiv:'equivale a:',
+  un_seo:'Conversor de unidades técnicas: presión, temperatura, fuerza, torque, potencia y flujo.',
+  // Panel 10
+  mat_title:'Propiedades de Materiales',
+  mat_sub:'Propiedades mecánicas y físicas de materiales comunes en industria.',
+  mat_search_ph:'Ej: acero, aluminio, titanio...',mat_no_res:'Sin resultados',
+  mat_col_mat:'Material',
+  mat_seo:'Propiedades mecánicas: densidad, módulo de Young, límite elástico, resistencia tensil, dureza y coeficiente de expansión térmica.',
+  about:'📌 Acerca',
+  rb_ref:'Referencia',rb_ex:'Ej: 6205',rb_ex2:'d20 · D52 · B15mm',
+  rb_d_lbl:'Ø Interior',rb_D_lbl:'Ø Exterior',rb_B_lbl:'Ancho',
+},
+en:{
+  logo_sub:'Technical Tools',
+  nav_conv:'mm↔inch',nav_oring:'O-Ring',nav_rod:'Bearings',nav_ros:'Threads',nav_cal:'Gauges',
+  nav_dur:'Hardness',nav_vel:'Cut.Speed',nav_tol:'Tolerances',nav_uni:'Units',nav_mat:'Materials',
+  cfg_theme:'Visual Theme',cfg_lang:'Language',
+  th_dark:'Dark',th_light:'Light',th_contrast:'High Contrast',th_sub:'(reading in sunlight)',
+  pwa_install:'Install App',pwa_fav:'Add to favorites',
+  pwa_title:'Save as shortcut',
+  pwa_body:'<p>Add this page to your bookmarks for quick access:</p><ul><li><b>Shortcut:</b> <kbd style="background:var(--card2);padding:2px 8px;border-radius:5px;font-family:monospace">Ctrl+D</kbd> (Mac: Cmd+D)</li><li><b>Chrome/Edge:</b> ☆ in URL bar → "Bookmark this tab"</li><li><b>Firefox:</b> Star icon → "Bookmark This Page"</li><li><b>Safari:</b> Share → "Add Bookmark"</li></ul>',
+  understood:'✓ Got it',
+  conv_title:'mm ↔ Inches Equivalence',
+  conv_sub:'Convert millimeters to fractional inches and vice versa. Identifies SAE standard wrenches.',
+  conv_mode:'Mode',conv_mmi:'Millimeters → Inches',conv_imm:'Inches → Millimeters',
+  conv_measure:'Measurement',conv_placeholder:'Ex: 13 or 1 1/2',
+  conv_table_link:'View full equivalence table: Fraction / mm / Thousandths of inch',
+  conv_hist:'History',conv_std:'✓ Standard SAE Wrench',conv_spec:'Special Wrench',conv_dec:'Decimal:',
+  conv_wait:'Enter a measurement...',conv_invalid:'Invalid format',
+  conv_seo:'mm to fractional inches converter for mechanics. Identifies SAE standard wrenches. Includes full table up to 64ths of an inch.',
+  ft_title:'Full Table: Inches ↔ mm Equivalences',ft_filter:'Filter by fraction or mm...',
+  ft_col1:'Fraction',ft_col2:'mm',ft_col3:'Thousandths of inch',ft_col4:'Decimal (inch)',
+  or_title:'Parker O-Ring Finder',
+  or_sub:'Full Parker Series 2 and Series 3 catalog. Search by code, inner/outer Ø or cross-section.',
+  or_strip:'O-rings are measured by <b>I.D.</b> (inner diameter) and <b>W</b> (cross-section).<br>2-0XX: W≈1.78mm · 2-1XX: W≈2.62mm · 2-2XX: W≈3.53mm · 2-3XX: W≈5.33mm · 2-4XX: W≈6.99mm',
+  or_mode:'Search mode',
+  or_m_code:'🔍 By code (e.g.: 2-321, 3-901)',or_m_id:'📏 By Inner Ø I.D. (mm)',or_m_od:'📏 By Outer Ø O.D. (mm)',or_m_cs:'📏 By Cross-Section W (mm)',or_m_all:'📋 Full table',
+  or_code_lbl:'Parker Code',or_code_ph:'2-321',
+  or_dim_id:'Inner Ø I.D. (mm)',or_dim_od:'Outer Ø O.D. (mm)',or_dim_cs:'Cross-Section W (mm)',
+  or_dim_ph:'29.51',or_tol_lbl:'Tolerance ±mm',
+  or_tol0:'±0.3 exact',or_tol1:'±0.8 close',or_tol2:'±1.5 wide',or_tol3:'±3.0 very wide',
+  or_wait:'Select a search mode...',or_wait_code:'Type a code (e.g.: 2-321)...',or_not_found:'⚠ Not found. Try: 2-321, 3-901',or_no_match:'⚠ No matches — increase tolerance',
+  or_found:'Results:',or_efound:'Found:',
+  or_seo:'Full Parker O-Ring catalog Series 2 (2-001 to 2-474) and Series 3. Search by code, inner/outer Ø or cross-section.',
+  rb_title:'Bearing Finder',
+  rb_sub:'Rodinar catalog: Ball, Self-aligning, Angular, Thrust, Tapered, Cylindrical, Needle, Linear and Housings.',
+  rb_mode:'Search mode',
+  rb_m_d:'By d — Inner Ø (mm)',rb_m_D:'By D — Outer Ø (mm)',rb_m_B:'By B — Width (mm)',rb_m_code:'By code (e.g.: 6205)',rb_m_all:'View full table',
+  rb_type:'Type',
+  rb_ty_all:'All',rb_ty_rig:'Ball Bearings (600/6000/6200/6300)',rb_ty_osc:'Self-Aligning (1200/2200/1300)',rb_ty_ang:'Angular Contact (7200/7300)',rb_ty_axb:'Thrust Ball (51100/51200/51300)',rb_ty_con:'Tapered Roller (30000/32000/33000)',rb_ty_cil:'Cylindrical Roller (NU/NJ/N)',rb_ty_agu:'Needle Bearings (HK)',rb_ty_lin:'Linear Ball (KH)',rb_ty_ucp:'Housings UCP · UCF · UCFL',
+  rb_val_d:'d — Inner Ø (mm)',rb_val_D:'D — Outer Ø (mm)',rb_val_B:'B — Width (mm)',rb_val_code:'Code (e.g.: 6205)',
+  rb_ph:'25',rb_wait:'Enter a value...',rb_invalid:'Invalid value',rb_not_found:'⚠ No results — change type or check value',rb_found:'Found:',rb_showing:'bearings.',
+  rb_full_toggle:'▶ View full bearing table',
+  rb_seo:'Full Rodinar catalog. Ball bearings, self-aligning, tapered, cylindrical, needle HK, linear KH and UCP/UCF/UCFL housings. Compatible SKF, NSK, FAG, NTN, Timken.',
+  ros_title:'Thread & Tap Drill Chart',
+  ros_sub:'Drill diameter for tapping — Metric M1–M50, Inch UNC/UNF and NPT.',
+  ros_t_m:'Metric (M)',ros_t_in:'Inch (UNC/UNF)',ros_t_npt:'NPT',
+  ros_size:'Size',ros_type:'Thread type',
+  ros_std:'Coarse',ros_fine:'Fine (MF / UNF)',
+  ros_wait:'Select a thread...',ros_wait_diag:'Select a thread to view the diagram...',
+  ros_special:'Special thread — Not a standard commercial size. Requires special cutting tool or special order.',
+  ros_ocupa:'⚙ You need for this thread',ros_drill:'Drill / Hole',ros_pitch:'Thread pitch',
+  ros_male:'External Thread (Male)',ros_female:'Internal Thread (Female)',
+  ros_major:'Major Ø:',ros_minor:'Minor Ø:',ros_bit:'⌀ Drill:',ros_step:'Pitch:',
+  ros_seo:'Complete thread table metric M1–M50, inch UNC/UNF and NPT. Drill diameter for coarse and fine tap.',
+  cal_title:'Steel Sheet Gauges',
+  cal_sub:'Find gauge by thickness. USSG, Galvanized GSG and Aluminum AWG.',
+  cal_mm:'Thickness (mm)',cal_in:'or in inches',
+  cal_ph_mm:'Ex: 2.0',cal_ph_in:'Ex: 0.078',
+  cal_gauge:'Gauge',cal_mm_t:'Thickness mm',cal_in_t:'Thickness in',cal_weight:'Weight',
+  cal_seo:'USSG, GSG and AWG gauge tables in mm and inches. For sheet metal, HVAC and metal fabrication.',
+  dur_title:'Hardness Conversion',
+  dur_sub:'Convert between HRC, HRB, Brinell HB, Vickers HV and tensile strength MPa.',
+  dur_from:'Source scale',dur_val:'Value',dur_val_ph:'Ex: 45',dur_wait:'Enter a value...',
+  dur_tbl_title:'Hardness reference table by material',
+  dur_warn:'⚠ Approximate values (ASTM E140). For critical applications use certified tables.',
+  dur_tensil:'Approx. tensile strength',
+  dur_seo:'Conversion between HRC, HRB, Brinell HB, Vickers HV and tensile strength MPa.',
+  vc_title:'Cutting Speeds (RPM)',
+  vc_sub:'Calculate RPM for milling, turning and drilling. RPM = (Vc × 1000) / (π × D)',
+  vc_d:'Tool Ø (mm)',vc_v:'Vc (m/min)',vc_mat:'Material (will auto-fill Vc)',
+  vc_mat0:'— Select material —',
+  vc_wait:'Enter diameter and cutting speed...',
+  vc_advance:'Ref. feed mm/min',vc_sec:'Sec/revolution',
+  vc_tbl_title:'Recommended speeds by material',
+  vc_seo:'RPM calculator for lathe, mill and drill press. Recommended cutting speeds by material for HSS and carbide tools.',
+  tol_title:'ISO Tolerances & Fits',
+  tol_sub:'Calculate ISO 286 limits for shafts and holes. Clearance, transition and interference fits.',
+  tol_d:'Nominal dimension (mm)',tol_it:'IT Quality',tol_hole:'Hole',tol_shaft:'Shaft',
+  tol_d_ph:'Ex: 25',tol_wait:'Enter a dimension...',tol_out_range:'Dimension out of range (0.5–500mm)',
+  tol_fit_clear:'Clearance fit ✓',tol_fit_trans:'Transition fit ↕',tol_fit_press:'Interference fit ⬤',
+  tol_it5:'IT5 (very precise)',tol_it6:'IT6 (precise)',tol_it7:'IT7 (normal)',tol_it8:'IT8 (medium)',tol_it9:'IT9 (wide)',tol_it11:'IT11 (free)',
+  tol_h_H:'H (hole basis)',tol_h_G:'G (small clearance)',tol_h_F:'F (medium clearance)',tol_h_E:'E (wide clearance)',tol_h_D:'D (max clearance)',
+  tol_s_h:'h (free)',tol_s_g:'g (sliding)',tol_s_f:'f (bearing)',tol_s_k:'k (transition)',tol_s_n:'n (light press)',tol_s_p:'p (press)',tol_s_s:'s (heavy press)',
+  tol_tbl_title:'Most common ISO fits',tol_col_fit:'Fit',tol_col_des:'Designation',tol_col_use:'Typical use',
+  tol_clearance:'Clearance:',tol_press_fit:'Interference:',tol_trans:'Transition: 0',
+  tol_seo:'ISO 286 tolerance and fit calculator. Shaft and hole tolerance limits.',
+  un_title:'Unit Conversion',
+  un_sub:'Pressure, temperature, force, torque, power and flow.',
+  un_pres:'Pressure',un_temp:'Temperature',un_fuerza:'Force',un_torque:'Torque',un_pot:'Power',un_flow:'Flow',
+  un_val_ph:'Ex: 100',un_from:'Source unit',un_wait:'Enter a value...',un_equiv:'equals:',
+  un_seo:'Technical unit converter: pressure, temperature, force, torque, power and flow.',
+  mat_title:'Material Properties',
+  mat_sub:'Mechanical and physical properties of common industrial materials.',
+  mat_search_ph:'Ex: steel, aluminum, titanium...',mat_no_res:'No results',
+  mat_col_mat:'Material',
+  mat_seo:'Mechanical properties: density, Young\'s modulus, yield strength, tensile strength, hardness and thermal expansion.',
+  about:'📌 About',
+  rb_ref:'Reference',rb_ex:'Ex: 6205',rb_ex2:'d20 · D52 · B15mm',
+  rb_d_lbl:'Inner Ø',rb_D_lbl:'Outer Ø',rb_B_lbl:'Width',
+},
+pt:{
+  logo_sub:'Ferramentas Técnicas',
+  nav_conv:'mm↔pol',nav_oring:'O-Ring',nav_rod:'Rolamentos',nav_ros:'Roscas',nav_cal:'Calibres',
+  nav_dur:'Dureza',nav_vel:'Vel.Corte',nav_tol:'Tolerâncias',nav_uni:'Unidades',nav_mat:'Materiais',
+  cfg_theme:'Tema visual',cfg_lang:'Idioma',
+  th_dark:'Escuro',th_light:'Claro',th_contrast:'Contraste',th_sub:'(leitura com luz)',
+  pwa_install:'Instalar App',pwa_fav:'Adicionar favoritos',
+  pwa_title:'Salvar nos favoritos',pwa_body:'<p>Adicione esta página aos favoritos:</p><ul><li><b>Atalho:</b> <kbd style="background:var(--card2);padding:2px 8px;border-radius:5px;font-family:monospace">Ctrl+D</kbd></li></ul>',
+  understood:'✓ Entendido',
+  conv_title:'Equivalências mm ↔ Polegadas',conv_sub:'Converte milímetros em polegadas fracionárias. Identifica chaves padrão SAE.',
+  conv_mode:'Modo',conv_mmi:'Milímetros → Polegadas',conv_imm:'Polegadas → Milímetros',
+  conv_measure:'Medida',conv_placeholder:'Ex: 13 ou 1 1/2',
+  conv_table_link:'Ver tabela completa de equivalências Fração / mm / Milésimos de polegada',
+  conv_hist:'Histórico',conv_std:'✓ Chave Padrão SAE',conv_spec:'Chave Especial',conv_dec:'Decimal:',
+  conv_wait:'Digite uma medida...',conv_invalid:'Formato inválido',
+  conv_seo:'Conversor mm para polegadas fracionárias. Identifica chaves padrão SAE.',
+  ft_title:'Tabela Completa: Equivalências Polegadas ↔ mm',ft_filter:'Filtrar por fração ou mm...',
+  ft_col1:'Fração',ft_col2:'mm',ft_col3:'Milésimos de polegada',ft_col4:'Decimal (pol)',
+  or_title:'Buscador de O-Ring Parker',or_sub:'Catálogo Parker Série 2 e Série 3.',or_strip:'Os O-rings são medidos por <b>D.I.</b> e <b>W</b> (seção).<br>2-0XX: W≈1.78mm · 2-1XX: W≈2.62mm · 2-2XX: W≈3.53mm · 2-3XX: W≈5.33mm',
+  or_mode:'Modo de busca',or_m_code:'🔍 Por código (ex: 2-321)',or_m_id:'📏 Por Ø Interno D.I. (mm)',or_m_od:'📏 Por Ø Externo D.E. (mm)',or_m_cs:'📏 Por Seção W (mm)',or_m_all:'📋 Tabela completa',
+  or_code_lbl:'Código Parker',or_code_ph:'2-321',or_dim_id:'Ø Interno D.I. (mm)',or_dim_od:'Ø Externo D.E. (mm)',or_dim_cs:'Seção W (mm)',or_dim_ph:'29.51',or_tol_lbl:'Tolerância ±mm',
+  or_tol0:'±0.3 exato',or_tol1:'±0.8 próximo',or_tol2:'±1.5 amplo',or_tol3:'±3.0 muito amplo',
+  or_wait:'Selecione um modo...',or_wait_code:'Digite um código (ex: 2-321)...',or_not_found:'⚠ Não encontrado.',or_no_match:'⚠ Sem resultados — aumente a tolerância',or_found:'Resultados:',or_efound:'Encontrados:',
+  or_seo:'Catálogo Parker O-Ring Série 2 (2-001 a 2-474) e Série 3.',
+  rb_title:'Buscador de Rolamentos',rb_sub:'Catálogo Rodinar: Rígidos, Oscilantes, Cônicos, Cilíndricos, Agulhas, Lineares e Suportes.',
+  rb_mode:'Modo de busca',rb_m_d:'Por d — Ø Interno (mm)',rb_m_D:'Por D — Ø Externo (mm)',rb_m_B:'Por B — Largura (mm)',rb_m_code:'Por código (ex: 6205)',rb_m_all:'Ver tabela completa',
+  rb_type:'Tipo',rb_ty_all:'Todos',rb_ty_rig:'Rígidos a Bola (6000/6200/6300)',rb_ty_osc:'Oscilantes (1200/2200)',rb_ty_ang:'Contato Angular (7200/7300)',rb_ty_axb:'Axiais a Bola (51100/51200)',rb_ty_con:'Rolos Cônicos (30000/32000)',rb_ty_cil:'Rolos Cilíndricos (NU)',rb_ty_agu:'Buchas Agulha (HK)',rb_ty_lin:'Lineares (KH)',rb_ty_ucp:'Suportes UCP · UCF · UCFL',
+  rb_val_d:'d — Ø Interno (mm)',rb_val_D:'D — Ø Externo (mm)',rb_val_B:'B — Largura (mm)',rb_val_code:'Código (ex: 6205)',
+  rb_ph:'25',rb_wait:'Digite um valor...',rb_invalid:'Valor inválido',rb_not_found:'⚠ Sem resultados',rb_found:'Encontrados:',rb_showing:'rolamentos.',rb_full_toggle:'▶ Ver tabela completa de rolamentos',
+  rb_seo:'Catálogo Rodinar completo. Compatível SKF, NSK, FAG, NTN, Timken.',
+  ros_title:'Roscas e Furos para Macho',ros_sub:'Diâmetro de furo para macho — Métrico M1–M50, Polegadas e NPT.',
+  ros_t_m:'Métrico (M)',ros_t_in:'Polegadas (UNC/UNF)',ros_t_npt:'NPT',ros_size:'Tamanho',ros_type:'Tipo',ros_std:'Padrão / Grosso',ros_fine:'Fino (MF / UNF)',
+  ros_wait:'Selecione uma rosca...',ros_wait_diag:'Selecione uma rosca para ver o diagrama...',
+  ros_special:'Rosca especial — Não é medida comercial padrão. Requer ferramenta especial.',
+  ros_ocupa:'⚙ Você precisa para esta rosca',ros_drill:'Broca / Furo',ros_pitch:'Passo',
+  ros_male:'Rosca Externa (Macho)',ros_female:'Rosca Interna (Fêmea)',ros_major:'Ø Maior:',ros_minor:'Ø Menor:',ros_bit:'⌀ Broca:',ros_step:'Passo:',
+  ros_seo:'Tabela completa de roscas métricas M1–M50, UNC, UNF e NPT.',
+  cal_title:'Calibres de Chapa de Aço',cal_sub:'Encontre o calibre pela espessura. USSG, Galvanizado e Alumínio AWG.',
+  cal_mm:'Espessura (mm)',cal_in:'ou em polegadas',cal_ph_mm:'Ex: 2.0',cal_ph_in:'Ex: 0.078',cal_gauge:'Calibre',cal_mm_t:'Espessura mm',cal_in_t:'Espessura in',cal_weight:'Peso',
+  cal_seo:'Tabelas USSG, GSG e AWG em mm e polegadas.',
+  dur_title:'Conversão de Dureza',dur_sub:'Converte entre HRC, HRB, HB, HV e resistência à tração MPa.',
+  dur_from:'Escala origem',dur_val:'Valor',dur_val_ph:'Ex: 45',dur_wait:'Digite um valor...',dur_tbl_title:'Tabela de referência de durezas',dur_warn:'⚠ Valores aproximados (ASTM E140).',dur_tensil:'Resistência à tração aprox.',
+  dur_seo:'Conversão entre escalas de dureza HRC, HRB, HB, HV e MPa.',
+  vc_title:'Velocidades de Corte (RPM)',vc_sub:'Calcula RPM para fresamento, torneamento e furação.',vc_d:'Ø ferramenta (mm)',vc_v:'Vc (m/min)',vc_mat:'Material (preencherá Vc)',vc_mat0:'— Selecione material —',vc_wait:'Digite diâmetro e velocidade...',vc_advance:'Avanço ref. mm/min',vc_sec:'Seg/revolução',vc_tbl_title:'Velocidades recomendadas por material',
+  vc_seo:'Calculadora RPM para torno, fresadora e furadeira.',
+  tol_title:'Tolerâncias e Ajustes ISO',tol_sub:'Calcula limites ISO 286 para eixos e furos.',tol_d:'Dimensão nominal (mm)',tol_it:'Qualidade IT',tol_hole:'Furo',tol_shaft:'Eixo',tol_d_ph:'Ex: 25',tol_wait:'Digite uma dimensão...',tol_out_range:'Dimensão fora do intervalo (0.5–500mm)',
+  tol_fit_clear:'Ajuste com folga ✓',tol_fit_trans:'Ajuste de transição ↕',tol_fit_press:'Ajuste com interferência ⬤',
+  tol_it5:'IT5 (muito preciso)',tol_it6:'IT6 (preciso)',tol_it7:'IT7 (normal)',tol_it8:'IT8 (médio)',tol_it9:'IT9 (amplo)',tol_it11:'IT11 (livre)',
+  tol_h_H:'H (base furo)',tol_h_G:'G (folga pequena)',tol_h_F:'F (folga média)',tol_h_E:'E (folga ampla)',tol_h_D:'D (folga máxima)',
+  tol_s_h:'h (livre)',tol_s_g:'g (deslizamento)',tol_s_f:'f (mancal)',tol_s_k:'k (transição)',tol_s_n:'n (leve interferência)',tol_s_p:'p (interferência)',tol_s_s:'s (interferência forte)',
+  tol_tbl_title:'Ajustes ISO mais comuns',tol_col_fit:'Ajuste',tol_col_des:'Designação',tol_col_use:'Uso típico',tol_clearance:'Folga:',tol_press_fit:'Interferência:',tol_trans:'Transição: 0',
+  tol_seo:'Calculadora de tolerâncias e ajustes ISO 286.',
+  un_title:'Conversão de Unidades',un_sub:'Pressão, temperatura, força, torque, potência e fluxo.',un_pres:'Pressão',un_temp:'Temperatura',un_fuerza:'Força',un_torque:'Torque',un_pot:'Potência',un_flow:'Fluxo',un_val_ph:'Ex: 100',un_from:'Unidade origem',un_wait:'Digite um valor...',un_equiv:'equivale a:',
+  un_seo:'Conversor de unidades técnicas: pressão, temperatura, força, torque, potência e fluxo.',
+  mat_title:'Propriedades de Materiais',mat_sub:'Propriedades mecânicas e físicas de materiais comuns.',mat_search_ph:'Ex: aço, alumínio, titânio...',mat_no_res:'Sem resultados',mat_col_mat:'Material',
+  mat_seo:'Propriedades mecânicas: densidade, módulo de Young, limite elástico, resistência à tração.',
+  about:'📌 Sobre',rb_ref:'Referência',rb_ex:'Ex: 6205',rb_ex2:'d20 · D52 · B15mm',rb_d_lbl:'Ø Interno',rb_D_lbl:'Ø Externo',rb_B_lbl:'Largura',
+},
+fr:{
+  logo_sub:'Outils Techniques',
+  nav_conv:'mm↔po',nav_oring:'Joint Tor.',nav_rod:'Roulements',nav_ros:'Filetages',nav_cal:'Calibres',
+  nav_dur:'Dureté',nav_vel:'Vit.Coupe',nav_tol:'Tolérances',nav_uni:'Unités',nav_mat:'Matériaux',
+  cfg_theme:'Thème',cfg_lang:'Langue',
+  th_dark:'Sombre',th_light:'Clair',th_contrast:'Contraste',th_sub:'(lecture en plein jour)',
+  pwa_install:"Installer l'App",pwa_fav:'Ajouter aux favoris',
+  pwa_title:'Enregistrer en favoris',pwa_body:'<p>Ajoutez cette page à vos favoris :</p><ul><li><b>Raccourci :</b> <kbd style="background:var(--card2);padding:2px 8px;border-radius:5px;font-family:monospace">Ctrl+D</kbd></li></ul>',
+  understood:'✓ Compris',
+  conv_title:'Équivalences mm ↔ Pouces',conv_sub:'Convertit les millimètres en pouces fractionnaires. Identifie les clés SAE standard.',
+  conv_mode:'Mode',conv_mmi:'Millimètres → Pouces',conv_imm:'Pouces → Millimètres',
+  conv_measure:'Mesure',conv_placeholder:'Ex : 13 ou 1 1/2',
+  conv_table_link:'Voir le tableau complet des équivalences Fraction / mm / Millièmes de pouce',
+  conv_hist:'Historique',conv_std:'✓ Clé SAE Standard',conv_spec:'Clé Spéciale',conv_dec:'Décimal :',
+  conv_wait:'Entrez une mesure...',conv_invalid:'Format invalide',
+  conv_seo:'Convertisseur mm en pouces fractionnaires pour mécaniciens.',
+  ft_title:'Tableau complet : Équivalences Pouces ↔ mm',ft_filter:'Filtrer par fraction ou mm...',
+  ft_col1:'Fraction',ft_col2:'mm',ft_col3:'Millièmes de pouce',ft_col4:'Décimal (po)',
+  or_title:'Chercheur de Joint Torique Parker',or_sub:'Catalogue Parker Série 2 et Série 3.',or_strip:'Les joints sont mesurés par <b>D.I.</b> et <b>W</b> (section).<br>2-0XX: W≈1.78mm · 2-1XX: W≈2.62mm · 2-2XX: W≈3.53mm · 2-3XX: W≈5.33mm',
+  or_mode:'Mode de recherche',or_m_code:'🔍 Par code (ex : 2-321)',or_m_id:'📏 Par Ø Intérieur (mm)',or_m_od:'📏 Par Ø Extérieur (mm)',or_m_cs:'📏 Par Section W (mm)',or_m_all:'📋 Tableau complet',
+  or_code_lbl:'Code Parker',or_code_ph:'2-321',or_dim_id:'Ø Intérieur D.I. (mm)',or_dim_od:'Ø Extérieur D.E. (mm)',or_dim_cs:'Section W (mm)',or_dim_ph:'29.51',or_tol_lbl:'Tolérance ±mm',
+  or_tol0:'±0.3 exact',or_tol1:'±0.8 proche',or_tol2:'±1.5 large',or_tol3:'±3.0 très large',
+  or_wait:'Sélectionnez un mode...',or_wait_code:'Tapez un code (ex : 2-321)...',or_not_found:'⚠ Non trouvé. Essai : 2-321',or_no_match:'⚠ Aucun résultat — augmentez la tolérance',or_found:'Résultats :',or_efound:'Trouvés :',
+  or_seo:'Catalogue complet Parker O-Ring Série 2 et Série 3.',
+  rb_title:'Chercheur de Roulements',rb_sub:'Catalogue Rodinar : Rigides, Oscillants, Coniques, Cylindriques, Aiguilles, Linéaires et Paliers.',
+  rb_mode:'Mode de recherche',rb_m_d:'Par d — Ø Intérieur (mm)',rb_m_D:'Par D — Ø Extérieur (mm)',rb_m_B:'Par B — Largeur (mm)',rb_m_code:'Par code (ex : 6205)',rb_m_all:'Voir tableau complet',
+  rb_type:'Type',rb_ty_all:'Tous',rb_ty_rig:'Billes Rigides (6000/6200/6300)',rb_ty_osc:'Oscillants (1200/2200)',rb_ty_ang:'Contact Angulaire (7200/7300)',rb_ty_axb:'Butées à Billes (51100)',rb_ty_con:'Rouleaux Coniques (30000)',rb_ty_cil:'Rouleaux Cylindriques (NU)',rb_ty_agu:'Aiguilles (HK)',rb_ty_lin:'Linéaires (KH)',rb_ty_ucp:'Paliers UCP · UCF · UCFL',
+  rb_val_d:'d — Ø Intérieur (mm)',rb_val_D:'D — Ø Extérieur (mm)',rb_val_B:'B — Largeur (mm)',rb_val_code:'Code (ex : 6205)',
+  rb_ph:'25',rb_wait:'Entrez une valeur...',rb_invalid:'Valeur invalide',rb_not_found:'⚠ Aucun résultat',rb_found:'Trouvés :',rb_showing:'roulements.',rb_full_toggle:'▶ Voir tableau complet des roulements',
+  rb_seo:'Catalogue Rodinar complet. Compatible SKF, NSK, FAG, NTN, Timken.',
+  ros_title:'Filetages et Perçages pour Taraud',ros_sub:'Diamètre de perçage pour taraud — Métrique M1–M50, Pouces et NPT.',
+  ros_t_m:'Métrique (M)',ros_t_in:'Pouces (UNC/UNF)',ros_t_npt:'NPT',ros_size:'Taille',ros_type:'Type de pas',ros_std:'Gros',ros_fine:'Fin (MF / UNF)',
+  ros_wait:'Sélectionnez un filetage...',ros_wait_diag:'Sélectionnez un filetage pour voir le diagramme...',
+  ros_special:'Filetage spécial — Taille non commerciale standard. Outil spécial requis.',
+  ros_ocupa:'⚙ Nécessaire pour ce filetage',ros_drill:'Foret / Alésage',ros_pitch:'Pas du filet',
+  ros_male:'Filetage Externe (Mâle)',ros_female:'Filetage Interne (Femelle)',ros_major:'Ø Majeur :',ros_minor:'Ø Mineur :',ros_bit:'⌀ Foret :',ros_step:'Pas :',
+  ros_seo:'Tableau complet des filetages métriques M1–M50, UNC, UNF et NPT.',
+  cal_title:'Calibres de Tôle Acier',cal_sub:'Trouvez le calibre par épaisseur. USSG, Galvanisé GSG et Aluminium AWG.',
+  cal_mm:'Épaisseur (mm)',cal_in:'ou en pouces',cal_ph_mm:'Ex : 2.0',cal_ph_in:'Ex : 0.078',cal_gauge:'Calibre',cal_mm_t:'Épaisseur mm',cal_in_t:'Épaisseur po',cal_weight:'Poids',
+  cal_seo:'Tableaux USSG, GSG et AWG en mm et pouces.',
+  dur_title:'Conversion de Dureté',dur_sub:'Convertit entre HRC, HRB, Brinell HB, Vickers HV et résistance MPa.',dur_from:'Échelle source',dur_val:'Valeur',dur_val_ph:'Ex : 45',dur_wait:'Entrez une valeur...',dur_tbl_title:'Tableau de référence des duretés',dur_warn:'⚠ Valeurs approchées (ASTM E140).',dur_tensil:'Résistance à la traction approx.',
+  dur_seo:'Conversion entre HRC, HRB, HB, HV et MPa.',
+  vc_title:'Vitesses de Coupe (tr/min)',vc_sub:'Calcule les tr/min pour fraisage, tournage et perçage.',vc_d:'Ø outil (mm)',vc_v:'Vc (m/min)',vc_mat:'Matériau (complétera Vc)',vc_mat0:'— Sélectionnez un matériau —',vc_wait:'Entrez diamètre et vitesse...',vc_advance:'Avance réf. mm/min',vc_sec:'Sec/révolution',vc_tbl_title:'Vitesses recommandées par matériau',
+  vc_seo:'Calculatrice tr/min pour tour, fraiseuse et perceuse.',
+  tol_title:'Tolérances et Ajustements ISO',tol_sub:'Calcule les limites ISO 286 pour arbres et alésages.',tol_d:'Dimension nominale (mm)',tol_it:'Qualité IT',tol_hole:'Alésage',tol_shaft:'Arbre',tol_d_ph:'Ex : 25',tol_wait:'Entrez une dimension...',tol_out_range:'Dimension hors plage (0.5–500mm)',
+  tol_fit_clear:'Ajustement avec jeu ✓',tol_fit_trans:'Ajustement de transition ↕',tol_fit_press:'Ajustement serré ⬤',
+  tol_it5:'IT5 (très précis)',tol_it6:'IT6 (précis)',tol_it7:'IT7 (normal)',tol_it8:'IT8 (moyen)',tol_it9:'IT9 (large)',tol_it11:'IT11 (libre)',
+  tol_h_H:'H (base alésage)',tol_h_G:'G (jeu faible)',tol_h_F:'F (jeu moyen)',tol_h_E:'E (jeu large)',tol_h_D:'D (jeu max)',
+  tol_s_h:'h (libre)',tol_s_g:'g (glissant)',tol_s_f:'f (palier)',tol_s_k:'k (transition)',tol_s_n:'n (léger serrage)',tol_s_p:'p (serrage)',tol_s_s:'s (serrage fort)',
+  tol_tbl_title:'Ajustements ISO les plus courants',tol_col_fit:'Ajustement',tol_col_des:'Désignation',tol_col_use:'Usage typique',tol_clearance:'Jeu :',tol_press_fit:'Serrage :',tol_trans:'Transition : 0',
+  tol_seo:'Calculatrice de tolérances et ajustements ISO 286.',
+  un_title:'Conversion d\'Unités',un_sub:'Pression, température, force, couple, puissance et débit.',un_pres:'Pression',un_temp:'Température',un_fuerza:'Force',un_torque:'Couple',un_pot:'Puissance',un_flow:'Débit',un_val_ph:'Ex : 100',un_from:'Unité source',un_wait:'Entrez une valeur...',un_equiv:'équivaut à :',
+  un_seo:'Convertisseur d\'unités techniques : pression, température, force, couple, puissance et débit.',
+  mat_title:'Propriétés des Matériaux',mat_sub:'Propriétés mécaniques et physiques des matériaux industriels courants.',mat_search_ph:'Ex : acier, aluminium, titane...',mat_no_res:'Aucun résultat',mat_col_mat:'Matériau',
+  mat_seo:'Propriétés mécaniques : densité, module de Young, limite élastique, résistance à la traction.',
+  about:'📌 À propos',rb_ref:'Référence',rb_ex:'Ex : 6205',rb_ex2:'d20 · D52 · B15mm',rb_d_lbl:'Ø Intérieur',rb_D_lbl:'Ø Extérieur',rb_B_lbl:'Largeur',
+}
+};
 
-    function toggleMode() {
-        const mode = document.getElementById('mode').value;
-        const slashBtn = document.getElementById('slashBtn');
-        const spaceBtn = document.getElementById('spaceBtn');
-        const showBtns = (mode === 'in_to_mm') ? 'block' : 'none';
-        
-        slashBtn.style.display = showBtns;
-        spaceBtn.style.display = showBtns;
-        convert();
-    }
+let currentLang='es';
+function t(k){return(TR[currentLang]&&TR[currentLang][k])||TR.es[k]||k;}
 
-    function addSlash() {
-        const input = document.getElementById('input');
-        input.value += "/";
-        input.focus();
-        convert();
-    }
+function applyLang(){
+  // HTML lang
+  document.documentElement.lang=currentLang;
+  // Logo subtitle
+  const ls=document.querySelector('.logo-sub');if(ls)ls.textContent=t('logo_sub');
+  // Nav buttons
+  const navMap=[['nb-conv','nav_conv','📐'],['nb-oring','nav_oring','⭕'],['nb-rod','nav_rod','🔵'],['nb-ros','nav_ros','🔧'],['nb-cal','nav_cal','📏'],['nb-dureza','nav_dur','💎'],['nb-velcorte','nav_vel','⚡'],['nb-tolerancia','nav_tol','📊'],['nb-unidades','nav_uni','🔄'],['nb-mater','nav_mat','🔩']];
+  navMap.forEach(([id,key,em])=>{const b=document.getElementById(id);if(b)b.innerHTML=`${em} ${t(key)}`;});
+  // Config titles
+  document.querySelectorAll('.cfg-t').forEach((el,i)=>{el.textContent=i===0?t('cfg_theme'):t('cfg_lang');});
+  ['dark','light','contrast'].forEach(th=>{const el=document.getElementById('th-'+th);if(!el)return;const k='th_'+th;if(el.children[1])el.children[1].textContent=t(k);const sm=el.querySelector('small');if(sm)sm.textContent=t('th_sub');});
+  // PWA label
+  const pl=document.getElementById('pwa-label');if(pl)pl.textContent=deferredPrompt?t('pwa_install'):t('pwa_fav');
+  // About labels
+  document.querySelectorAll('.seo-t').forEach(el=>el.textContent=t('about'));
 
-    function addSpace() {
-        const input = document.getElementById('input');
-        input.value += " ";
-        input.focus();
-        convert();
-    }
+  // ---- Panel-by-panel using querySelectorAll within each panel ----
+  function pTitle(panelId,key){const p=document.getElementById('panel-'+panelId);if(!p)return;const el=p.querySelector('.card-title');if(el)el.textContent=t(key);}
+  function pSub(panelId,key){const p=document.getElementById('panel-'+panelId);if(!p)return;const el=p.querySelector('.card-sub');if(el)el.textContent=t(key);}
+  function pLbl(panelId,idx,key){const p=document.getElementById('panel-'+panelId);if(!p)return;const els=p.querySelectorAll('.lbl');if(els[idx])els[idx].textContent=t(key);}
+  function pSeoP(panelId,key){const p=document.getElementById('panel-'+panelId);if(!p)return;const el=p.querySelector('.seo p');if(el)el.textContent=t(key);}
 
-    function convert() {
-        const rawVal = document.getElementById('input').value.trim();
-        const mode = document.getElementById('mode').value;
-        const resBox = document.getElementById('resBox');
-        if (!rawVal) { resBox.innerHTML = '<div style="color: #475569;">Esperando...</div>'; return; }
-        const val = procesarEntrada(rawVal);
-        if (isNaN(val) || val <= 0) { resBox.innerHTML = '<div style="color: #ef4444;">Formato no válido</div>'; return; }
+  // P1: mm↔pulg
+  pTitle('conv','conv_title');pSub('conv','conv_sub');
+  pLbl('conv',0,'conv_mode');pLbl('conv',1,'conv_measure');
+  setOpt('a_mode','mm_to_in',t('conv_mmi'));setOpt('a_mode','in_to_mm',t('conv_imm'));
+  setAttr('a_in','placeholder',t('conv_placeholder'));
+  const linkSpan=document.querySelector('#panel-conv .link-row span');if(linkSpan)linkSpan.textContent=t('conv_table_link');
+  const hTitle=document.querySelector('#panel-conv .ht');if(hTitle)hTitle.textContent=t('conv_hist');
+  const ar=document.getElementById('a_res');if(ar&&!ar.querySelector('.res-main'))ar.innerHTML=`<div style="color:var(--text3)">${t('conv_wait')}</div>`;
+  pSeoP('conv','conv_seo');
+  // Full table modal
+  const ftH=document.querySelector('.ftable-box h3');if(ftH)ftH.textContent=t('ft_title');
+  setAttr('ft-search','placeholder',t('ft_filter'));
 
-        let resPrincipal = "", resBadge = "", resExtra = "";
+  // P2: O-Ring
+  pTitle('oring','or_title');pSub('oring','or_sub');
+  const strip=document.querySelector('#panel-oring .istrip');if(strip)strip.innerHTML=t('or_strip');
+  pLbl('oring',0,'or_mode');
+  setOpt('or_mode','code',t('or_m_code'));setOpt('or_mode','id',t('or_m_id'));setOpt('or_mode','od',t('or_m_od'));setOpt('or_mode','cs',t('or_m_cs'));setOpt('or_mode','all',t('or_m_all'));
+  const orCodeLbl=document.querySelector('#or_code_a .lbl');if(orCodeLbl)orCodeLbl.textContent=t('or_code_lbl');
+  setAttr('or_code','placeholder',t('or_code_ph'));
+  const orDimLbl=document.getElementById('or_dlbl');if(orDimLbl)orDimLbl.textContent=t('or_dim_id');
+  setAttr('or_dv','placeholder',t('or_dim_ph'));
+  const orTolLbl=document.querySelector('#or_dim_a .lbl:last-of-type');// second lbl
+  const orDimLbls=document.querySelectorAll('#or_dim_a .lbl');if(orDimLbls[1])orDimLbls[1].textContent=t('or_tol_lbl');
+  const orTol=document.getElementById('or_tol');if(orTol){const o=orTol.options;if(o[0])o[0].textContent=t('or_tol0');if(o[1])o[1].textContent=t('or_tol1');if(o[2])o[2].textContent=t('or_tol2');if(o[3])o[3].textContent=t('or_tol3');}
+  pSeoP('oring','or_seo');
+  orModeChange();
 
-        if (mode === 'mm_to_in') {
-            let res = tablaComercial[val] ? tablaComercial[val] : toFraction(val / 25.4);
-            let isStd = tablaComercial[val] ? true : false;
-            resPrincipal = res;
-            resBadge = `<div class="badge ${isStd ? 'badge-std' : 'badge-spec'}">${isStd ? '✓ Llave Estándar' : 'Llave Especial'}</div>`;
-            resExtra = `<div class="exact-val">Decimal: ${(val/25.4).toFixed(4)}"</div>`;
-        } else {
-            const mm = val * 25.4;
-            resPrincipal = mm.toFixed(2) + '<span style="font-size:1.5rem">mm</span>';
-            resBadge = `<div class="badge badge-std">Sugerencia: ${Math.round(mm)}mm</div>`;
-            resExtra = `<div class="exact-val">Entrada: ${rawVal}"</div>`;
-        }
+  // P3: Rodamientos
+  pTitle('rod','rb_title');pSub('rod','rb_sub');
+  pLbl('rod',0,'rb_mode');
+  setOpt('rb_mode','d',t('rb_m_d'));setOpt('rb_mode','D',t('rb_m_D'));setOpt('rb_mode','B',t('rb_m_B'));setOpt('rb_mode','code',t('rb_m_code'));setOpt('rb_mode','all',t('rb_m_all'));
+  pLbl('rod',1,'rb_type');
+  [['all','rb_ty_all'],['rigid','rb_ty_rig'],['osc','rb_ty_osc'],['ang','rb_ty_ang'],['axb','rb_ty_axb'],['con','rb_ty_con'],['cil','rb_ty_cil'],['agu','rb_ty_agu'],['lin','rb_ty_lin'],['ucp','rb_ty_ucp']].forEach(([v,k])=>setOpt('rb_type',v,t(k)));
+  setAttr('rb_v','placeholder',t('rb_ph'));
+  const rbToggle=document.querySelector('#panel-rod details summary');if(rbToggle)rbToggle.textContent=t('rb_full_toggle');
+  pSeoP('rod','rb_seo');
 
-        resBox.innerHTML = `<div class="main-res">${resPrincipal}</div>${resBadge}${resExtra}`;
-        actualizarHistorial(rawVal, resPrincipal.replace(/<[^>]*>?/gm, ''), mode);
-    }
+  // P4: Roscas
+  pTitle('ros','ros_title');pSub('ros','ros_sub');
+  setTb('ros_t_m',t('ros_t_m'));setTb('ros_t_in',t('ros_t_in'));setTb('ros_t_npt',t('ros_t_npt'));
+  pLbl('ros',0,'ros_size');pLbl('ros',1,'ros_type');
+  setOpt('ros_tp','std',t('ros_std'));setOpt('ros_tp','fine',t('ros_fine'));
+  const ieRT=document.querySelector('#panel-ros .rt:last-of-type');if(ieRT)ieRT.textContent=t('ros_male')+' / '+t('ros_female');
+  pSeoP('ros','ros_seo');
+  rosPopSel();
 
-    function procesarEntrada(texto) {
-        texto = texto.replace(',', '.').replace('-', ' ').trim();
-        if (texto.includes(' ')) {
-            const partes = texto.split(/\s+/);
-            if (partes[1] && partes[1].includes('/')) {
-                const f = partes[1].split('/');
-                return parseFloat(partes[0]) + (parseFloat(f[0]) / parseFloat(f[1]));
-            }
-        } else if (texto.includes('/')) {
-            const f = texto.split('/');
-            return parseFloat(f[0]) / parseFloat(f[1]);
-        }
-        return parseFloat(texto);
-    }
+  // P5: Calibres
+  pTitle('cal','cal_title');pSub('cal','cal_sub');
+  pLbl('cal',0,'cal_mm');pLbl('cal',1,'cal_in');
+  setAttr('cal_mm','placeholder',t('cal_ph_mm'));setAttr('cal_in','placeholder',t('cal_ph_in'));
+  pSeoP('cal','cal_seo');
+  calRenderTbl();
 
-    function toFraction(dec) {
-        const denominators = [2, 4, 8, 16, 32, 64];
-        let bestNum = 0, bestDen = 1, minDiff = Infinity;
-        for (let d of denominators) {
-            let n = Math.round(dec * d);
-            let diff = Math.abs(dec - n / d);
-            if (diff < minDiff) { minDiff = diff; bestNum = n; bestDen = d; }
-        }
-        const entero = Math.floor(bestNum / bestDen);
-        let residuoNum = bestNum % bestDen;
-        if (residuoNum === 0) return entero + '"';
-        const gcd = (a, b) => b ? gcd(b, a % b) : a;
-        const common = gcd(residuoNum, bestDen);
-        residuoNum /= common;
-        const denFinal = bestDen / common;
-        return (entero > 0 ? entero + " " : "") + residuoNum + "/" + denFinal + '"';
-    }
+  // P6: Dureza
+  pTitle('dureza','dur_title');pSub('dureza','dur_sub');
+  pLbl('dureza',0,'dur_from');pLbl('dureza',1,'dur_val');
+  setAttr('h_val','placeholder',t('dur_val_ph'));
+  const durTblT=document.querySelector('#panel-dureza .rt');if(durTblT)durTblT.textContent=t('dur_tbl_title');
+  pSeoP('dureza','dur_seo');
+  calcH();
 
-    function actualizarHistorial(entrada, salida, modo) {
-        if (historial.length > 0 && historial[0].entrada === entrada) return;
-        historial.unshift({ entrada, salida, modo });
-        if (historial.length > 5) historial.pop();
-        const section = document.getElementById('historySection');
-        const list = document.getElementById('historyList');
-        section.style.display = 'block';
-        list.innerHTML = historial.map((item, i) => `
-            <div class="history-item" onclick="cargarHistorial(${i})">
-                <span style="color:#94a3b8">${item.modo === 'in_to_mm' ? 'IN' : 'mm'}: ${item.entrada}</span>
-                <span style="color:var(--accent); font-weight:bold">${item.salida}</span>
-            </div>
-        `).join('');
-    }
+  // P7: Vel Corte
+  pTitle('velcorte','vc_title');pSub('velcorte','vc_sub');
+  pLbl('velcorte',0,'vc_d');pLbl('velcorte',1,'vc_v');pLbl('velcorte',2,'vc_mat');
+  setOpt('vc_mat','',t('vc_mat0'));
+  const vcTblT=document.querySelector('#panel-velcorte .rt');if(vcTblT)vcTblT.textContent=t('vc_tbl_title');
+  pSeoP('velcorte','vc_seo');
+  calcVc();
 
-    function cargarHistorial(i) {
-        const item = historial[i];
-        document.getElementById('mode').value = item.modo;
-        document.getElementById('input').value = item.entrada;
-        toggleMode(); 
-        convert();
-    }
+  // P8: Tolerancias
+  pTitle('tolerancia','tol_title');pSub('tolerancia','tol_sub');
+  pLbl('tolerancia',0,'tol_d');pLbl('tolerancia',1,'tol_it');pLbl('tolerancia',2,'tol_hole');pLbl('tolerancia',3,'tol_shaft');
+  setAttr('tol_d','placeholder',t('tol_d_ph'));
+  [['5','tol_it5'],['6','tol_it6'],['7','tol_it7'],['8','tol_it8'],['9','tol_it9'],['11','tol_it11']].forEach(([v,k])=>setOpt('tol_it',v,t(k)));
+  [['H','tol_h_H'],['G','tol_h_G'],['F','tol_h_F'],['E','tol_h_E'],['D','tol_h_D']].forEach(([v,k])=>setOpt('tol_hole',v,t(k)));
+  [['h','tol_s_h'],['g','tol_s_g'],['f','tol_s_f'],['k','tol_s_k'],['n','tol_s_n'],['p','tol_s_p'],['s','tol_s_s']].forEach(([v,k])=>setOpt('tol_shaft',v,t(k)));
+  const tolTblT=document.querySelector('#panel-tolerancia .rt');if(tolTblT)tolTblT.textContent=t('tol_tbl_title');
+  pSeoP('tolerancia','tol_seo');
+  calcTol();
+
+  // P9: Unidades
+  pTitle('unidades','un_title');pSub('unidades','un_sub');
+  setTb('un_t_pres',t('un_pres'));setTb('un_t_temp',t('un_temp'));setTb('un_t_fuerza',t('un_fuerza'));setTb('un_t_torque',t('un_torque'));setTb('un_t_pot',t('un_pot'));setTb('un_t_flow',t('un_flow'));
+  pLbl('unidades',1,'un_from');
+  pSeoP('unidades','un_seo');
+  setUnTab(unTab);
+
+  // P10: Materiales
+  pTitle('mater','mat_title');pSub('mater','mat_sub');
+  setAttr('mat_q','placeholder',t('mat_search_ph'));
+  pSeoP('mater','mat_seo');
+  matSearch();
+}
+
+function setText(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+function setHTML(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html;}
+function setAttr(id,attr,val){const el=document.getElementById(id);if(el)el.setAttribute(attr,val);}
+function setOpt(selId,val,txt){const sel=document.getElementById(selId);if(!sel)return;const opt=Array.from(sel.options).find(o=>o.value===val);if(opt)opt.textContent=txt;}
+function setTb(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+
+function setLang(lg){
+  currentLang=lg;
+  document.querySelectorAll('.l-opt').forEach(e=>e.classList.remove('active'));
+  document.getElementById('lg-'+lg).classList.add('active');
+  localStorage.setItem('ip_lang',lg);
+  applyLang();
+}
+function toggleConfig(){document.getElementById('cfgPanel').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeAll(){document.getElementById('cfgPanel').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function showPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.getElementById('nb-'+id).classList.add('active');closeAll();}
+
+/* ============================================================
+   INFO MODAL
+   ============================================================ */
+const INFO_DATA={
+  conv:{t:'Equivalencias mm ↔ Pulgadas',b:`<p>Esta herramienta convierte medidas entre milímetros y pulgadas fraccionarias.</p><ul><li><b>Modo mm → pulgadas:</b> Ingresa el valor en mm (ej: 13). Obtendrás la fracción equivalente en pulgadas y si es una llave estándar SAE.</li><li><b>Modo pulgadas → mm:</b> Ingresa la fracción (ej: 1 1/2). Usa el botón <b>/</b> para la barra y el botón de espacio para separar la parte entera de la fracción.</li><li><b>Historial:</b> Muestra las últimas 5 conversiones. Haz clic en cualquiera para recargarla.</li></ul><p><b>Resultado "Llave Estándar":</b> significa que existe una llave SAE comercial de ese tamaño exacto.</p>`},
+  oring:{t:'Buscador de O-Ring Parker',b:`<p>Busca O-rings del catálogo Parker Serie 2 (2-001 a 2-474) y Serie 3.</p><ul><li><b>Por código:</b> Escribe el código exacto como 2-321 o 3-901. También funciona con búsqueda parcial (ej: escribir "321" encontrará 2-321).</li><li><b>Por Ø Interior:</b> Ingresa el diámetro interno en mm. Ajusta la tolerancia para ampliar o reducir resultados.</li><li><b>Por Ø Exterior:</b> Ingresa el diámetro externo en mm.</li><li><b>Por Sección W:</b> Ingresa el grosor de la sección transversal en mm.</li></ul><p><b>Resultados:</b> Se muestran el código Parker, D.I. y D.E. en mm y pulgadas, y la sección W.</p>`},
+  rod:{t:'Buscador de Rodamientos',b:`<p>Busca en el catálogo Rodinar de rodamientos y soportes.</p><ul><li><b>d (interior):</b> Diámetro del eje donde va montado el rodamiento.</li><li><b>D (exterior):</b> Diámetro externo total del rodamiento (el que entra al alojamiento).</li><li><b>B (ancho):</b> Espesor o altura del rodamiento.</li><li><b>Por código:</b> Escribe el código (ej: 6205, HK2016, UCP208).</li></ul><p><b>Búsqueda amplia:</b> Al buscar por dimensión, se muestran todos los rodamientos dentro de ±18% del valor ingresado, ordenados por proximidad.</p>`},
+  ros:{t:'Roscas y Orificios de Machuelo',b:`<p>Calcula el diámetro de la broca necesaria para hacer un orificio donde se cortará la rosca con un machuelo.</p><ul><li><b>Métrico M1–M50:</b> Selecciona la rosca y el paso (estándar o fino MF). Incluye todas las medidas, incluso las especiales.</li><li><b>Pulgadas UNC/UNF:</b> Sistema anglosajón. UNC es paso grueso estándar, UNF es paso fino.</li><li><b>NPT:</b> Rosca cónica para tubería americana.</li></ul><p><b>Diagrama de rosca:</b> Muestra el perfil con Ø mayor (sobre hilo), Ø menor (bajo hilo) y paso p. El diagrama inferior muestra la diferencia entre rosca macho (externa) y hembra (interna).</p><p>⚠ Las roscas marcadas como <b>especiales</b> no son comerciales estándar y requieren herramienta especial.</p>`},
+  cal:{t:'Calibres de Lámina de Acero',b:`<p>Encuentra el calibre de lámina de acero correspondiente a un espesor dado.</p><ul><li><b>USSG:</b> United States Standard Gauge — acero al carbono laminado.</li><li><b>GSG:</b> Galvanized Steel Gauge — acero galvanizado.</li><li><b>AWG:</b> Aluminum Wire Gauge — aluminio.</li></ul><p>Ingresa el espesor en mm o pulgadas. El sistema encontrará el calibre más cercano y resaltará el resultado en la tabla.</p>`},
+  dureza:{t:'Conversión de Dureza',b:`<p>Convierte entre las principales escalas de dureza para metales.</p><ul><li><b>HRC (Rockwell C):</b> Para materiales duros, aceros templados. Rango 20–68.</li><li><b>HRB (Rockwell B):</b> Para materiales blandos, aceros suaves y aluminio. Rango 0–100.</li><li><b>HB (Brinell):</b> Escala clásica. Rango 80–700.</li><li><b>HV (Vickers):</b> Medición de punta de diamante piramidal. Rango 5–3000.</li></ul><p>⚠ Los valores son aproximaciones basadas en ASTM E140. Para aplicaciones críticas use tablas certificadas.</p>`},
+  vel:{t:'Velocidades de Corte RPM',b:`<p>Fórmula: <b>RPM = (Vc × 1000) / (π × D)</b></p><ul><li><b>Vc:</b> Velocidad de corte en metros por minuto (m/min).</li><li><b>D:</b> Diámetro de la herramienta (broca, fresa, torno) en mm.</li></ul><p>Selecciona el material para autocompletar una velocidad de corte típica. Los valores varían según el recubrimiento de la herramienta, la profundidad de corte y el tipo de operación.</p>`},
+  tol:{t:'Tolerancias y Ajustes ISO',b:`<p>Calcula los límites de tolerancia según norma ISO 286.</p><ul><li><b>Dimensión nominal:</b> Medida nominal del eje o agujero en mm (0.5–500mm).</li><li><b>Calidad IT:</b> Define la magnitud de la tolerancia. IT5 es muy preciso, IT11 es libre.</li><li><b>Letra agujero:</b> H es la base del sistema (EI=0). G, F, E, D tienen juego creciente.</li><li><b>Letra eje:</b> h es la base (es=0). g, f tienen juego; k, n transición; p, s apriete.</li></ul><p><b>Resultados:</b> ES/EI son los límites superior/inferior del agujero. es/ei son del eje. Todos en micras (µm).</p>`},
+  units:{t:'Conversión de Unidades',b:`<p>Convierte entre unidades técnicas usadas en ingeniería.</p><ul><li><b>Presión:</b> PSI (libras/pulg²), bar, MPa, kPa, atm, kgf/cm²</li><li><b>Temperatura:</b> °Celsius, °Fahrenheit, Kelvin, Rankine</li><li><b>Fuerza:</b> Newton, kN, kgf, lbf</li><li><b>Torque:</b> N·m, kN·m, kgf·m, lbf·ft, lbf·in</li><li><b>Potencia:</b> kW, HP, CV/PS, W, kcal/h</li><li><b>Flujo:</b> L/min, L/s, m³/h, GPM, CFM</li></ul>`},
+  mat:{t:'Propiedades de Materiales',b:`<p>Tabla de propiedades mecánicas y físicas de materiales comunes.</p><ul><li><b>ρ:</b> Densidad en g/cm³ (o ×10³ kg/m³)</li><li><b>E:</b> Módulo de elasticidad (Young) en GPa — rigidez del material</li><li><b>σy:</b> Límite elástico en MPa — hasta dónde deforma elásticamente</li><li><b>σu:</b> Resistencia tensil última en MPa — carga de rotura</li><li><b>HB:</b> Dureza Brinell aproximada</li><li><b>α:</b> Coeficiente de expansión térmica en µm/(m·°C)</li></ul><p>Usa el buscador para filtrar por nombre de material.</p>`}
+};
+function showInfo(key){const d=INFO_DATA[key];if(!d)return;document.getElementById('info-title').textContent=d.t;document.getElementById('info-body').innerHTML=d.b;const cb=document.getElementById('info-close-btn');if(cb)cb.textContent=t('understood');document.getElementById('infoModal').classList.add('open');}
+function closeInfoModal(e){if(!e||e.target===document.getElementById('infoModal'))document.getElementById('infoModal').classList.remove('open');}
+
+/* ============================================================
+   FULL TABLE MODAL (Equivalencias Excel)
+   ============================================================ */
+// Complete conversion table from Excel: [fraction_label, mm, thousandths_in]
+const FT_DATA=[
+  ['1/64',0.397,0.016],['1/32',0.794,0.031],['3/64',1.191,0.047],['1/16',1.588,0.063],
+  ['5/64',1.984,0.078],['3/32',2.381,0.094],['7/64',2.778,0.109],['1/8',3.175,0.125],
+  ['9/64',3.572,0.141],['5/32',3.969,0.156],['11/64',4.366,0.172],['3/16',4.763,0.188],
+  ['13/64',5.159,0.203],['7/32',5.556,0.219],['15/64',5.953,0.234],['1/4',6.350,0.250],
+  ['17/64',6.747,0.266],['9/32',7.144,0.281],['19/64',7.541,0.297],['5/16',7.938,0.313],
+  ['21/64',8.334,0.328],['11/32',8.731,0.344],['23/64',9.128,0.359],['3/8',9.525,0.375],
+  ['25/64',9.922,0.391],['13/32',10.319,0.406],['27/64',10.716,0.422],['7/16',11.113,0.438],
+  ['29/64',11.509,0.453],['15/32',11.906,0.469],['31/64',12.303,0.484],['1/2',12.700,0.500],
+  ['33/64',13.097,0.516],['17/32',13.494,0.531],['35/64',13.891,0.547],['9/16',14.288,0.563],
+  ['37/64',14.684,0.578],['19/32',15.081,0.594],['39/64',15.478,0.609],['5/8',15.875,0.625],
+  ['41/64',16.272,0.641],['21/32',16.669,0.656],['43/64',17.066,0.672],['11/16',17.463,0.688],
+  ['45/64',17.859,0.703],['23/32',18.256,0.719],['47/64',18.653,0.734],['3/4',19.050,0.750],
+  ['49/64',19.447,0.766],['25/32',19.844,0.781],['51/64',20.241,0.797],['13/16',20.638,0.813],
+  ['53/64',21.034,0.828],['27/32',21.431,0.844],['55/64',21.828,0.859],['7/8',22.225,0.875],
+  ['57/64',22.622,0.891],['29/32',23.019,0.906],['59/64',23.416,0.922],['15/16',23.813,0.938],
+  ['61/64',24.209,0.953],['31/32',24.606,0.969],['63/64',25.003,0.984],['1',25.400,1.000],
+  ['1 1/16',26.988,1.063],['1 1/8',28.575,1.125],['1 3/16',30.163,1.188],['1 1/4',31.750,1.250],
+  ['1 5/16',33.338,1.313],['1 3/8',34.925,1.375],['1 7/16',36.513,1.438],['1 1/2',38.100,1.500],
+  ['1 9/16',39.688,1.563],['1 5/8',41.275,1.625],['1 11/16',42.863,1.688],['1 3/4',44.450,1.750],
+  ['1 13/16',46.038,1.813],['1 7/8',47.625,1.875],['1 15/16',49.213,1.938],['2',50.800,2.000],
+  ['2 1/16',52.388,2.063],['2 1/8',53.975,2.125],['2 3/16',55.563,2.188],['2 1/4',57.150,2.250],
+  ['2 5/16',58.738,2.313],['2 3/8',60.325,2.375],['2 7/16',61.913,2.438],['2 1/2',63.500,2.500],
+  ['2 9/16',65.088,2.563],['2 5/8',66.675,2.625],['2 11/16',68.263,2.688],['2 3/4',69.850,2.750],
+  ['2 13/16',71.438,2.813],['2 7/8',73.025,2.875],['2 15/16',74.613,2.938],['3',76.200,3.000]
+];
+function openFtable(){document.getElementById('ftModal').classList.add('open');renderFtable(FT_DATA);}
+function closeFtModal(e){if(!e||e.target===document.getElementById('ftModal'))document.getElementById('ftModal').classList.remove('open');}
+function renderFtable(data){let h=`<table><thead><tr><th>Fracción</th><th>mm</th><th>Milésimas de pulg</th><th>Decimal (pulg)</th></tr></thead><tbody>`;data.forEach(r=>{h+=`<tr><td><b>${r[0]}"</b></td><td>${r[1].toFixed(3)}</td><td>${Math.round(r[2]*1000)}</td><td>${r[2].toFixed(4)}"</td></tr>`;});h+=`</tbody></table>`;document.getElementById('ft-table-wrap').innerHTML=h;}
+function filterFtable(){const q=document.getElementById('ft-search').value.toLowerCase().trim();const filtered=q?FT_DATA.filter(r=>r[0].toLowerCase().includes(q)||String(r[1]).includes(q)||String(r[2]).includes(q)):FT_DATA;renderFtable(filtered);}
+
+/* ============================================================
+   PWA / ADD TO HOME / INSTALL
+   ============================================================ */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;setPwaBtn('mobile');});
+window.addEventListener('appinstalled',()=>{document.getElementById('pwa-btn').classList.remove('show');});
+function detectPwa(){
+  const isMobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const isInstalled=window.matchMedia('(display-mode: standalone)').matches;
+  if(isInstalled)return;
+  const btn=document.getElementById('pwa-btn');
+  if(deferredPrompt){setPwaBtn('mobile');return;}
+  if(!isMobile){setPwaBtn('desktop');}
+}
+function setPwaBtn(type){
+  const btn=document.getElementById('pwa-btn'),lbl=document.getElementById('pwa-label');
+  if(type==='mobile'){lbl.textContent='Instalar App';btn.title='Instalar como app';}
+  else{lbl.textContent='Agregar a favoritos';btn.title='Agregar a favoritos / escritorio';}
+  btn.classList.add('show');
+}
+function pwaBtnClick(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('pwa-btn').classList.remove('show');});return;}
+  // Desktop fallback: bookmark instruction
+  const modal=document.getElementById('infoModal');
+  document.getElementById('info-title').textContent=t('pwa_title');
+  document.getElementById('info-body').innerHTML=t('pwa_body');
+  modal.classList.add('open');
+}
+setTimeout(detectPwa,800);
+
+/* ============================================================
+   PANEL 1: mm ↔ pulg
+   ============================================================ */
+const tablaC={"1.5":"1/16\"","2":"5/64\"","2.5":"3/32\"","3":"1/8\"","4":"5/32\"","5":"3/16\"","5.5":"7/32\"","6":"1/4\"","7":"9/32\"","8":"5/16\"","9":"11/32\"","10":"3/8\"","11":"7/16\"","12":"15/32\"","13":"1/2\"","14":"9/16\"","15":"19/32\"","16":"5/8\"","17":"11/16\"","18":"23/32\"","19":"3/4\"","21":"13/16\"","22":"7/8\"","23":"29/32\"","24":"15/16\"","25":"1\"","25.4":"1\""};
+let aHist=[];
+function antiToggle(){const m=document.getElementById('a_mode').value,s=m==='in_to_mm'?'flex':'none';document.getElementById('a_sl').style.display=s;document.getElementById('a_sp').style.display=s;antiConv();}
+function antiSl(){const i=document.getElementById('a_in');i.value+='/';i.focus();antiConv();}
+function antiSp(){const i=document.getElementById('a_in');i.value+=' ';i.focus();antiConv();}
+function antiConv(){
+  const raw=document.getElementById('a_in').value.trim(),m=document.getElementById('a_mode').value,box=document.getElementById('a_res');
+  if(!raw){box.innerHTML=`<div style="color:var(--text3)">Introduce una medida...</div>`;return;}
+  const v=pMix(raw);if(isNaN(v)||v<=0){box.innerHTML=`<div style="color:var(--danger)">Formato no válido</div>`;return;}
+  let main,badge,sub;
+  if(m==='mm_to_in'){const s=tablaC[String(v)]!==undefined;const r=s?tablaC[String(v)]:toFrac(v/25.4);main=r;badge=`<div class="badge ${s?'badge-ok':'badge-warn'}">${s?'✓ Llave Estándar SAE':'Llave Especial'}</div>`;sub=`<div class="res-sub">Decimal: ${(v/25.4).toFixed(4)}" &nbsp;|&nbsp; ${v} mm</div>`;}
+  else{const mm=v*25.4;main=`${mm.toFixed(3)}<span style="font-size:1rem"> mm</span>`;badge=`<div class="badge badge-ok">≈ ${Math.round(mm)} mm</div>`;sub=`<div class="res-sub">${toFrac(v)} &nbsp;|&nbsp; ${v}" = ${(v*25.4).toFixed(3)} mm</div>`;}
+  box.innerHTML=`<div class="res-main">${main}</div>${badge}${sub}`;
+  if(aHist.length>0&&aHist[0].e===raw)return;
+  aHist.unshift({e:raw,s:main.replace(/<[^>]*>/g,''),m});if(aHist.length>5)aHist.pop();
+  document.getElementById('a_hs').style.display='block';
+  document.getElementById('a_hl').innerHTML=aHist.map((it,i)=>`<div class="hi" onclick="aHL(${i})"><span style="color:var(--text2)">${it.m==='in_to_mm'?'IN':'mm'}: ${it.e}</span><span style="color:var(--accent);font-weight:600">${it.s}</span></div>`).join('');
+}
+function aHL(i){const it=aHist[i];document.getElementById('a_mode').value=it.m;document.getElementById('a_in').value=it.e;antiToggle();antiConv();}
+function pMix(tx){tx=tx.replace(',','.').replace('-',' ').trim();if(tx.includes(' ')){const p=tx.split(/\s+/);if(p[1]&&p[1].includes('/')){const f=p[1].split('/');return parseFloat(p[0])+(parseFloat(f[0])/parseFloat(f[1]));}}else if(tx.includes('/')){const f=tx.split('/');return parseFloat(f[0])/parseFloat(f[1]);}return parseFloat(tx);}
+function toFrac(d){const dn=[2,4,8,16,32,64];let bn=0,bd=1,mD=Infinity;for(let x of dn){let n=Math.round(d*x);let df=Math.abs(d-n/x);if(df<mD){mD=df;bn=n;bd=x;}}const e=Math.floor(bn/bd);let rn=bn%bd;if(rn===0)return e+'"';const gcd=(a,b)=>b?gcd(b,a%b):a;const g=gcd(rn,bd);rn/=g;const df=bd/g;return(e>0?e+' ':'')+rn+'/'+df+'"';}
+
+/* ============================================================
+   PANEL 2: O-RING PARKER
+   ============================================================ */
+const PARKER2=[['2-001',0.029,0.74,0.097,0.070],['2-002',0.042,1.07,0.123,0.070],['2-003',0.056,1.42,0.196,0.070],['2-004',0.070,1.78,0.210,0.070],['2-005',0.101,2.57,0.241,0.070],['2-006',0.114,2.90,0.254,0.070],['2-007',0.145,3.68,0.285,0.070],['2-008',0.176,4.47,0.316,0.070],['2-009',0.208,5.28,0.348,0.070],['2-010',0.239,6.07,0.379,0.070],['2-011',0.301,7.65,0.441,0.070],['2-012',0.364,9.25,0.504,0.070],['2-013',0.426,10.82,0.566,0.070],['2-014',0.489,12.42,0.629,0.070],['2-015',0.551,14.00,0.691,0.070],['2-016',0.614,15.60,0.754,0.070],['2-017',0.676,17.17,0.816,0.070],['2-018',0.739,18.77,0.879,0.070],['2-019',0.801,20.35,0.941,0.070],['2-020',0.864,21.95,1.004,0.070],['2-021',0.926,23.52,1.066,0.070],['2-022',0.989,25.12,1.129,0.070],['2-023',1.051,26.70,1.191,0.070],['2-024',1.114,28.30,1.254,0.070],['2-025',1.176,29.87,1.316,0.070],['2-026',1.239,31.47,1.379,0.070],['2-027',1.301,33.05,1.441,0.070],['2-028',1.364,34.65,1.504,0.070],['2-029',1.489,37.82,1.629,0.070],['2-030',1.614,41.00,1.754,0.070],['2-031',1.739,44.17,1.879,0.070],['2-032',1.864,47.35,2.004,0.070],['2-033',1.989,50.52,2.129,0.070],['2-034',2.114,53.70,2.254,0.070],['2-035',2.239,56.87,2.379,0.070],['2-036',2.364,60.05,2.504,0.070],['2-037',2.489,63.22,2.629,0.070],['2-038',2.614,66.40,2.754,0.070],['2-039',2.739,69.57,2.879,0.070],['2-040',2.864,72.75,3.004,0.070],['2-041',2.989,75.92,3.129,0.070],['2-042',3.239,82.27,3.379,0.070],['2-043',3.489,88.62,3.629,0.070],['2-044',3.739,94.97,3.879,0.070],['2-045',3.989,101.32,4.129,0.070],['2-046',4.239,107.67,4.379,0.070],['2-047',4.489,114.02,4.629,0.070],['2-048',4.739,120.37,4.879,0.070],['2-049',4.989,126.72,5.129,0.070],['2-050',5.239,133.07,5.379,0.070],['2-102',0.049,1.24,0.255,0.103],['2-103',0.081,2.06,0.287,0.103],['2-104',0.112,2.84,0.318,0.103],['2-105',0.143,3.63,0.349,0.103],['2-106',0.174,4.42,0.380,0.103],['2-107',0.206,5.23,0.412,0.103],['2-108',0.237,6.02,0.443,0.103],['2-109',0.299,7.59,0.505,0.103],['2-110',0.362,9.19,0.568,0.103],['2-111',0.424,10.77,0.630,0.103],['2-112',0.487,12.37,0.693,0.103],['2-113',0.549,13.94,0.755,0.103],['2-114',0.612,15.54,0.818,0.103],['2-115',0.674,17.12,0.880,0.103],['2-116',0.737,18.72,0.943,0.103],['2-117',0.799,20.30,1.005,0.103],['2-118',0.862,21.89,1.068,0.103],['2-119',0.924,23.47,1.130,0.103],['2-120',0.987,25.07,1.193,0.103],['2-121',1.049,26.64,1.255,0.103],['2-122',1.112,28.42,1.318,0.103],['2-123',1.174,29.82,1.380,0.103],['2-124',1.237,31.42,1.443,0.103],['2-125',1.299,32.99,1.505,0.103],['2-126',1.362,34.59,1.568,0.103],['2-127',1.424,36.17,1.630,0.103],['2-128',1.487,37.77,1.693,0.103],['2-129',1.549,39.34,1.755,0.103],['2-130',1.612,40.94,1.818,0.103],['2-131',1.674,42.52,1.880,0.103],['2-132',1.737,44.12,1.943,0.103],['2-133',1.799,45.69,2.005,0.103],['2-134',1.862,47.29,2.068,0.103],['2-135',1.925,48.90,2.131,0.103],['2-136',1.987,50.47,2.193,0.103],['2-137',2.050,52.07,2.256,0.103],['2-138',2.112,53.64,2.318,0.103],['2-139',2.175,55.25,2.381,0.103],['2-140',2.237,56.82,2.443,0.103],['2-141',2.300,58.42,2.506,0.103],['2-142',2.362,59.99,2.568,0.103],['2-143',2.425,61.60,2.631,0.103],['2-144',2.487,63.17,2.693,0.103],['2-145',2.550,64.77,2.756,0.103],['2-146',2.612,66.34,2.818,0.103],['2-147',2.675,67.95,2.881,0.103],['2-148',2.737,69.52,2.943,0.103],['2-149',2.800,71.12,3.006,0.103],['2-150',2.862,72.69,3.068,0.103],['2-151',2.987,75.87,3.193,0.103],['2-152',3.237,82.22,3.443,0.103],['2-153',3.487,88.57,3.693,0.103],['2-154',3.737,94.92,3.943,0.103],['2-155',3.987,101.27,4.193,0.103],['2-156',4.237,107.62,4.443,0.103],['2-157',4.487,113.97,4.693,0.103],['2-158',4.737,120.32,4.943,0.103],['2-159',4.987,126.67,5.193,0.103],['2-160',5.237,133.02,5.443,0.103],['2-161',5.487,139.37,5.693,0.103],['2-162',5.737,145.72,5.943,0.103],['2-163',5.987,152.07,6.193,0.103],['2-164',6.237,158.42,6.443,0.103],['2-165',6.487,164.77,6.693,0.103],['2-166',6.737,171.12,6.943,0.103],['2-167',6.987,177.47,7.193,0.103],['2-168',7.237,183.82,7.443,0.103],['2-169',7.487,190.17,7.693,0.103],['2-170',7.737,196.52,7.943,0.103],['2-171',7.987,202.87,8.193,0.103],['2-172',8.237,209.22,8.443,0.103],['2-173',8.487,215.57,8.693,0.103],['2-174',8.737,221.92,8.943,0.103],['2-175',8.987,228.27,9.193,0.103],['2-176',9.237,234.62,9.443,0.103],['2-177',9.487,240.97,9.693,0.103],['2-178',9.737,247.32,9.943,0.103],['2-201',0.171,4.34,0.449,0.139],['2-202',0.231,5.94,0.509,0.139],['2-203',0.296,7.52,0.574,0.139],['2-204',0.359,9.12,0.637,0.139],['2-205',0.421,10.69,0.699,0.139],['2-206',0.484,12.29,0.762,0.139],['2-207',0.546,13.87,0.824,0.139],['2-208',0.609,15.47,0.887,0.139],['2-209',0.671,17.04,0.949,0.139],['2-210',0.734,18.64,1.012,0.139],['2-211',0.796,20.22,1.074,0.139],['2-212',0.859,21.82,1.137,0.139],['2-213',0.921,23.39,1.199,0.139],['2-214',0.984,24.99,1.262,0.139],['2-215',1.046,26.57,1.324,0.139],['2-216',1.109,28.17,1.387,0.139],['2-217',1.171,29.74,1.449,0.139],['2-218',1.234,31.34,1.512,0.139],['2-219',1.296,32.92,1.574,0.139],['2-220',1.359,34.52,1.637,0.139],['2-221',1.421,36.09,1.699,0.139],['2-222',1.484,37.69,1.762,0.139],['2-223',1.609,40.87,1.887,0.139],['2-224',1.734,44.04,2.012,0.139],['2-225',1.859,47.22,2.137,0.139],['2-226',1.984,50.39,2.262,0.139],['2-227',2.109,53.57,2.387,0.139],['2-228',2.234,56.76,2.512,0.139],['2-229',2.359,59.22,2.637,0.139],['2-230',2.484,63.09,2.762,0.139],['2-231',2.609,66.27,2.887,0.139],['2-232',2.734,69.44,3.012,0.139],['2-233',2.859,72.62,3.137,0.139],['2-234',2.984,75.79,3.262,0.139],['2-235',3.109,78.97,3.387,0.139],['2-236',3.234,82.14,3.512,0.139],['2-237',3.359,85.32,3.637,0.139],['2-238',3.484,88.49,3.762,0.139],['2-239',3.609,91.67,3.887,0.139],['2-240',3.734,94.84,4.012,0.139],['2-241',3.859,98.02,4.137,0.139],['2-242',3.984,101.19,4.262,0.139],['2-243',4.109,104.37,4.387,0.139],['2-244',4.234,107.54,4.512,0.139],['2-245',4.359,110.72,4.637,0.139],['2-246',4.484,113.89,4.762,0.139],['2-247',4.609,117.07,4.887,0.139],['2-248',4.734,120.24,5.012,0.139],['2-249',4.859,123.42,5.137,0.139],['2-250',4.984,126.59,5.262,0.139],['2-251',5.109,129.77,5.387,0.139],['2-252',5.234,139.94,5.512,0.139],['2-253',5.359,136.12,5.637,0.139],['2-254',5.484,139.29,5.762,0.139],['2-255',5.609,142.47,5.887,0.139],['2-256',5.734,145.64,6.012,0.139],['2-257',5.859,148.82,6.137,0.139],['2-258',5.984,151.99,6.262,0.139],['2-259',6.234,158.34,6.512,0.139],['2-260',6.484,164.69,6.762,0.139],['2-261',6.734,171.04,7.012,0.139],['2-262',6.984,177.39,7.262,0.139],['2-263',7.234,183.74,7.512,0.139],['2-264',7.484,190.09,7.762,0.139],['2-265',7.734,196.44,8.012,0.139],['2-266',7.984,202.79,8.262,0.139],['2-267',8.234,209.14,8.512,0.139],['2-268',8.484,215.49,8.762,0.139],['2-269',8.734,221.84,9.012,0.139],['2-270',8.984,228.19,9.262,0.139],['2-271',9.234,234.54,9.512,0.139],['2-272',9.484,240.89,9.762,0.139],['2-273',9.734,247.24,10.012,0.139],['2-274',9.984,253.59,10.262,0.139],['2-275',10.484,266.29,10.762,0.139],['2-276',10.984,278.99,11.262,0.139],['2-277',11.484,291.69,11.762,0.139],['2-278',11.984,304.39,12.262,0.139],['2-279',12.984,329.79,13.262,0.139],['2-280',13.984,355.19,14.262,0.139],['2-281',14.984,380.59,15.262,0.139],['2-282',15.955,405.26,16.233,0.139],['2-283',16.955,430.66,17.233,0.139],['2-284',17.955,456.06,18.233,0.139],['2-309',0.412,10.46,0.832,0.210],['2-310',0.475,12.07,0.895,0.210],['2-311',0.537,13.64,0.957,0.210],['2-312',0.600,15.24,1.020,0.210],['2-313',0.662,16.81,1.082,0.210],['2-314',0.725,18.42,1.145,0.210],['2-315',0.787,19.99,1.207,0.210],['2-316',0.850,21.59,1.270,0.210],['2-317',0.912,23.16,1.332,0.210],['2-318',0.975,24.77,1.395,0.210],['2-319',1.037,26.34,1.457,0.210],['2-320',1.100,27.94,1.520,0.210],['2-321',1.162,29.51,1.582,0.210],['2-322',1.225,31.12,1.645,0.210],['2-323',1.287,32.69,1.707,0.210],['2-324',1.350,34.29,1.770,0.210],['2-325',1.475,37.47,1.895,0.210],['2-326',1.600,40.64,2.020,0.210],['2-327',1.725,43.82,2.145,0.210],['2-328',1.850,46.99,2.270,0.210],['2-329',1.975,50.17,2.395,0.210],['2-330',2.100,53.34,2.520,0.210],['2-331',2.225,56.52,2.645,0.210],['2-332',2.350,59.69,2.770,0.210],['2-333',2.475,62.87,2.895,0.210],['2-334',2.600,66.04,3.020,0.210],['2-335',2.725,69.22,3.145,0.210],['2-336',2.850,72.39,3.270,0.210],['2-337',2.975,75.57,3.395,0.210],['2-340',3.350,85.09,3.770,0.210],['2-341',3.475,88.27,3.895,0.210],['2-342',3.600,91.44,4.020,0.210],['2-343',3.725,94.62,4.145,0.210],['2-344',3.850,97.79,4.270,0.210],['2-345',3.975,100.97,4.395,0.210],['2-346',4.100,104.14,4.520,0.210],['2-347',4.225,107.32,4.645,0.210],['2-348',4.350,110.49,4.770,0.210],['2-349',4.475,113.67,4.895,0.210],['2-350',4.600,116.84,5.020,0.210],['2-425',4.475,113.67,5.025,0.275],['2-426',4.600,116.84,5.150,0.275],['2-427',4.725,120.02,5.275,0.275],['2-428',4.850,123.19,5.400,0.275],['2-429',4.975,126.37,5.525,0.275],['2-430',5.100,129.54,5.650,0.275],['2-435',5.725,145.42,6.275,0.275],['2-440',6.725,170.82,7.275,0.275],['2-445',7.975,202.57,8.525,0.275],['2-450',10.475,266.07,11.025,0.275],['2-455',12.975,329.57,13.525,0.275],['2-460',15.475,393.07,16.025,0.275],['2-465',17.955,456.06,18.505,0.275],['2-470',20.955,532.26,21.505,0.275],['2-472',22.940,582.68,23.490,0.275],['2-474',24.940,633.48,25.490,0.275],['3-901',0.185,4.70,0.297,0.056],['3-902',0.239,6.07,0.367,0.064],['3-903',0.301,7.65,0.429,0.064],['3-904',0.351,8.92,0.495,0.072],['3-905',0.414,10.52,0.558,0.072],['3-906',0.468,11.89,0.624,0.078],['3-907',0.530,13.46,0.694,0.082],['3-908',0.644,16.36,0.818,0.087],['3-909',0.706,17.93,0.900,0.097],['3-910',0.755,19.18,0.949,0.097],['3-911',0.863,21.92,1.095,0.116],['3-912',0.924,23.47,1.156,0.116],['3-913',0.986,25.04,1.218,0.116],['3-914',1.047,26.59,1.279,0.116],['3-916',1.171,29.74,1.403,0.116],['3-918',1.355,34.42,1.587,0.116],['3-920',1.475,37.47,1.711,0.118],['3-924',1.720,43.69,1.956,0.118],['3-928',2.090,53.09,2.326,0.118],['3-932',2.337,59.36,2.573,0.118]];
+function orModeChange(){const m=document.getElementById('or_mode').value;document.getElementById('or_code_a').style.display=m==='code'?'block':'none';document.getElementById('or_dim_a').style.display=(m!=='code'&&m!=='all')?'block':'none';const lbls={id:'Ø Interior D.I. (mm)',od:'Ø Exterior D.E. (mm)',cs:'Sección W (mm)'};if(lbls[m])document.getElementById('or_dlbl').textContent=lbls[m];if(m==='all')renderFullOR();else orSearch();}
+function renderFullOR(){const h=`<div class="tw" style="max-height:400px;overflow-y:auto"><table><thead><tr><th>Código</th><th>D.I. pulg</th><th>D.I. mm</th><th>D.E. pulg</th><th>W pulg</th><th>W mm</th></tr></thead><tbody>${PARKER2.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}"</td><td>${r[2]}</td><td>${r[3].toFixed(3)}"</td><td>${r[4]}"</td><td>${(r[4]*25.4).toFixed(2)}</td></tr>`).join('')}</tbody></table></div>`;document.getElementById('or_res').innerHTML=h;}
+function orSearch(){const m=document.getElementById('or_mode').value,box=document.getElementById('or_res');if(m==='all'){renderFullOR();return;}if(m==='code'){const q=(document.getElementById('or_code').value||'').trim().toUpperCase();if(!q){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Escribe un código (ej: 2-321)...</div></div>`;return;}const ms=PARKER2.filter(r=>r[0].toUpperCase().includes(q));if(!ms.length){box.innerHTML=`<div class="res-box"><div style="color:var(--warn)">⚠ No encontrado. Ej: 2-321, 3-901</div></div>`;return;}let h=`<div style="font-size:0.71rem;color:var(--accent);margin-bottom:5px;font-weight:600">Resultados: ${ms.length}</div><div class="tw" style="max-height:290px;overflow-y:auto"><table><thead><tr><th>Código</th><th>D.I. mm</th><th>D.E. mm</th><th>W mm</th><th>D.I. pulg</th></tr></thead><tbody>`;ms.forEach((r,i)=>{h+=`<tr class="${i===0&&ms.length<4?'hl':''}"><td><b>${r[0]}</b></td><td>${r[2]}</td><td>${(r[3]*25.4).toFixed(2)}</td><td>${(r[4]*25.4).toFixed(2)}</td><td>${r[1]}"</td></tr>`;});h+=`</tbody></table></div>`;box.innerHTML=h;return;}const v=parseFloat(document.getElementById('or_dv').value),tol=parseFloat(document.getElementById('or_tol').value);if(isNaN(v)){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa una dimensión...</div></div>`;return;}let ms=PARKER2.filter(r=>{const ref=m==='id'?r[2]:m==='od'?+(r[3]*25.4).toFixed(2):+(r[4]*25.4).toFixed(2);return Math.abs(ref-v)<=tol;}).map(r=>({r,d:Math.abs((m==='id'?r[2]:m==='od'?r[3]*25.4:r[4]*25.4)-v)}));ms.sort((a,b)=>a.d-b.d);if(!ms.length){box.innerHTML=`<div class="res-box"><div style="color:var(--warn)">⚠ Sin coincidencias — aumenta tolerancia</div></div>`;return;}let h=`<div style="font-size:0.71rem;color:var(--accent);margin-bottom:5px;font-weight:600">Encontrados: ${ms.length}</div><div class="tw" style="max-height:290px;overflow-y:auto"><table><thead><tr><th>Código</th><th>D.I. mm</th><th>D.E. mm</th><th>W mm</th><th>D.I. pulg</th></tr></thead><tbody>`;ms.slice(0,30).forEach(({r},i)=>{h+=`<tr class="${i===0?'hl':''}"><td><b>${r[0]}</b></td><td>${r[2]}</td><td>${(r[3]*25.4).toFixed(2)}</td><td>${(r[4]*25.4).toFixed(2)}</td><td>${r[1]}"</td></tr>`;});h+=`</tbody></table></div>`;box.innerHTML=h;}
+
+/* ============================================================
+   PANEL 3: RODAMIENTOS
+   ============================================================ */
+const BRG=[['625',5,16,5,'rigid'],['635',5,19,6,'rigid'],['606',6,17,6,'rigid'],['626',6,19,6,'rigid'],['607',7,19,6,'rigid'],['627',7,22,7,'rigid'],['608',8,22,7,'rigid'],['628',8,24,8,'rigid'],['609',9,24,7,'rigid'],['629',9,26,8,'rigid'],['6000',10,26,8,'rigid'],['6200',10,30,9,'rigid'],['6300',10,35,11,'rigid'],['6001',12,28,8,'rigid'],['6201',12,32,10,'rigid'],['6301',12,37,12,'rigid'],['6002',15,32,9,'rigid'],['6202',15,35,11,'rigid'],['6302',15,42,13,'rigid'],['6003',17,35,10,'rigid'],['6203',17,40,12,'rigid'],['6303',17,47,14,'rigid'],['6403',17,62,17,'rigid'],['6004',20,42,12,'rigid'],['6204',20,47,14,'rigid'],['6304',20,52,15,'rigid'],['6404',20,72,19,'rigid'],['6005',25,47,12,'rigid'],['6205',25,52,15,'rigid'],['6305',25,62,17,'rigid'],['6405',25,80,21,'rigid'],['6006',30,55,13,'rigid'],['6206',30,62,16,'rigid'],['6306',30,72,19,'rigid'],['6406',30,90,23,'rigid'],['6007',35,62,14,'rigid'],['6207',35,72,17,'rigid'],['6307',35,80,21,'rigid'],['6407',35,100,25,'rigid'],['6008',40,68,15,'rigid'],['6208',40,80,18,'rigid'],['6308',40,90,23,'rigid'],['6408',40,110,27,'rigid'],['6009',45,75,16,'rigid'],['6209',45,85,19,'rigid'],['6309',45,100,25,'rigid'],['6409',45,120,29,'rigid'],['6010',50,80,16,'rigid'],['6210',50,90,20,'rigid'],['6310',50,110,27,'rigid'],['6410',50,130,31,'rigid'],['6011',55,90,18,'rigid'],['6211',55,100,21,'rigid'],['6311',55,120,29,'rigid'],['6411',55,140,33,'rigid'],['6012',60,95,18,'rigid'],['6212',60,110,22,'rigid'],['6312',60,130,31,'rigid'],['6412',60,150,35,'rigid'],['6013',65,100,18,'rigid'],['6213',65,120,23,'rigid'],['6313',65,140,33,'rigid'],['6413',65,160,37,'rigid'],['6014',70,110,20,'rigid'],['6214',70,125,24,'rigid'],['6314',70,150,35,'rigid'],['6414',70,180,42,'rigid'],['6015',75,115,20,'rigid'],['6215',75,130,25,'rigid'],['6315',75,160,37,'rigid'],['6415',75,190,45,'rigid'],['6016',80,125,22,'rigid'],['6216',80,140,26,'rigid'],['6316',80,170,39,'rigid'],['6416',80,200,48,'rigid'],['6017',85,130,22,'rigid'],['6217',85,150,28,'rigid'],['6317',85,180,41,'rigid'],['6417',85,210,52,'rigid'],['6018',90,140,24,'rigid'],['6218',90,160,30,'rigid'],['6318',90,190,43,'rigid'],['6019',95,145,24,'rigid'],['6219',95,170,32,'rigid'],['6319',95,200,45,'rigid'],['6020',100,150,24,'rigid'],['6220',100,180,34,'rigid'],['6320',100,215,47,'rigid'],['1200',10,30,9,'osc'],['2200',10,30,14,'osc'],['1201',12,32,10,'osc'],['2201',12,32,14,'osc'],['1301',12,37,12,'osc'],['2301',12,37,17,'osc'],['1202',15,35,11,'osc'],['2202',15,35,14,'osc'],['1302',15,42,13,'osc'],['2302',15,42,17,'osc'],['1203',17,40,12,'osc'],['2203',17,40,16,'osc'],['1303',17,47,14,'osc'],['2303',17,47,19,'osc'],['1204',20,47,14,'osc'],['2204',20,47,18,'osc'],['1304',20,52,15,'osc'],['2304',20,52,21,'osc'],['1205',25,52,15,'osc'],['2205',25,52,18,'osc'],['1305',25,62,17,'osc'],['2305',25,62,24,'osc'],['1206',30,62,16,'osc'],['2206',30,62,20,'osc'],['1306',30,72,19,'osc'],['2306',30,72,27,'osc'],['1207',35,72,17,'osc'],['2207',35,72,23,'osc'],['1307',35,80,21,'osc'],['2307',35,80,31,'osc'],['1208',40,80,18,'osc'],['2208',40,80,23,'osc'],['1308',40,90,23,'osc'],['2308',40,90,33,'osc'],['1209',45,85,19,'osc'],['2209',45,85,23,'osc'],['1309',45,100,25,'osc'],['2309',45,100,36,'osc'],['1210',50,90,20,'osc'],['2210',50,90,23,'osc'],['1310',50,110,27,'osc'],['2310',50,110,40,'osc'],['1211',55,100,21,'osc'],['2211',55,100,25,'osc'],['1311',55,120,29,'osc'],['2311',55,120,43,'osc'],['1212',60,110,22,'osc'],['2212',60,110,28,'osc'],['1312',60,130,31,'osc'],['2312',60,130,46,'osc'],['1220',100,180,34,'osc'],['2220',100,180,46,'osc'],['1320',100,215,47,'osc'],['2320',100,215,73,'osc'],['7200',10,30,9,'ang'],['7201',12,32,10,'ang'],['7202',15,35,11,'ang'],['7203',17,40,12,'ang'],['7204',20,47,14,'ang'],['7205',25,52,15,'ang'],['7206',30,62,16,'ang'],['7207',35,72,17,'ang'],['7208',40,80,18,'ang'],['7209',45,85,19,'ang'],['7210',50,90,20,'ang'],['7220',100,180,34,'ang'],['51100',10,24,9,'axb'],['51200',10,26,11,'axb'],['51104',20,35,10,'axb'],['51204',20,40,14,'axb'],['51105',25,42,11,'axb'],['51205',25,47,15,'axb'],['51305',25,52,18,'axb'],['51106',30,47,11,'axb'],['51206',30,52,16,'axb'],['51110',50,70,14,'axb'],['51210',50,78,22,'axb'],['51116',80,105,19,'axb'],['51216',80,115,28,'axb'],['30302',15,42,14.25,'con'],['30203',17,40,13.25,'con'],['30303',17,47,15.25,'con'],['30204',20,47,15.25,'con'],['30304',20,52,16.25,'con'],['30205',25,52,16.25,'con'],['30305',25,62,18.25,'con'],['30206',30,62,17.25,'con'],['30306',30,72,20.75,'con'],['30207',35,72,18.25,'con'],['30307',35,80,22.65,'con'],['30208',40,80,19.75,'con'],['30308',40,90,25.25,'con'],['30209',45,85,20.75,'con'],['30309',45,100,27.25,'con'],['30210',50,90,21.75,'con'],['30310',50,110,29.25,'con'],['NU202',15,35,11,'cil'],['NU203',17,40,12,'cil'],['NU204',20,47,14,'cil'],['NU205',25,52,15,'cil'],['NU305',25,62,17,'cil'],['NU206',30,62,16,'cil'],['NU306',30,72,19,'cil'],['NU207',35,72,17,'cil'],['NU307',35,80,21,'cil'],['NU208',40,80,18,'cil'],['NU308',40,90,23,'cil'],['NU209',45,85,19,'cil'],['NU309',45,100,25,'cil'],['NU210',50,90,20,'cil'],['NU310',50,110,27,'cil'],['NU211',55,100,21,'cil'],['NU311',55,120,29,'cil'],['NU212',60,110,22,'cil'],['NU312',60,130,31,'cil'],['HK0205',2,4.6,5,'agu'],['HK0306',3,6.5,6,'agu'],['HK0408',4,8,8,'agu'],['HK0509',5,9,9,'agu'],['HK0606',6,10,6,'agu'],['HK0709',7,11,9,'agu'],['HK0808',8,12,8,'agu'],['HK0810',8,12,10,'agu'],['HK1010',10,14,10,'agu'],['HK1012',10,14,12,'agu'],['HK1210',12,16,10,'agu'],['HK1212',12,18,12,'agu'],['HK1412',14,20,12,'agu'],['HK1512',15,21,12,'agu'],['HK1516',15,21,16,'agu'],['HK1612',16,22,12,'agu'],['HK1812',18,24,12,'agu'],['HK2012',20,26,12,'agu'],['HK2016',20,26,16,'agu'],['HK2212',22,28,12,'agu'],['HK2512',25,32,12,'agu'],['HK3012',30,37,12,'agu'],['HK3512',35,42,12,'agu'],['HK4012',40,47,12,'agu'],['HK4512',45,52,12,'agu'],['HK5020',50,58,20,'agu'],['HK5520',55,63,20,'agu'],['HK6020',60,68,20,'agu'],['KH0622',6,12,22,'lin'],['KH0824',8,15,24,'lin'],['KH1026',10,17,26,'lin'],['KH1228',12,19,28,'lin'],['KH1630',16,24,30,'lin'],['KH2030',20,28,30,'lin'],['KH2540',25,35,40,'lin'],['KH3050',30,40,50,'lin'],['KH4060',40,52,60,'lin'],['KH5070',50,62,70,'lin'],['UCP203',17,0,0,'ucp'],['UCP204',20,0,0,'ucp'],['UCP205',25,0,0,'ucp'],['UCP206',30,0,0,'ucp'],['UCP207',35,0,0,'ucp'],['UCP208',40,0,0,'ucp'],['UCP209',45,0,0,'ucp'],['UCP210',50,0,0,'ucp'],['UCP211',55,0,0,'ucp'],['UCP212',60,0,0,'ucp'],['UCP213',65,0,0,'ucp'],['UCP214',70,0,0,'ucp'],['UCP215',75,0,0,'ucp'],['UCP216',80,0,0,'ucp'],['UCP218',90,0,0,'ucp'],['UCP220',100,0,0,'ucp'],['UCF203',17,0,0,'ucp'],['UCF204',20,0,0,'ucp'],['UCF205',25,0,0,'ucp'],['UCF206',30,0,0,'ucp'],['UCF208',40,0,0,'ucp'],['UCF210',50,0,0,'ucp'],['UCF212',60,0,0,'ucp'],['UCF216',80,0,0,'ucp'],['UCFL203',17,0,0,'ucp'],['UCFL204',20,0,0,'ucp'],['UCFL205',25,0,0,'ucp'],['UCFL206',30,0,0,'ucp'],['UCFL208',40,0,0,'ucp'],['UCFL210',50,0,0,'ucp'],['UCFL212',60,0,0,'ucp'],['UCFL216',80,0,0,'ucp']];
+const RBL={rigid:'Rígido Bolas',osc:'Oscilante',ang:'C.Angular',axb:'Axial Bola',con:'Cónico',cil:'Cilíndrico',agu:'Aguja HK',lin:'Lineal KH',ucp:'Soporte'};
+let rbMode='d';
+function rbModeChange(){rbMode=document.getElementById('rb_mode').value;const va=document.getElementById('rb_va'),lbl=document.getElementById('rb_vlbl');if(rbMode==='all'){va.style.display='none';renderBrgFull();return;}va.style.display='block';const lm={d:'d — Ø Interior (mm)',D:'D — Ø Exterior (mm)',B:'B — Ancho (mm)',code:'Código (ej: 6205, HK2016)'};lbl.textContent=lm[rbMode]||'Valor';document.getElementById('rb_v').value='';document.getElementById('rb_res').innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div>`;}
+function rodSearch(){const mode=rbMode,val=document.getElementById('rb_v').value.trim(),tf=document.getElementById('rb_type').value,box=document.getElementById('rb_res');if(mode==='all'){renderBrgFull();return;}if(!val){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div>`;return;}let data=tf==='all'?BRG:BRG.filter(r=>r[4]===tf);let ms=[];if(mode==='code'){const q=val.toUpperCase().replace(/\s/g,'');ms=data.filter(r=>r[0].toUpperCase().includes(q));}else{const v=parseFloat(val);if(isNaN(v)){box.innerHTML=`<div class="res-box"><div style="color:var(--danger)">Valor inválido</div></div>`;return;}const idx=mode==='d'?1:mode==='D'?2:3;const range=Math.max(v*0.18,4);ms=data.filter(r=>r[idx]>0&&Math.abs(r[idx]-v)<=range).sort((a,b)=>Math.abs(a[idx]-v)-Math.abs(b[idx]-v));}if(!ms.length){box.innerHTML=`<div class="res-box"><div style="color:var(--warn)">⚠ Sin resultados — cambia tipo o revisa el valor</div></div>`;return;}let h=`<div style="font-size:0.71rem;color:var(--accent);margin-bottom:5px;font-weight:600">Encontrados: ${ms.length}</div><div class="tw" style="max-height:330px;overflow-y:auto"><table><thead><tr><th>Código</th><th>Tipo</th><th>d</th><th>D</th><th>B</th></tr></thead><tbody>`;ms.slice(0,30).forEach((r,i)=>{h+=`<tr class="${i===0&&ms.length<5?'hl':''}"><td><b>${r[0]}</b></td><td style="font-size:0.71rem;color:var(--text2)">${RBL[r[4]]||r[4]}</td><td>${r[1]||'—'}</td><td>${r[2]||'—'}</td><td>${r[3]||'—'}</td></tr>`;});h+=`</tbody></table></div>`;box.innerHTML=h;}
+function renderBrgFull(){const tf=document.getElementById('rb_type').value;const data=tf==='all'?BRG:BRG.filter(r=>r[4]===tf);let h=`<table><thead><tr><th>Código</th><th>Tipo</th><th>d</th><th>D</th><th>B</th></tr></thead><tbody>`;data.forEach(r=>{h+=`<tr><td><b>${r[0]}</b></td><td style="font-size:0.69rem;color:var(--text2)">${RBL[r[4]]||r[4]}</td><td>${r[1]||'—'}</td><td>${r[2]||'—'}</td><td>${r[3]||'—'}</td></tr>`;});h+=`</tbody></table>`;document.getElementById('rb_ft').innerHTML=h;document.getElementById('rb_res').innerHTML=`<div style="font-size:0.74rem;color:var(--text2);padding:5px">Mostrando ${data.length} rodamientos.</div>`;}
+
+/* ============================================================
+   PANEL 4: ROSCAS — M1 a M50 completo
+   ============================================================ */
+// [size, paso_std, paso_fino, broca_std, broca_fino, especial]
+// especial=true = no comercial estándar, requiere herramienta especial
+const ROM=[
+  ['M1',0.25,0.2,0.75,0.80,false],['M1.1',0.25,0.2,0.85,0.90,true],['M1.2',0.25,0.2,0.95,1.00,false],
+  ['M1.4',0.3,0.2,1.10,1.20,false],['M1.6',0.35,0.2,1.25,1.40,false],['M1.8',0.35,0.2,1.45,1.60,true],
+  ['M2',0.4,0.25,1.60,1.75,false],['M2.2',0.45,0.25,1.75,1.95,true],['M2.5',0.45,0.35,2.05,2.15,false],
+  ['M3',0.5,0.35,2.50,2.65,false],['M3.5',0.6,0.35,2.90,3.15,false],['M4',0.7,0.5,3.30,3.50,false],
+  ['M4.5',0.75,0.5,3.70,4.00,true],['M5',0.8,0.5,4.20,4.50,false],['M5.5',0.9,0.5,4.60,5.00,true],
+  ['M6',1.0,0.75,5.00,5.25,false],['M7',1.0,0.75,6.00,6.25,false],['M8',1.25,1.0,6.75,7.00,false],
+  ['M9',1.25,1.0,7.75,8.00,true],['M10',1.5,1.25,8.50,8.75,false],['M11',1.5,1.0,9.50,10.00,true],
+  ['M12',1.75,1.25,10.25,10.75,false],['M13',1.75,1.0,11.25,12.00,true],['M14',2.0,1.5,12.00,12.50,false],
+  ['M15',1.5,1.0,13.50,14.00,true],['M16',2.0,1.5,14.00,14.50,false],['M17',1.5,1.0,15.50,16.00,true],
+  ['M18',2.5,1.5,15.50,16.50,false],['M19',2.5,1.5,16.50,17.50,true],['M20',2.5,1.5,17.50,18.50,false],
+  ['M21',2.5,1.5,18.50,19.50,true],['M22',2.5,1.5,19.50,20.50,false],['M23',2.5,1.5,20.50,21.50,true],
+  ['M24',3.0,2.0,21.00,22.00,false],['M25',3.0,2.0,22.00,23.00,true],['M26',3.0,1.5,23.00,24.50,true],
+  ['M27',3.0,2.0,24.00,25.00,false],['M28',3.0,2.0,25.00,26.00,true],['M29',3.0,2.0,26.00,27.00,true],
+  ['M30',3.5,2.0,26.50,28.00,false],['M31',3.5,2.0,27.50,29.00,true],['M32',3.5,2.0,28.50,30.00,false],
+  ['M33',3.5,2.0,29.50,31.00,true],['M34',3.5,2.0,30.50,32.00,true],['M35',3.5,1.5,31.50,33.50,true],
+  ['M36',4.0,3.0,32.00,33.00,false],['M37',4.0,3.0,33.00,34.00,true],['M38',4.0,3.0,34.00,35.00,true],
+  ['M39',4.0,3.0,35.00,36.00,false],['M40',4.0,3.0,36.00,37.00,false],['M41',4.0,3.0,37.00,38.00,true],
+  ['M42',4.5,3.0,37.50,39.00,false],['M43',4.5,3.0,38.50,40.00,true],['M44',4.5,3.0,39.50,41.00,false],
+  ['M45',4.5,3.0,40.50,42.00,true],['M46',4.5,3.0,41.50,43.00,true],['M47',4.5,3.0,42.50,44.00,true],
+  ['M48',5.0,3.0,43.00,45.00,false],['M49',5.0,3.0,44.00,46.00,true],['M50',5.0,3.0,45.00,47.00,false],
+];
+const ROI=[['#0-80',80,80,1.25,1.25,false],['#1-64',64,72,1.50,1.65,false],['#2-56',56,64,1.75,1.90,false],['#3-48',48,56,2.05,2.15,false],['#4-40',40,48,2.25,2.45,false],['#5-40',40,44,2.55,2.70,false],['#6-32',32,40,2.75,2.95,false],['#8-32',32,36,3.45,3.65,false],['#10-24',24,32,3.80,4.15,false],['#12-24',24,28,4.50,4.70,false],['1/4"',20,28,5.10,5.60,false],['5/16"',18,24,6.50,7.04,false],['3/8"',16,24,7.94,8.43,false],['7/16"',14,20,9.35,9.93,false],['1/2"',13,20,10.72,11.51,false],['9/16"',12,18,12.30,12.93,false],['5/8"',11,18,13.49,14.50,false],['3/4"',10,16,16.67,17.48,false],['7/8"',9,14,19.45,20.32,false],['1"',8,12,22.23,23.42,false],['1-1/4"',7,12,28.17,29.77,false],['1-1/2"',6,12,34.13,36.13,false]];
+const RON=[['1/8"',27,8.43],['1/4"',18,11.13],['3/8"',18,14.68],['1/2"',14,18.26],['3/4"',14,23.83],['1"',11.5,29.77],['1-1/4"',11.5,38.10],['1-1/2"',11.5,44.45],['2"',11.5,56.36],['2-1/2"',8,66.68],['3"',8,82.55]];
+let rosTab='m';
+function setRosTab(tt){rosTab=tt;document.querySelectorAll('#panel-ros .tb').forEach(b=>b.classList.remove('active'));document.getElementById('ros_t_'+tt).classList.add('active');document.getElementById('ros_tw').style.display=tt==='npt'?'none':'block';rosPopSel();}
+function rosPopSel(){const sel=document.getElementById('ros_sz');sel.innerHTML=`<option value="">-- Selecciona --</option>`;const arr=rosTab==='m'?ROM:rosTab==='in'?ROI:RON;arr.forEach(r=>{const o=document.createElement('option');o.value=r[0];o.textContent=r[0]+(r[5]?' ⚠ especial':'');sel.appendChild(o);});rosResult();}
+function rosResult(){
+  const sz=document.getElementById('ros_sz').value,tp=document.getElementById('ros_tp').value;
+  const box=document.getElementById('ros_res'),diag=document.getElementById('ros_diag'),ie=document.getElementById('ros_ie');
+  if(!sz){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Selecciona una rosca...</div></div>`;diag.style.display='none';ie.innerHTML=`<div class="res-box" style="padding:8px"><div style="color:var(--text3);font-size:0.75rem">Selecciona una rosca para ver el diagrama...</div></div>`;return;}
+  let drill,pitch,lbl,nomD,tpiTxt='',isSpecial=false;
+  if(rosTab==='m'){const r=ROM.find(x=>x[0]===sz);if(!r)return;drill=tp==='std'?r[3]:r[4];pitch=tp==='std'?r[1]:r[2];lbl=`${sz} ${tp==='std'?'Estándar':'Fino (MF)'}`;nomD=parseFloat(sz.replace('M',''));isSpecial=r[5];}
+  else if(rosTab==='in'){const r=ROI.find(x=>x[0]===sz);if(!r)return;const tpi=tp==='std'?r[1]:r[2];drill=tp==='std'?r[3]:r[4];pitch=+(25.4/tpi).toFixed(3);lbl=`${sz} ${tp==='std'?'UNC':'UNF'} (${tpi} TPI)`;nomD=drill*1.1;tpiTxt=`${tpi} TPI`;}
+  else{const r=RON.find(x=>x[0]===sz);if(!r)return;drill=r[2];pitch=+(25.4/r[1]).toFixed(3);lbl=`NPT ${sz} (${r[1]} TPI)`;nomD=drill*1.1;tpiTxt=`${r[1]} TPI`;}
+  box.innerHTML=`<div class="ocupa"><div class="rt">⚙ Ocupa para esta rosca</div>${isSpecial?`<div style="background:rgba(245,158,11,0.12);border:1px solid var(--warn);border-radius:7px;padding:7px 10px;font-size:0.75rem;color:var(--warn);margin-bottom:8px">⚠ <b>Rosca especial</b> — No es medida comercial estándar. Requiere herramienta de corte especial o pedido especial al proveedor.</div>`:''}
+  <div class="gg"><div class="gc"><div class="gn">${drill}<small style="font-size:0.82rem">mm</small></div><div class="gl">Broca / Orificio</div></div><div class="gc"><div class="gn">${pitch}<small style="font-size:0.82rem">mm</small></div><div class="gl">Paso de cuerda</div></div></div>
+  <div style="margin-top:8px;padding:8px;background:var(--card2);border-radius:7px;font-size:0.78rem;color:var(--text2)"><b style="color:var(--text)">${lbl}</b><br><span style="color:var(--accent)">Broca: ${drill} mm</span> · <span style="color:var(--accent2)">Paso: ${pitch} mm</span>${tpiTxt?` · <span style="color:var(--accent3)">${tpiTxt}</span>`:''}</div></div>`;
+  diag.style.display='block';
+  drawRosDiag(nomD||drill*1.1,drill,pitch,lbl);
+  drawIntExtDiag(nomD||drill*1.1,drill,pitch);
+}
+
+function drawRosDiag(nomD,drillD,pitch,label){
+  const diag=document.getElementById('ros_diag');
+  const scl=Math.min(58,58)/Math.max(nomD,1);
+  const nr=Math.max(nomD*scl/2,3),dr=Math.max(drillD*scl/2,1.5);
+  // Center everything in a 320-wide viewbox: cx=160
+  const cx=160,cy=84,p=Math.max(pitch*scl,10);
+  const tc='var(--accent)',dc='var(--accent2)',pc='var(--accent3)';
+  let thr='';
+  for(let i=-2;i<=2;i++){const y=cy+i*p;thr+=`<polyline points="${cx-nr},${y} ${cx-dr},${y+p*0.5} ${cx-nr},${y+p}" stroke="${tc}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;thr+=`<polyline points="${cx+nr},${y} ${cx+dr},${y+p*0.5} ${cx+nr},${y+p}" stroke="${tc}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;}
+  diag.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:11px">
+  <div style="font-size:0.66rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;text-align:center">${label}</div>
+  <svg viewBox="0 0 320 168" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;max-width:300px;width:100%">
+    <defs><marker id="d1" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5" fill="${pc}"/></marker><marker id="d2" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto-start-reverse"><path d="M0,0 L5,2.5 L0,5" fill="${pc}"/></marker></defs>
+    <line x1="${cx-nr}" y1="6" x2="${cx-nr}" y2="162" stroke="${tc}" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+    <line x1="${cx+nr}" y1="6" x2="${cx+nr}" y2="162" stroke="${tc}" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+    <line x1="${cx-dr}" y1="16" x2="${cx-dr}" y2="152" stroke="${dc}" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <line x1="${cx+dr}" y1="16" x2="${cx+dr}" y2="152" stroke="${dc}" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    ${thr}
+    <line x1="${cx+nr+13}" y1="${cy}" x2="${cx+nr+13}" y2="${cy+p}" stroke="${pc}" stroke-width="1.5" marker-end="url(#d1)" marker-start="url(#d2)"/>
+    <text x="${cx-nr-3}" y="162" fill="${tc}" font-size="8.5" font-family="Rajdhani,sans-serif" text-anchor="end" opacity="0.7">Ø${nomD.toFixed(1)}</text>
+    <text x="${cx-dr-3}" y="148" fill="${dc}" font-size="7.5" font-family="Inter,sans-serif" text-anchor="end" opacity="0.8">⌀${drillD}</text>
+    <text x="${cx+nr+17}" y="${cy+p/2+4}" fill="${pc}" font-size="8" font-family="Rajdhani,sans-serif">p=${pitch}</text>
+  </svg></div>`;
+}
+
+function drawIntExtDiag(nomD,drillD,pitch){
+  const ie=document.getElementById('ros_ie');
+  const scl=Math.min(50,50)/Math.max(nomD,1);
+  const nr=Math.max(nomD*scl/2,5),dr=Math.max(drillD*scl/2,3);
+  const p=Math.max(pitch*scl,12);
+  // Center each diagram: left at cx1=185/2=92.5, right at 185+185/2=277.5
+  // Total viewBox = 370
+  const cx1=93,cx2=277,cy=100;
+  const tc='var(--accent)',dc='var(--accent2)';
+  const top=cy-2.5*p,bot=cy+2.5*p,h1=bot-top;
+  let mT='',fT='';
+  for(let i=-2;i<=2;i++){
+    const y=cy+i*p;
+    mT+=`<path d="M${cx1-dr},${y} L${cx1-nr},${y+p*0.5} L${cx1-dr},${y+p}" stroke="${tc}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    mT+=`<path d="M${cx1+dr},${y} L${cx1+nr},${y+p*0.5} L${cx1+dr},${y+p}" stroke="${tc}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    fT+=`<path d="M${cx2-nr},${y} L${cx2-dr},${y+p*0.5} L${cx2-nr},${y+p}" stroke="${dc}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    fT+=`<path d="M${cx2+nr},${y} L${cx2+dr},${y+p*0.5} L${cx2+nr},${y+p}" stroke="${dc}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+  ie.innerHTML=`<div style="background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:11px;overflow-x:auto">
+  <svg viewBox="0 0 370 210" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;min-width:320px;max-width:360px;width:100%">
+    <defs>
+      <clipPath id="mc"><rect x="${cx1-nr-8}" y="${top-2}" width="${nr*2+16}" height="${h1+4}"/></clipPath>
+      <clipPath id="fc"><rect x="${cx2-nr-16}" y="${top-2}" width="${nr*2+32}" height="${h1+4}"/></clipPath>
+      <pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="7" stroke="var(--text3)" stroke-width="0.9" opacity="0.35"/>
+      </pattern>
+    </defs>
+    <!-- MALE -->
+    <rect x="${cx1-dr}" y="${top}" width="${dr*2}" height="${h1}" fill="rgba(0,212,255,0.05)" stroke="${tc}" stroke-width="1.5"/>
+    <rect x="${cx1-nr-14}" y="${cy-18}" width="14" height="36" rx="2" fill="var(--text3)" opacity="0.28"/>
+    <g clip-path="url(#mc)">${mT}</g>
+    <line x1="${cx1-nr-16}" y1="${cy}" x2="${cx1+nr+4}" y2="${cy}" stroke="${tc}" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+    <text x="${cx1}" y="${top-5}" fill="${tc}" font-size="10" font-family="Rajdhani,sans-serif" text-anchor="middle" font-weight="700">Rosca Externa (Macho)</text>
+    <line x1="${cx1-nr}" y1="${bot+10}" x2="${cx1+nr}" y2="${bot+10}" stroke="${tc}" stroke-width="1.1"/><line x1="${cx1-nr}" y1="${bot+6}" x2="${cx1-nr}" y2="${bot+14}" stroke="${tc}" stroke-width="1.1"/><line x1="${cx1+nr}" y1="${bot+6}" x2="${cx1+nr}" y2="${bot+14}" stroke="${tc}" stroke-width="1.1"/>
+    <text x="${cx1}" y="${bot+24}" fill="${tc}" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Ø Mayor: ${nomD.toFixed(1)}mm</text>
+    <line x1="${cx1-dr}" y1="${bot+32}" x2="${cx1+dr}" y2="${bot+32}" stroke="${dc}" stroke-width="1.1" stroke-dasharray="3,2"/><line x1="${cx1-dr}" y1="${bot+28}" x2="${cx1-dr}" y2="${bot+36}" stroke="${dc}" stroke-width="1.1"/><line x1="${cx1+dr}" y1="${bot+28}" x2="${cx1+dr}" y2="${bot+36}" stroke="${dc}" stroke-width="1.1"/>
+    <text x="${cx1}" y="${bot+46}" fill="${dc}" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Ø Menor: ${drillD}mm</text>
+    <!-- Divider -->
+    <line x1="185" y1="${top-10}" x2="185" y2="${bot+50}" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
+    <!-- FEMALE -->
+    <rect x="${cx2-nr-16}" y="${top}" width="${nr*2+32}" height="${h1}" fill="url(#hatch)"/>
+    <rect x="${cx2-nr-16}" y="${top}" width="${nr*2+32}" height="${h1}" fill="none" stroke="var(--text2)" stroke-width="1.3"/>
+    <rect x="${cx2-dr}" y="${top}" width="${dr*2}" height="${h1}" fill="var(--bg)" stroke="${dc}" stroke-width="1.5"/>
+    <g clip-path="url(#fc)">${fT}</g>
+    <line x1="${cx2-nr-18}" y1="${cy}" x2="${cx2+nr+18}" y2="${cy}" stroke="${dc}" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+    <text x="${cx2}" y="${top-5}" fill="${dc}" font-size="10" font-family="Rajdhani,sans-serif" text-anchor="middle" font-weight="700">Rosca Interna (Hembra)</text>
+    <line x1="${cx2-dr}" y1="${bot+10}" x2="${cx2+dr}" y2="${bot+10}" stroke="${dc}" stroke-width="1.1"/><line x1="${cx2-dr}" y1="${bot+6}" x2="${cx2-dr}" y2="${bot+14}" stroke="${dc}" stroke-width="1.1"/><line x1="${cx2+dr}" y1="${bot+6}" x2="${cx2+dr}" y2="${bot+14}" stroke="${dc}" stroke-width="1.1"/>
+    <text x="${cx2}" y="${bot+24}" fill="${dc}" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">⌀ Broca: ${drillD}mm</text>
+    <text x="${cx2}" y="${bot+38}" fill="var(--text3)" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Paso: ${pitch}mm</text>
+  </svg></div>`;
+}
+
+/* ============================================================
+   PANEL 5: CALIBRES
+   ============================================================ */
+const GUSSG=[[3,6.35,0.2500,49.9],[4,5.95,0.2344,46.8],[5,5.56,0.2187,43.7],[6,5.16,0.2031,40.6],[7,4.76,0.1875,37.4],[8,4.17,0.1641,32.7],[9,3.81,0.1500,30.0],[10,3.57,0.1406,28.1],[11,3.05,0.1200,23.9],[12,2.78,0.1094,21.9],[13,2.38,0.0937,18.7],[14,1.90,0.0750,15.0],[15,1.71,0.0673,13.5],[16,1.51,0.0598,11.9],[17,1.37,0.0538,10.7],[18,1.21,0.0478,9.5],[19,1.06,0.0418,8.3],[20,0.91,0.0359,7.2],[21,0.84,0.0329,6.6],[22,0.76,0.0299,5.9],[23,0.69,0.0269,5.4],[24,0.61,0.0239,4.8],[25,0.53,0.0209,4.2],[26,0.46,0.0179,3.6],[27,0.42,0.0164,3.3],[28,0.38,0.0149,3.0],[29,0.34,0.0134,2.7],[30,0.30,0.0120,2.4]];
+const GGSG=[[8,4.27,0.168,33.5],[9,3.81,0.150,30.0],[10,3.51,0.138,27.5],[11,3.05,0.120,24.0],[12,2.78,0.109,21.9],[13,2.38,0.093,18.6],[14,1.94,0.076,15.3],[15,1.75,0.069,13.8],[16,1.61,0.063,12.7],[17,1.46,0.057,11.5],[18,1.31,0.051,10.2],[19,1.16,0.045,9.1],[20,1.01,0.040,7.9],[21,0.91,0.036,7.2],[22,0.86,0.034,6.7],[24,0.71,0.028,5.6],[26,0.56,0.022,4.5],[28,0.43,0.017,3.4],[30,0.38,0.015,3.0]];
+const GAL=[[6,4.115,0.162,11.2],[7,3.665,0.144,9.9],[8,3.264,0.129,8.8],[9,2.906,0.114,7.9],[10,2.588,0.102,7.0],[11,2.305,0.091,6.3],[12,2.053,0.081,5.6],[13,1.828,0.072,5.0],[14,1.628,0.064,4.4],[15,1.450,0.057,3.9],[16,1.291,0.051,3.5],[17,1.150,0.045,3.1],[18,1.024,0.040,2.8],[19,0.912,0.036,2.5],[20,0.812,0.032,2.2],[22,0.644,0.025,1.7],[24,0.511,0.020,1.4],[26,0.405,0.016,1.1],[28,0.321,0.013,0.87],[30,0.255,0.010,0.69]];
+let calTab='sg';
+function setCalTab(tt){calTab=tt;document.querySelectorAll('#panel-cal .tb').forEach(b=>b.classList.remove('active'));document.getElementById('cal_'+tt).classList.add('active');document.getElementById('cal_mm').value='';document.getElementById('cal_in').value='';document.getElementById('cal_res').innerHTML='';calRenderTbl();}
+function getCD(){return calTab==='sg'?GUSSG:calTab==='ga'?GGSG:GAL;}
+function calSearch(){const mm=parseFloat(document.getElementById('cal_mm').value);document.getElementById('cal_in').value='';if(isNaN(mm)){document.getElementById('cal_res').innerHTML='';calRenderTbl();return;}calHL(mm);}
+function calSearchIn(){const v=parseFloat(document.getElementById('cal_in').value);document.getElementById('cal_mm').value='';if(isNaN(v)){document.getElementById('cal_res').innerHTML='';calRenderTbl();return;}calHL(v*25.4);}
+function calHL(mm){const d=getCD();let best=null,bD=Infinity;for(const r of d){const x=Math.abs(r[1]-mm);if(x<bD){bD=x;best=r;}}if(best)document.getElementById('cal_res').innerHTML=`<div class="gg"><div class="gc"><div class="gn">${best[0]}</div><div class="gl">Calibre</div></div><div class="gc"><div class="gn">${best[1]}<small style="font-size:0.82rem">mm</small></div><div class="gl">Espesor mm</div></div><div class="gc"><div class="gn">${best[2]}"</div><div class="gl">Espesor in</div></div><div class="gc"><div class="gn">${best[3]}<small style="font-size:0.82rem">kg/m²</small></div><div class="gl">Peso</div></div></div>`;calRenderTbl(best?best[0]:null);}
+function calRenderTbl(hl=null){const d=getCD();let h=`<table><thead><tr><th>Calibre</th><th>Espesor mm</th><th>Espesor in</th><th>kg/m²</th></tr></thead><tbody>`;d.forEach(r=>{h+=`<tr class="${r[0]===hl?'hl':''}"><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}"</td><td>${r[3]}</td></tr>`;});h+=`</tbody></table>`;document.getElementById('cal_tw').innerHTML=h;}
+
+/* ============================================================
+   PANEL 6: DUREZA
+   ============================================================ */
+function calcH(){const from=document.getElementById('h_from').value,v=parseFloat(document.getElementById('h_val').value),box=document.getElementById('h_res');if(isNaN(v)){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div>`;return;}let hrc,hrb,hb,hv,mpa;if(from==='hrc'){hrc=v;hb=hrc*8.55+27.2;hv=hrc*9.81+50;hrb=hrc>20?hrc*1.64+17:null;mpa=hb*3.28;}else if(from==='hrb'){hrb=v;hb=hrb*1.2+11.7;hv=hrb*1.2+14;hrc=hrb>80?(hrb-17)/1.64:null;mpa=hb*3.28;}else if(from==='hb'){hb=v;hrc=(hb-27.2)/8.55;hv=hb*1.05+15;hrb=(hb-11.7)/1.2;mpa=hb*3.28;}else{hv=v;hb=(hv-15)/1.05;hrc=(hb-27.2)/8.55;hrb=(hb-11.7)/1.2;mpa=hb*3.28;}const fmt=(x,d=1)=>x!=null&&!isNaN(x)&&x>0?x.toFixed(d):'—';box.innerHTML=`<div class="cgr"><div class="cc"><div class="cv">${fmt(hrc)}</div><div class="cu">Rockwell C (HRC)</div></div><div class="cc"><div class="cv">${fmt(hrb)}</div><div class="cu">Rockwell B (HRB)</div></div><div class="cc"><div class="cv">${fmt(hb,0)}</div><div class="cu">Brinell (HB)</div></div><div class="cc"><div class="cv">${fmt(hv,0)}</div><div class="cu">Vickers (HV)</div></div><div class="cc" style="grid-column:span 2"><div class="cv">${fmt(mpa,0)} <small style="font-size:0.9rem">MPa</small></div><div class="cu">Resistencia tensil aprox.</div></div></div><div style="font-size:0.69rem;color:var(--text3);margin-top:7px;text-align:center">⚠ Valores aproximados (ASTM E140). Para aplicaciones críticas use tablas certificadas.</div>`;}
+
+/* ============================================================
+   PANEL 7: VELOCIDADES DE CORTE
+   ============================================================ */
+function vcMat(){const v=document.getElementById('vc_mat').value;if(v)document.getElementById('vc_v').value=v;calcVc();}
+function calcVc(){const D=parseFloat(document.getElementById('vc_d').value),Vc=parseFloat(document.getElementById('vc_v').value),box=document.getElementById('vc_res');if(isNaN(D)||isNaN(Vc)||D<=0||Vc<=0){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa diámetro y velocidad de corte...</div></div>`;return;}const rpm=Math.round((Vc*1000)/(Math.PI*D));box.innerHTML=`<div style="padding:12px;background:linear-gradient(135deg,rgba(0,212,255,0.1),rgba(124,58,237,0.1));border:1px solid rgba(0,212,255,0.2);border-radius:10px;text-align:center"><div style="font-family:Rajdhani,sans-serif;font-size:2.2rem;font-weight:700;color:var(--accent)">${rpm.toLocaleString()} <small style="font-size:1.1rem">RPM</small></div><div style="font-size:0.78rem;color:var(--text2);margin-top:4px">Vc=${Vc}m/min · Ø=${D}mm · π×D=${(Math.PI*D).toFixed(3)}mm</div></div><div class="cgr" style="margin-top:7px"><div class="cc"><div class="cv">${Vc}</div><div class="cu">Vc (m/min)</div></div><div class="cc"><div class="cv">${D}</div><div class="cu">Ø (mm)</div></div><div class="cc"><div class="cv">${(rpm*0.1).toFixed(1)}</div><div class="cu">Avance ref. mm/min</div></div><div class="cc"><div class="cv">${(60/rpm).toFixed(3)}</div><div class="cu">Seg/revolución</div></div></div>`;}
+
+/* ============================================================
+   PANEL 8: TOLERANCIAS ISO
+   ============================================================ */
+const IT_VALS={5:[4,4,5,6,7,8,9,10,11,13,15,16],6:[6,8,9,11,13,16,19,22,25,29,32,36],7:[10,12,15,18,21,25,30,35,40,46,52,57],8:[14,18,22,27,33,39,46,54,63,72,81,89],9:[25,30,36,43,52,62,74,87,100,115,130,140],11:[60,75,90,110,130,160,190,220,250,290,320,360]};
+const IT_RNG=[6,10,18,30,50,80,120,180,250,315,400,500];
+function getIT(d,g){const i=IT_RNG.findIndex(r=>d<=r);if(i<0)return null;const v=IT_VALS[g];return v?v[i]:null;}
+function getFDH(l,d){const m={H:0,G:-(2.5*Math.pow(d,0.34)),F:-(5.5*Math.pow(d,0.41)),E:-(11*Math.pow(d,0.41)),D:-(16*Math.pow(d,0.44))};return m[l]!==undefined?Math.round(m[l]):0;}
+function getFDS(l,d){const m={h:0,g:-(2.5*Math.pow(d,0.34)),f:-(5.5*Math.pow(d,0.41)),k:+(0.6*Math.pow(d,0.33)),n:+(5+0.24*d),p:+(6+0.44*d),s:+(15+1.6*d)};return m[l]!==undefined?Math.round(m[l]):0;}
+function calcTol(){const d=parseFloat(document.getElementById('tol_d').value),it=parseInt(document.getElementById('tol_it').value),hole=document.getElementById('tol_hole').value,shaft=document.getElementById('tol_shaft').value,box=document.getElementById('tol_res');if(isNaN(d)||d<=0){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa una dimensión...</div></div>`;return;}const itV=getIT(d,it);if(!itV){box.innerHTML=`<div class="res-box"><div style="color:var(--warn)">Dimensión fuera de rango (0.5–500mm)</div></div>`;return;}const hEI=getFDH(hole,d),hES=hEI+itV,sEI=getFDS(shaft,d),sES=sEI+(shaft==='h'||shaft==='g'||shaft==='f'?-itV:itV);const[slo,shi]=sEI<sES?[sEI,sES]:[sES,sEI];const cl=hEI-shi;let ft,fc;if(cl>0){ft='Ajuste con juego ✓';fc='var(--accent3)';}else if(cl>=-(itV)){ft='Ajuste de transición ↕';fc='var(--warn)';}else{ft='Ajuste con apriete ⬤';fc='var(--danger)';}box.innerHTML=`<div style="padding:11px;background:var(--card2);border:1px solid var(--border);border-radius:9px"><div style="font-size:0.77rem;font-weight:600;color:${fc};margin-bottom:9px;text-align:center">${ft} — ${hole}${it}/${shaft}${it} · Ø${d}mm</div><div class="cgr"><div class="cc"><div style="font-size:0.62rem;color:var(--accent);text-transform:uppercase;margin-bottom:3px">Agujero ${hole}${it}</div><div style="font-size:0.82rem;color:var(--text)">ES: <b>+${hES} µm</b></div><div style="font-size:0.82rem;color:var(--text)">EI: <b>${hEI>=0?'+':''}${hEI} µm</b></div></div><div class="cc"><div style="font-size:0.62rem;color:var(--accent2);text-transform:uppercase;margin-bottom:3px">Eje ${shaft}${it}</div><div style="font-size:0.82rem;color:var(--text)">es: <b>${shi>=0?'+':''}${shi} µm</b></div><div style="font-size:0.82rem;color:var(--text)">ei: <b>${slo>=0?'+':''}${slo} µm</b></div></div><div class="cc"><div style="font-size:0.62rem;color:var(--text3);text-transform:uppercase;margin-bottom:3px">IT${it}</div><div class="cv" style="font-size:1.3rem">${itV} µm</div></div><div class="cc"><div style="font-size:0.62rem;color:var(--text3);text-transform:uppercase;margin-bottom:3px">Resultado</div><div style="font-size:0.8rem;color:${fc};font-weight:600">${cl>0?`Juego: +${cl}µm`:cl<0?`Apriete: ${cl}µm`:'Transición: 0'}</div></div></div></div>`;}
+
+/* ============================================================
+   PANEL 9: UNIDADES
+   ============================================================ */
+const UND={pres:{lbl:'Presión',units:[['psi','PSI'],['bar','bar'],['mpa','MPa'],['kpa','kPa'],['atm','atm'],['kgcm2','kgf/cm²'],['inHg','in Hg'],['mmHg','mmHg']],base:{psi:1,bar:14.5038,mpa:145.038,kpa:0.145038,atm:14.6959,kgcm2:14.2233,inHg:0.491154,mmHg:0.019337}},temp:{lbl:'Temperatura',units:[['c','°C'],['f','°F'],['k','Kelvin'],['r','Rankine']],base:null},fuerza:{lbl:'Fuerza',units:[['n','Newton'],['kn','kN'],['kgf','kgf'],['lbf','lbf'],['tf','ton-f']],base:{n:1,kn:1000,kgf:9.80665,lbf:4.44822,tf:9806.65}},torque:{lbl:'Torque',units:[['nm','N·m'],['knm','kN·m'],['kgfm','kgf·m'],['lbfft','lbf·ft'],['lbfin','lbf·in'],['kgfcm','kgf·cm']],base:{nm:1,knm:1000,kgfm:9.80665,lbfft:1.35582,lbfin:0.112985,kgfcm:0.0980665}},pot:{lbl:'Potencia',units:[['kw','kW'],['hp','HP'],['cv','CV (PS)'],['w','W'],['kcalh','kcal/h'],['btu','BTU/h']],base:{kw:1,hp:0.745699,cv:0.735499,w:0.001,kcalh:0.001163,btu:0.000293071}},flow:{lbl:'Flujo',units:[['lmin','L/min'],['ls','L/s'],['m3h','m³/h'],['m3min','m³/min'],['gpm','GPM'],['cfm','CFM']],base:{lmin:1,ls:60,m3h:16.6667,m3min:1000,gpm:3.78541,cfm:28.3168}}};
+let unTab='pres';
+function setUnTab(tt){unTab=tt;document.querySelectorAll('#panel-unidades .tb').forEach(b=>b.classList.remove('active'));document.getElementById('un_t_'+tt).classList.add('active');const d=UND[tt];const sel=document.getElementById('un_from');sel.innerHTML=d.units.map(u=>`<option value="${u[0]}">${u[1]}</option>`).join('');document.getElementById('un_lbl').textContent=d.lbl;document.getElementById('un_val').value='';document.getElementById('un_res').innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div>`;}
+function calcU(){const tt=unTab,d=UND[tt],v=parseFloat(document.getElementById('un_val').value),from=document.getElementById('un_from').value,box=document.getElementById('un_res');if(isNaN(v)){box.innerHTML=`<div class="res-box"><div style="color:var(--text3)">Ingresa un valor...</div></div>`;return;}let res=[];if(tt==='temp'){let c;if(from==='c')c=v;else if(from==='f')c=(v-32)*5/9;else if(from==='k')c=v-273.15;else c=v*5/9-273.15;res=[['°C',c.toFixed(3)],['°F',(c*9/5+32).toFixed(3)],['Kelvin',(c+273.15).toFixed(3)],['Rankine',((c+273.15)*9/5).toFixed(3)]];}else{const bv=v*d.base[from];res=d.units.map(u=>[u[1],(bv/d.base[u[0]]).toPrecision(5)]);}let h=`<div style="font-size:0.69rem;color:var(--text3);margin-bottom:6px">${v} ${d.units.find(u=>u[0]===from)?.[1]||from} equivale a:</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">`;res.forEach(([l,val])=>{h+=`<div class="cc"><div class="cv" style="font-size:1.1rem">${parseFloat(val).toPrecision(4)}</div><div class="cu">${l}</div></div>`;});h+=`</div>`;box.innerHTML=h;}
+
+/* ============================================================
+   PANEL 10: MATERIALES
+   ============================================================ */
+const MATER=[{n:'Acero AISI 1020 (suave)',d:7.85,E:200,sy:210,su:380,hb:110,al:11.7,k:'acero'},
+{n:'Acero AISI 1045 (medio C)',d:7.85,E:200,sy:310,su:570,hb:170,al:11.5,k:'acero'},
+{n:'Acero AISI 4140 (templado)',d:7.85,E:205,sy:655,su:1020,hb:302,al:12.3,k:'acero'},
+{n:'Acero AISI 4340 (alta resist.)',d:7.85,E:205,sy:470,su:745,hb:217,al:12.3,k:'acero'},
+{n:'Acero inox 304',d:7.93,E:193,sy:205,su:515,hb:160,al:17.2,k:'acero inox'},
+{n:'Acero inox 316',d:7.98,E:193,sy:205,su:515,hb:160,al:16.0,k:'acero inox'},
+{n:'Acero inox 440C (temple)',d:7.65,E:200,sy:1900,su:1970,hb:580,al:10.2,k:'acero inox'},
+{n:'Acero herramienta D2',d:7.70,E:210,sy:1380,su:1520,hb:460,al:10.7,k:'acero herramienta'},
+{n:'Acero herramienta H13',d:7.76,E:215,sy:1200,su:1380,hb:400,al:11.0,k:'acero herramienta'},
+{n:'Hierro fundido gris FC200',d:7.20,E:100,sy:0,su:200,hb:180,al:10.5,k:'hierro fundido'},
+{n:'Hierro fundido nodular',d:7.10,E:165,sy:310,su:414,hb:200,al:12.5,k:'hierro fundido'},
+{n:'Aluminio 2024-T4',d:2.78,E:73,sy:325,su:470,hb:120,al:23.2,k:'aluminio'},
+{n:'Aluminio 6061-T6',d:2.70,E:69,sy:276,su:310,hb:95,al:23.6,k:'aluminio'},
+{n:'Aluminio 7075-T6',d:2.81,E:71,sy:503,su:572,hb:150,al:23.4,k:'aluminio'},
+{n:'Cobre electrolítico',d:8.96,E:110,sy:70,su:220,hb:40,al:17.0,k:'cobre'},
+{n:'Latón 70/30',d:8.53,E:100,sy:130,su:330,hb:80,al:20.0,k:'latón cobre'},
+{n:'Bronce al aluminio',d:7.60,E:120,sy:280,su:590,hb:170,al:18.0,k:'bronce cobre'},
+{n:'Titanio Ti-6Al-4V',d:4.43,E:114,sy:880,su:950,hb:334,al:8.6,k:'titanio'},
+{n:'Titanio grado 2 (cp)',d:4.51,E:103,sy:275,su:345,hb:180,al:8.9,k:'titanio'},
+{n:'Nylon 6 (PA6)',d:1.14,E:3.2,sy:45,su:70,hb:20,al:80,k:'plástico nylon'},
+{n:'Acetal (POM)',d:1.41,E:3.1,sy:60,su:65,hb:85,al:90,k:'plástico acetal'},
+{n:'PTFE (Teflón)',d:2.17,E:0.5,sy:10,su:14,hb:5,al:100,k:'plástico ptfe teflón'},
+{n:'Policarbonato (PC)',d:1.20,E:2.3,sy:55,su:60,hb:70,al:65,k:'plástico'},
+{n:'ABS',d:1.07,E:2.2,sy:40,su:44,hb:80,al:90,k:'plástico abs'},
+{n:'Inconel 625',d:8.44,E:205,sy:517,su:930,hb:241,al:12.8,k:'inconel superaleación'},
+{n:'Monel 400',d:8.83,E:180,sy:240,su:550,hb:130,al:13.5,k:'monel superaleación'}];
+function matSearch(){const q=(document.getElementById('mat_q').value||'').toLowerCase().trim();const data=q?MATER.filter(m=>m.n.toLowerCase().includes(q)||m.k.toLowerCase().includes(q)):MATER;let h=`<table><thead><tr><th>Material</th><th>ρ g/cm³</th><th>E GPa</th><th>σy MPa</th><th>σu MPa</th><th>HB</th><th>α µm/m·°C</th></tr></thead><tbody>`;if(!data.length)h+=`<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:14px">Sin resultados</td></tr>`;data.forEach(m=>{h+=`<tr><td><b style="font-size:0.78rem">${m.n}</b></td><td>${m.d}</td><td>${m.E}</td><td>${m.sy||'—'}</td><td>${m.su}</td><td>${m.hb}</td><td>${m.al}</td></tr>`;});h+=`</tbody></table>`;document.getElementById('mat_res').innerHTML=h;}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+(function(){
+  const th=localStorage.getItem('ip_theme')||'dark';
+  const lg=localStorage.getItem('ip_lang')||'es';
+  setTheme(th);
+  currentLang=lg;
+  document.querySelectorAll('.l-opt').forEach(e=>e.classList.remove('active'));
+  document.getElementById('lg-'+lg).classList.add('active');
+  renderBrgFull();
+  applyLang();
+})();
 </script>
 </body>
 </html>
